@@ -1,0 +1,14 @@
+{
+  "name": "button",
+  "description": "Primary action control. Five variants, three sizes, optional leading/trailing icons.",
+  "version": "0.2.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["button.css", "button.tsx", "index.ts"],
+    "vue": ["Button.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

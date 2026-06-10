@@ -1,0 +1,21 @@
+[package]
+name = "jlds"
+version = "0.1.0"
+edition = "2021"
+description = "CLI for the JLDS design system — download and own your components"
+license = "MIT"
+
+[[bin]]
+name = "jlds"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "json"] }
+tokio = { version = "1", features = ["full"] }
+anyhow = "1"
+colored = "2"
+indicatif = "0.17"
+dialoguer = "0.11"
