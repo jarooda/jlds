@@ -58,6 +58,9 @@ pub async fn run(components: Vec<String>) -> Result<()> {
             pb.inc(1);
         }
 
+        let css = client.fetch_css(name).await?;
+        fs::write(output_dir.join(format!("{name}.css")), css)?;
+
         pb.finish_and_clear();
         println!("{} {}", "✓".green().bold(), name);
 

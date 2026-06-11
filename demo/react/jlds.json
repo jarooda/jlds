@@ -1,5 +1,4 @@
 {
-  "$schema": "https://jlds.dev/schema.json",
   "framework": "react",
   "typescript": true,
   "tailwind": {

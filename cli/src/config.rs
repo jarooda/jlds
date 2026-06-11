@@ -5,13 +5,11 @@ use std::path::{Path, PathBuf};
 
 pub const CONFIG_FILE: &str = "jlds.json";
 pub const DEFAULT_REGISTRY: &str =
-    "https://cdn.jsdelivr.net/gh/jlds-dev/registry@main";
+    "https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry";
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Config {
-    #[serde(rename = "$schema", default = "default_schema")]
-    pub schema: String,
     pub framework: Framework,
     pub typescript: bool,
     pub tailwind: TailwindConfig,
@@ -46,10 +44,6 @@ pub struct TailwindConfig {
 pub struct PathsConfig {
     pub components: String,
     pub utils: String,
-}
-
-fn default_schema() -> String {
-    "https://jlds.dev/schema.json".to_string()
 }
 
 fn default_registry() -> String {
