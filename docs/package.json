@@ -1,0 +1,19 @@
+{
+  "name": "docs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "sync-css": "node scripts/sync-css.mjs",
+    "docs:dev": "pnpm run sync-css && vitepress dev",
+    "docs:build": "pnpm run sync-css && vitepress build",
+    "docs:preview": "vitepress preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.12.1",
+  "devDependencies": {
+    "vitepress": "2.0.0-alpha.17"
+  }
+}
