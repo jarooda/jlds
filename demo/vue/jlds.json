@@ -1,5 +1,4 @@
 {
-  "$schema": "https://jlds.dev/schema.json",
   "framework": "vue",
   "typescript": true,
   "tailwind": {
@@ -10,5 +9,5 @@
     "components": "src/components/ui",
     "utils": "src/lib/utils"
   },
-  "registry": "https://cdn.jsdelivr.net/gh/jlds-dev/registry@main"
+  "registry": "../../registry"
 }

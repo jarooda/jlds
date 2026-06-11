@@ -16,12 +16,13 @@ pub struct ComponentMeta {
     pub frameworks: Vec<String>,
     pub dependencies: Vec<String>,
     pub dev_dependencies: Vec<String>,
+    #[serde(default)]
     pub files: ComponentFiles,
     #[serde(default)]
     pub registry_dependencies: Vec<String>,
 }
 
-#[derive(Debug, Deserialize, Clone)]
+#[derive(Debug, Default, Deserialize, Clone)]
 pub struct ComponentFiles {
     #[serde(default)]
     pub shared: Vec<String>,
@@ -100,5 +101,14 @@ impl RegistryClient {
         self.fetch_text(&format!("components/{name}/{file}"))
             .await
             .with_context(|| format!("Failed to fetch shared file {file}"))
+    }
+
+    /// Fetches a component's standalone stylesheet from `css/<name>.css`.
+    /// This is the single source of truth for the component's `.jl-*` classes —
+    /// also served directly to vanilla HTML users via the CDN.
+    pub async fn fetch_css(&self, name: &str) -> Result<String> {
+        self.fetch_text(&format!("css/{name}.css"))
+            .await
+            .with_context(|| format!("Failed to fetch css/{name}.css"))
     }
 }
