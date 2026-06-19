@@ -8,6 +8,25 @@ files.
 The full token set lives in [`registry/css/index.css`](https://github.com/jarooda/jlds/blob/main/registry/css/index.css)
 and is also what's served to HTML users — see [HTML](/guide/vanilla-html).
 
+## Light & dark themes
+
+JLDS is **light-first**: the light theme is the `:root` default — a low-glare off-white canvas
+(`--bg-app`) with white cards and a deep-emerald accent. A full **dark theme** is defined in a
+`[data-theme="dark"]` block and is **opt-in**: set the attribute on `<html>` (or any wrapper
+element) to switch.
+
+```js
+// Switch to dark
+document.documentElement.setAttribute("data-theme", "dark")
+// Back to light
+document.documentElement.removeAttribute("data-theme")
+```
+
+Theming is a deterministic attribute toggle — JLDS does **not** auto-follow the OS
+`prefers-color-scheme`. Both themes remap the same semantic aliases, and the accent inverts its
+hover direction per theme (it **deepens** on light, **lightens** on dark) entirely from tokens,
+so component CSS never encodes a theme.
+
 ## Token categories
 
 | Category | Examples | Purpose |
@@ -15,7 +34,7 @@ and is also what's served to HTML users — see [HTML](/guide/vanilla-html).
 | Neutral ramp | `--neutral-0` … `--neutral-950` | Cool, slightly green-tinted grayscale used for surfaces, text, and borders |
 | Brand | `--brand-400`, `--brand-500`, `--brand-600` | Deep emerald accent ramp |
 | Semantic hues | `--green-400/700`, `--amber-400/700`, `--red-400/700`, `--sky-400/700` | Raw hues backing success/warning/danger/info |
-| Surfaces | `--bg-app`, `--surface-card`, `--surface-raised`, `--surface-sunken`, `--surface-muted` | Background layers, darkest to lightest |
+| Surfaces | `--bg-app`, `--surface-card`, `--surface-raised`, `--surface-sunken`, `--surface-muted` | Background layers — app canvas, cards, and raised/sunken/muted variants |
 | Borders | `--border-subtle`, `--border-default`, `--border-strong`, `--border-focus` | Border colors and focus ring source |
 | Text | `--text-primary`, `--text-secondary`, `--text-tertiary`, `--text-disabled`, `--text-brand`, `--text-on-brand` | Foreground text colors |
 | Accent | `--accent`, `--accent-hover`, `--accent-active`, `--accent-subtle`, `--accent-muted`, `--accent-ring` | Interactive accent states, aliased to the brand ramp |

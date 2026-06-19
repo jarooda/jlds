@@ -1,0 +1,14 @@
+{
+  "name": "skeleton",
+  "description": "Loading placeholder with a soft shimmer. Text (multi-line), circle, or rect.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["skeleton.tsx", "index.ts"],
+    "vue": ["Skeleton.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

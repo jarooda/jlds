@@ -1,0 +1,14 @@
+{
+  "name": "avatar",
+  "description": "User image with auto initials fallback and optional status dot. AvatarGroup stacks them.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["avatar.tsx", "index.ts"],
+    "vue": ["Avatar.vue", "AvatarGroup.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

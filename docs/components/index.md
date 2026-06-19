@@ -5,9 +5,14 @@ All components are self-contained — each ships its own `.jl-*` CSS classes bui
 
 | Component | Frameworks | Status |
 |---|---|---|
+| [Avatar](/components/avatar) | React, Vue | Available |
+| [Badge](/components/badge) | React, Vue | Available |
 | [Button](/components/button) | React, Vue | Available |
+| [Divider](/components/divider) | React, Vue | Available |
+| [Kbd](/components/kbd) | React, Vue | Available |
+| [Skeleton](/components/skeleton) | React, Vue | Available |
+| [Spinner](/components/spinner) | React, Vue | Available |
 | Input | React, Vue | Planned |
-| Badge | React, Vue | Planned |
 
 Run `jlds list` from a project with `jlds.json` to see what's available for your detected
 framework — see [CLI: list](/cli/list).

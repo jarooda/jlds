@@ -10,10 +10,12 @@ black-box components. A component is just files in your repo.
 
 ## The aesthetic
 
-The default look is a premium SaaS product, rendered as a dark theme with a deep-emerald
-accent: clean layouts, strong hierarchy, soft 12–16px corners, comfortable spacing, and small,
-confident micro-interactions. All of it is driven by [CSS variable design tokens](/guide/theming),
-so you can re-theme without touching component files.
+The default look is a premium SaaS product, **light-first**: a low-glare off-white canvas with
+a deep-emerald accent, clean layouts, strong hierarchy, soft 12–16px corners, comfortable
+spacing, and small, confident micro-interactions. A full **dark theme ships alongside**, opt-in
+via `<html data-theme="dark">`. All of it is driven by
+[CSS variable design tokens](/guide/theming), so you can switch themes — or re-theme entirely —
+without touching component files.
 
 ## Supported frameworks
 

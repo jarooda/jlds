@@ -1,0 +1,14 @@
+{
+  "name": "spinner",
+  "description": "Indeterminate circular loading indicator. Inherits text color unless tone is set.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["spinner.tsx", "index.ts"],
+    "vue": ["Spinner.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

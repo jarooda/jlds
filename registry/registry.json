@@ -7,6 +7,48 @@
       "frameworks": ["react", "vue"],
       "dependencies": [],
       "devDependencies": []
+    },
+    {
+      "name": "badge",
+      "description": "Compact status or metadata label. Soft tint by default; solid for high emphasis.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "spinner",
+      "description": "Indeterminate circular loading indicator. Inherits text color unless tone is set.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "divider",
+      "description": "A thin rule separating content. Horizontal, vertical, or with a centered label.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "skeleton",
+      "description": "Loading placeholder with a soft shimmer. Text (multi-line), circle, or rect.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "kbd",
+      "description": "A keyboard key cap for shortcut hints. Single key or a combination.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "avatar",
+      "description": "User image with auto initials fallback and optional status dot. AvatarGroup stacks them.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
     }
   ]
 }

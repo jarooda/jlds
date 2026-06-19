@@ -1,0 +1,14 @@
+{
+  "name": "divider",
+  "description": "A thin rule separating content. Horizontal, vertical, or with a centered label.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["divider.tsx", "index.ts"],
+    "vue": ["Divider.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

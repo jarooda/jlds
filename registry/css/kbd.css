@@ -1,0 +1,21 @@
+.jl-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-medium);
+  line-height: 1;
+  color: var(--text-secondary);
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
+  border-bottom-width: 2px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+.jl-kbd--sm { min-width: 18px; height: 18px; padding: 0 4px; }
+.jl-kbd-group { display: inline-flex; align-items: center; gap: 3px; }
+.jl-kbd-group__plus { color: var(--text-tertiary); font-size: var(--text-2xs); }

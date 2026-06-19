@@ -4,8 +4,12 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "jlds",
   description: "Design system for rapid prototyping. It exists to let a designer or agent stand up a polished, production-credible interface in minutes.",
+  head: [
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }]
+  ],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
+    logo: '/favicon.svg',
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Guide', link: '/guide/what-is-jlds' },
@@ -36,7 +40,13 @@ export default defineConfig({
           text: 'Components',
           items: [
             { text: 'Overview', link: '/components/' },
-            { text: 'Button', link: '/components/button' }
+            { text: 'Avatar', link: '/components/avatar' },
+            { text: 'Badge', link: '/components/badge' },
+            { text: 'Button', link: '/components/button' },
+            { text: 'Divider', link: '/components/divider' },
+            { text: 'Kbd', link: '/components/kbd' },
+            { text: 'Skeleton', link: '/components/skeleton' },
+            { text: 'Spinner', link: '/components/spinner' }
           ]
         }
       ],

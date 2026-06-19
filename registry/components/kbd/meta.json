@@ -1,0 +1,14 @@
+{
+  "name": "kbd",
+  "description": "A keyboard key cap for shortcut hints. Single key or a combination.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["kbd.tsx", "index.ts"],
+    "vue": ["Kbd.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

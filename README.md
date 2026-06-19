@@ -2,7 +2,7 @@
 
 JLDS is a design system and component CLI. Instead of installing components as a package dependency, `jlds` downloads component source code directly into your project — you own it, read it, and customize it freely.
 
-The aesthetic: a premium SaaS product, rendered as a dark theme with a deep-emerald accent. Clean layouts, strong hierarchy, soft 12–16px corners, comfortable spacing, and small, confident micro-interactions.
+The aesthetic: a premium SaaS product, **light-first** — a low-glare off-white canvas with a deep-emerald accent. Clean layouts, strong hierarchy, soft 12–16px corners, comfortable spacing, subtle depth (hairline borders over heavy shadows), and small, confident micro-interactions. A full **dark theme ships alongside**, opt-in via `<html data-theme="dark">`.
 
 **Supported frameworks:** React, Vue
 **Styling:** Self-contained CSS (`.jl-btn`-style classes) + CSS variable design tokens — Tailwind is **not required**
@@ -207,25 +207,41 @@ cat src/components/ui/button/button.tsx
 
 ## Theming
 
-JLDS uses CSS variables for design tokens. `jlds init` injects a full dark-theme token set into your global CSS file:
+JLDS uses CSS variables for design tokens, and is **light-first**. `jlds init` injects the full token set into your global CSS file — a light `:root` default plus an opt-in dark theme:
 
 ```css
 :root {
-  --accent: var(--brand-500);       /* deep emerald, #1b8a64 */
-  --accent-hover: var(--brand-400);
+  --accent: var(--brand-600);        /* deep emerald, #157053 on light */
+  --accent-hover: var(--brand-700);  /* hover deepens on light */
+  --bg-app: #f3f5f3;                 /* low-glare off-white canvas */
+  --surface-card: #ffffff;
+  --text-primary: #161b18;
+  --radius-control: var(--radius-xl);
+  --shadow-xs: 0 1px 2px hsl(220 24% 22% / 0.06);
+  /* ... full ramp: neutrals, semantic colors, typography, spacing, motion */
+}
+
+/* Dark theme — opt-in by setting data-theme="dark" on <html> */
+[data-theme="dark"] {
+  --accent: var(--brand-500);
+  --accent-hover: var(--brand-400);  /* on dark, hover lightens instead */
+  --bg-app: var(--neutral-950);
   --surface-card: var(--neutral-900);
   --text-primary: #eaf1ed;
-  --radius-control: var(--radius-xl);
-  --shadow-xs: 0 1px 2px hsl(220 60% 2% / 0.40);
-  /* ... full ramp: neutrals, semantic colors, typography, spacing, motion */
 }
 ```
 
-Override any token in your own CSS (after the injected block) to re-theme without touching component files:
+JLDS does **not** auto-follow the OS `prefers-color-scheme` — theming is a deterministic attribute toggle on `<html>` (or any wrapper):
+
+```js
+document.documentElement.setAttribute("data-theme", "dark"); // or remove it for light
+```
+
+Override any token in your own CSS (after the injected block) to re-theme without touching component files. Components reference only the semantic aliases (`--accent`, `--surface-card`, `--text-primary`, …) — never raw ramps — so re-accenting is a matter of repointing `--accent*`:
 
 ```css
 :root {
-  --brand-500: #6d28d9; /* swap emerald for purple */
+  --brand-600: #6d28d9; /* swap emerald for purple (light accent) */
 }
 ```
 

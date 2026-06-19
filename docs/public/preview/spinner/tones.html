@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/spinner.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); }
+      .on-brand { background: var(--accent); border-radius: var(--radius-md); padding: var(--space-2); display: inline-flex; }
+    </style>
+  </head>
+  <body>
+    <span class="jl-spinner">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <circle class="jl-spinner__track" cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5" />
+        <path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+      </svg>
+    </span>
+    <span class="jl-spinner" style="color: var(--neutral-400)">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <circle class="jl-spinner__track" cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5" />
+        <path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+      </svg>
+    </span>
+    <span class="on-brand">
+      <span class="jl-spinner" style="color: #fff">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <circle class="jl-spinner__track" cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5" />
+          <path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+        </svg>
+      </span>
+    </span>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>
