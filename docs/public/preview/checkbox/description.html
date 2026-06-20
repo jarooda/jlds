@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/checkbox.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); max-width: 360px; }
+    </style>
+  </head>
+  <body>
+    <label class="jl-check">
+      <input type="checkbox" class="jl-check__input" checked />
+      <span class="jl-check__box">
+        <svg class="jl-check__mark" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+          <path d="M2.5 6.2l2.2 2.3 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span class="jl-check__dash" aria-hidden="true"></span>
+      </span>
+      <span class="jl-check__body">
+        <span class="jl-check__label">Enable notifications</span>
+        <span class="jl-check__desc">Get notified when a deploy finishes.</span>
+      </span>
+    </label>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "switch",
+  "description": "Instant on/off toggle for settings that apply immediately (no separate save).",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["switch.tsx", "index.ts"],
+    "vue": ["Switch.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

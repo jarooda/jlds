@@ -1,0 +1,31 @@
+{
+  "name": "jlds",
+  "version": "0.0.0",
+  "description": "Own-your-code component CLI for the JLDS design system — downloads React/Vue components straight into your project.",
+  "bin": {
+    "jlds": "bin/jlds.js"
+  },
+  "files": [
+    "bin"
+  ],
+  "keywords": [
+    "jlds",
+    "design-system",
+    "cli",
+    "react",
+    "vue",
+    "components",
+    "ui"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/jarooda/jlds",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jarooda/jlds.git",
+    "directory": "npm/jlds"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "optionalDependencies": {}
+}

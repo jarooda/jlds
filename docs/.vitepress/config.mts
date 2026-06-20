@@ -40,13 +40,26 @@ export default defineConfig({
           text: 'Components',
           items: [
             { text: 'Overview', link: '/components/' },
+            { text: 'Alert', link: '/components/alert' },
             { text: 'Avatar', link: '/components/avatar' },
             { text: 'Badge', link: '/components/badge' },
+            { text: 'Banner', link: '/components/banner' },
             { text: 'Button', link: '/components/button' },
+            { text: 'Checkbox', link: '/components/checkbox' },
             { text: 'Divider', link: '/components/divider' },
+            { text: 'Icon Button', link: '/components/icon-button' },
+            { text: 'Input', link: '/components/input' },
             { text: 'Kbd', link: '/components/kbd' },
+            { text: 'Progress', link: '/components/progress' },
+            { text: 'Radio Group', link: '/components/radio-group' },
+            { text: 'Select', link: '/components/select' },
             { text: 'Skeleton', link: '/components/skeleton' },
-            { text: 'Spinner', link: '/components/spinner' }
+            { text: 'Slider', link: '/components/slider' },
+            { text: 'Spinner', link: '/components/spinner' },
+            { text: 'Stat', link: '/components/stat' },
+            { text: 'Switch', link: '/components/switch' },
+            { text: 'Tag', link: '/components/tag' },
+            { text: 'Textarea', link: '/components/textarea' }
           ]
         }
       ],

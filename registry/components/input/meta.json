@@ -1,0 +1,14 @@
+{
+  "name": "input",
+  "description": "Single-line text field with optional leading icon, trailing node, and invalid state.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["input.tsx", "index.ts"],
+    "vue": ["Input.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

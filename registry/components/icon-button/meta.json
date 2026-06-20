@@ -1,0 +1,14 @@
+{
+  "name": "icon-button",
+  "description": "A square, label-less button for toolbar/inline icon actions. Always provide aria-label.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["icon-button.tsx", "index.ts"],
+    "vue": ["IconButton.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/select.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); max-width: 280px; }
+    </style>
+  </head>
+  <body>
+    <span class="jl-select-wrap">
+      <select class="jl-select jl-select--md" data-placeholder="true">
+        <option value="" disabled selected>Choose a framework…</option>
+        <option value="react">React</option>
+        <option value="vue">Vue</option>
+        <option value="svelte">Svelte</option>
+      </select>
+      <span class="jl-select-chevron">
+        <svg viewBox="0 0 16 16" width="16" height="16" fill="none" aria-hidden="true">
+          <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+    </span>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

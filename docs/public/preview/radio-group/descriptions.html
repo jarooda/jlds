@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/radio-group.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); max-width: 360px; }
+    </style>
+  </head>
+  <body>
+    <div class="jl-radiogroup" role="radiogroup">
+      <label class="jl-radio">
+        <input type="radio" class="jl-radio__input" name="tier" value="hobby" checked />
+        <span class="jl-radio__dot"></span>
+        <span class="jl-radio__body">
+          <span class="jl-radio__label">Hobby</span>
+          <span class="jl-radio__desc">For personal projects. 1 environment.</span>
+        </span>
+      </label>
+      <label class="jl-radio">
+        <input type="radio" class="jl-radio__input" name="tier" value="pro" />
+        <span class="jl-radio__dot"></span>
+        <span class="jl-radio__body">
+          <span class="jl-radio__label">Pro</span>
+          <span class="jl-radio__desc">For growing teams. 3 environments.</span>
+        </span>
+      </label>
+      <label class="jl-radio" data-disabled="true">
+        <input type="radio" class="jl-radio__input" name="tier" value="team" disabled />
+        <span class="jl-radio__dot"></span>
+        <span class="jl-radio__body">
+          <span class="jl-radio__label">Team</span>
+          <span class="jl-radio__desc">Coming soon.</span>
+        </span>
+      </label>
+    </div>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "textarea",
+  "description": "Multi-line text field. Vertically resizable, with an invalid state.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["textarea.tsx", "index.ts"],
+    "vue": ["Textarea.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

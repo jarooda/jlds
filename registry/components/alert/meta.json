@@ -1,0 +1,14 @@
+{
+  "name": "alert",
+  "description": "Inline callout for status messaging. Four tones with a default icon and optional dismiss.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["alert.tsx", "index.ts"],
+    "vue": ["Alert.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

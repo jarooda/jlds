@@ -1,0 +1,14 @@
+{
+  "name": "progress",
+  "description": "Linear progress bar — determinate (value/max) or indeterminate (animated).",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["progress.tsx", "index.ts"],
+    "vue": ["Progress.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

@@ -1,0 +1,14 @@
+{
+  "name": "tag",
+  "description": "Removable / selectable pill for filters, tokens, and multi-select chips.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["tag.tsx", "index.ts"],
+    "vue": ["Tag.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

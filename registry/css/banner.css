@@ -1,0 +1,53 @@
+.jl-banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-5);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  border: 1px solid transparent;
+}
+.jl-banner--sticky { position: sticky; top: 0; z-index: 40; }
+.jl-banner__icon { flex: none; display: inline-flex; }
+.jl-banner__icon svg { width: 18px; height: 18px; }
+.jl-banner__content { flex: 1; min-width: 0; display: flex; align-items: baseline; gap: var(--space-2); flex-wrap: wrap; }
+.jl-banner__title { font-weight: var(--weight-semibold); }
+.jl-banner__text { opacity: 0.88; }
+.jl-banner__action { flex: none; }
+.jl-banner__close {
+  flex: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 4px;
+  margin: -2px -4px -2px 0;
+  color: currentColor;
+  opacity: 0.7;
+  border-radius: var(--radius-sm);
+  transition: var(--transition-control);
+}
+.jl-banner__close:hover { opacity: 1; background: color-mix(in srgb, currentColor 14%, transparent); }
+
+.jl-banner--center { justify-content: center; }
+.jl-banner--center .jl-banner__content { flex: 0 1 auto; }
+.jl-banner--center .jl-banner__close { position: absolute; right: var(--space-4); top: 50%; transform: translateY(-50%); margin: 0; }
+
+/* Subtle (tinted) variants */
+.jl-banner--subtle.jl-banner--info    { background: var(--info-subtle);    color: var(--info-text);    border-color: color-mix(in srgb, var(--info) 22%, transparent); }
+.jl-banner--subtle.jl-banner--success { background: var(--success-subtle); color: var(--success-text); border-color: color-mix(in srgb, var(--success) 22%, transparent); }
+.jl-banner--subtle.jl-banner--warning { background: var(--warning-subtle); color: var(--warning-text); border-color: color-mix(in srgb, var(--warning) 24%, transparent); }
+.jl-banner--subtle.jl-banner--danger  { background: var(--danger-subtle);  color: var(--danger-text);  border-color: color-mix(in srgb, var(--danger) 24%, transparent); }
+.jl-banner--subtle.jl-banner--accent  { background: var(--accent-subtle);  color: var(--text-brand);   border-color: color-mix(in srgb, var(--accent) 22%, transparent); }
+.jl-banner--subtle.jl-banner--neutral { background: var(--surface-sunken); color: var(--text-primary);  border-color: var(--border-subtle); }
+.jl-banner--subtle .jl-banner__text { color: var(--text-secondary); opacity: 1; }
+
+/* Solid variants */
+.jl-banner--solid { color: #fff; }
+.jl-banner--solid.jl-banner--info    { background: var(--info); }
+.jl-banner--solid.jl-banner--success { background: var(--success); }
+.jl-banner--solid.jl-banner--warning { background: var(--warning); }
+.jl-banner--solid.jl-banner--danger  { background: var(--danger); }
+.jl-banner--solid.jl-banner--accent  { background: var(--accent); color: var(--text-on-brand); }
+.jl-banner--solid.jl-banner--neutral { background: var(--surface-inverse); color: var(--text-inverse); }

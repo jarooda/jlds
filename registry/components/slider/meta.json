@@ -1,0 +1,14 @@
+{
+  "name": "slider",
+  "description": "Drag/keyboard numeric slider. Single value, or a two-thumb min-max band with range.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["slider.tsx", "index.ts"],
+    "vue": ["Slider.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

@@ -49,6 +49,97 @@
       "frameworks": ["react", "vue"],
       "dependencies": [],
       "devDependencies": []
+    },
+    {
+      "name": "input",
+      "description": "Single-line text field with optional leading icon, trailing node, and invalid state.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "textarea",
+      "description": "Multi-line text field. Vertically resizable, with an invalid state.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "icon-button",
+      "description": "A square, label-less button for toolbar/inline icon actions. Always provide aria-label.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "tag",
+      "description": "Removable / selectable pill for filters, tokens, and multi-select chips.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "checkbox",
+      "description": "Boolean checkbox with optional label, description, and indeterminate state.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "switch",
+      "description": "Instant on/off toggle for settings that apply immediately (no separate save).",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "radio-group",
+      "description": "Single-choice radio group rendered from an options array.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "select",
+      "description": "Styled native dropdown. Pass options or your own option children.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "progress",
+      "description": "Linear progress bar — determinate (value/max) or indeterminate (animated).",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "slider",
+      "description": "Drag/keyboard numeric slider. Single value, or a two-thumb min-max band with range.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "stat",
+      "description": "A metric / KPI tile: label, large value, and an optional trend delta. StatGroup lays out a row.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "alert",
+      "description": "Inline callout for status messaging. Four tones with a default icon and optional dismiss.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "banner",
+      "description": "A full-width page/section announcement bar. Subtle or solid, with optional action and dismiss.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
     }
   ]
 }

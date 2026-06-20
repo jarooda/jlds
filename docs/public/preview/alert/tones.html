@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/alert.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); max-width: 460px; display: flex; flex-direction: column; gap: var(--space-3); }
+    </style>
+  </head>
+  <body>
+    <div class="jl-alert jl-alert--success" role="status">
+      <span class="jl-alert__icon">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" opacity="0.35" />
+          <path d="M8 12.5l2.5 2.5 5.5-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+      <div class="jl-alert__body"><div class="jl-alert__text">Build #1843 deployed to production.</div></div>
+    </div>
+    <div class="jl-alert jl-alert--warning" role="status">
+      <span class="jl-alert__icon">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" opacity="0.35" />
+          <path d="M12 8.5v4M12 16h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+        </svg>
+      </span>
+      <div class="jl-alert__body"><div class="jl-alert__text">Your plan's build minutes are almost used up.</div></div>
+    </div>
+    <div class="jl-alert jl-alert--danger" role="status">
+      <span class="jl-alert__icon">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" opacity="0.35" />
+          <path d="M12 8v4.5M12 16h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+        </svg>
+      </span>
+      <div class="jl-alert__body"><div class="jl-alert__text">The last deploy failed. Check the build logs.</div></div>
+    </div>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

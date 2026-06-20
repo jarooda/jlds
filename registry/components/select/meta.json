@@ -1,0 +1,14 @@
+{
+  "name": "select",
+  "description": "Styled native dropdown. Pass options or your own option children.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["select.tsx", "index.ts"],
+    "vue": ["Select.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/slider.css">
+    <style>
+      body { margin: 0; padding: var(--space-5) var(--space-4); max-width: 360px; }
+    </style>
+  </head>
+  <body>
+    <div class="jl-slider jl-slider--md" data-min="0" data-max="100" data-step="1">
+      <div class="jl-slider__track">
+        <span class="jl-slider__fill"></span>
+        <button type="button" class="jl-slider__thumb" data-value="25" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25" tabindex="0"></button>
+        <button type="button" class="jl-slider__thumb" data-value="75" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="75" tabindex="0"></button>
+      </div>
+      <div class="jl-slider__marks">
+        <span class="jl-slider__mark" style="left: 0%">0</span>
+        <span class="jl-slider__mark" style="left: 50%">50</span>
+        <span class="jl-slider__mark" style="left: 100%">100</span>
+      </div>
+    </div>
+    <script src="/preview/slider-demo.js"></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "banner",
+  "description": "A full-width page/section announcement bar. Subtle or solid, with optional action and dismiss.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["banner.tsx", "index.ts"],
+    "vue": ["Banner.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

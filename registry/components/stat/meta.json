@@ -1,0 +1,14 @@
+{
+  "name": "stat",
+  "description": "A metric / KPI tile: label, large value, and an optional trend delta. StatGroup lays out a row.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["stat.tsx", "index.ts"],
+    "vue": ["Stat.vue", "StatGroup.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

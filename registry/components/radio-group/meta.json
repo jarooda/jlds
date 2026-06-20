@@ -1,0 +1,14 @@
+{
+  "name": "radio-group",
+  "description": "Single-choice radio group rendered from an options array.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["radio-group.tsx", "index.ts"],
+    "vue": ["RadioGroup.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

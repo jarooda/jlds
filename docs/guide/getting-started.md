@@ -5,23 +5,37 @@ This guide covers the CLI workflow for React and Vue projects. Not using a frame
 
 ## Install the CLI
 
-JLDS isn't published to crates.io yet — install it from source with
-[Rust](https://rustup.rs/) (1.80+):
+The fastest way — no Rust, no global install. Run it on the fly with `npx`:
 
 ```bash
-git clone https://github.com/jarooda/jlds.git
-cd jlds/cli
-cargo install --path .
+npx jlds init
+npx jlds add button
 ```
 
-Verify it's on your `PATH`:
+On first run, npm downloads the prebuilt binary for your platform and caches it; later
+`npx jlds …` calls reuse it. Prefer a global install? Any of:
+
+```bash
+npm install -g jlds       # or: pnpm add -g jlds / bun add -g jlds / yarn global add jlds
+```
+
+Rust user, or on an unsupported platform? Install from source — no clone needed
+([Rust](https://rustup.rs/) 1.80+):
+
+```bash
+cargo install --git https://github.com/jarooda/jlds.git jlds
+```
+
+Verify it's available:
 
 ```bash
 jlds --help
+# or: npx jlds --help
 ```
 
-> Whenever the CLI source changes, re-run `cargo install --path .` to update the globally
-> installed `jlds` binary — otherwise your shell keeps using the old build.
+> The npm package is a thin launcher around the native Rust binary — same CLI either way. The
+> examples below use the bare `jlds` command; prefix with `npx ` if you're not installing it
+> globally.
 
 ## Initialize your project
 

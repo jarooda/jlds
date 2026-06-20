@@ -27,6 +27,19 @@ No CLI, no build step, no framework — link the stylesheets straight from jsDel
 
 Only link the component stylesheets you actually use.
 
+## All-in-one bundle
+
+Prototyping, or don't want to manage individual links? Link **`css/all.css`** — a single bundle
+that pulls in the tokens (`index.css`) plus every component stylesheet. It's the only file you
+need:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/css/all.css">
+```
+
+This is the most convenient option but ships the CSS for every component. For production sites
+where bundle size matters, prefer linking `index.css` + just the component files you use.
+
 ## Single source of truth
 
 `registry/css/<name>.css` is the *only* place a component's styles are written. It's served

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/stat.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); }
+    </style>
+  </head>
+  <body>
+    <div class="jl-stat">
+      <div class="jl-stat__top"><span class="jl-stat__label">MRR</span></div>
+      <div class="jl-stat__value">$12.4k</div>
+      <div class="jl-stat__foot">
+        <span class="jl-stat__delta jl-stat__delta--positive">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" /></svg>
+          +12%
+        </span>
+      </div>
+    </div>
+    <div class="jl-stat">
+      <div class="jl-stat__top"><span class="jl-stat__label">Churn</span></div>
+      <div class="jl-stat__value">2.4%</div>
+      <div class="jl-stat__foot">
+        <span class="jl-stat__delta jl-stat__delta--negative">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" /></svg>
+          -0.4%
+        </span>
+      </div>
+    </div>
+    <div class="jl-stat">
+      <div class="jl-stat__top"><span class="jl-stat__label">Seats</span></div>
+      <div class="jl-stat__value">128</div>
+      <div class="jl-stat__foot">
+        <span class="jl-stat__delta jl-stat__delta--neutral">0%</span>
+      </div>
+    </div>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

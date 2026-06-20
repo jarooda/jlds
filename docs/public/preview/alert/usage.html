@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/alert.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); max-width: 460px; }
+    </style>
+  </head>
+  <body>
+    <div class="jl-alert jl-alert--info" role="status">
+      <span class="jl-alert__icon">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" opacity="0.35" />
+          <path d="M12 8h.01M11 12h1v4h1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+      <div class="jl-alert__body">
+        <div class="jl-alert__text">A new deploy is available for this project.</div>
+      </div>
+    </div>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

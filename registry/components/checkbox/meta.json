@@ -1,0 +1,14 @@
+{
+  "name": "checkbox",
+  "description": "Boolean checkbox with optional label, description, and indeterminate state.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["checkbox.tsx", "index.ts"],
+    "vue": ["Checkbox.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}
