@@ -8,19 +8,19 @@ This guide covers the CLI workflow for React and Vue projects. Not using a frame
 The fastest way — no Rust, no global install. Run it on the fly with `npx`:
 
 ```bash
-npx jlds init
-npx jlds add button
+npx @jarooda/jlds init
+npx @jarooda/jlds add button
 ```
 
 On first run, npm downloads the prebuilt binary for your platform and caches it; later
-`npx jlds …` calls reuse it. Prefer a global install? Any of:
+`npx @jarooda/jlds …` calls reuse it. Prefer a global install? Any of:
 
 ```bash
-npm install -g jlds       # or: pnpm add -g jlds / bun add -g jlds / yarn global add jlds
+npm install -g @jarooda/jlds   # or: pnpm add -g @jarooda/jlds / bun add -g @jarooda/jlds
 ```
 
-Rust user, or on an unsupported platform? Install from source — no clone needed
-([Rust](https://rustup.rs/) 1.80+):
+Once installed globally, the command is just `jlds`. Rust user, or on an unsupported platform?
+Install from source — no clone needed ([Rust](https://rustup.rs/) 1.80+):
 
 ```bash
 cargo install --git https://github.com/jarooda/jlds.git jlds
@@ -29,13 +29,13 @@ cargo install --git https://github.com/jarooda/jlds.git jlds
 Verify it's available:
 
 ```bash
-jlds --help
-# or: npx jlds --help
+npx @jarooda/jlds --help
+# or, if installed globally: jlds --help
 ```
 
-> The npm package is a thin launcher around the native Rust binary — same CLI either way. The
-> examples below use the bare `jlds` command; prefix with `npx ` if you're not installing it
-> globally.
+> The npm package (`@jarooda/jlds`) is a thin launcher around the native Rust binary — same CLI
+> either way. The examples below use the bare `jlds` command; if you're not installing it
+> globally, prefix them with `npx @jarooda/jlds ` (e.g. `npx @jarooda/jlds add button`).
 
 ## Initialize your project
 

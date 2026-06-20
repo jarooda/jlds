@@ -1,9 +1,12 @@
 {
-  "name": "jlds",
-  "version": "0.0.0",
+  "name": "@jarooda/jlds",
+  "version": "0.1.0",
   "description": "Own-your-code component CLI for the JLDS design system — downloads React/Vue components straight into your project.",
   "bin": {
     "jlds": "bin/jlds.js"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "files": [
     "bin"

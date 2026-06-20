@@ -15,11 +15,11 @@ The aesthetic: a premium SaaS product, **light-first** — a low-glare off-white
 No Rust, no global install — run it on the fly with `npx`:
 
 ```bash
-npx jlds init
-npx jlds add button
+npx @jarooda/jlds init
+npx @jarooda/jlds add button
 ```
 
-Or install globally (`npm i -g jlds`), or from source for Rust users (`cargo install --git https://github.com/jarooda/jlds.git jlds`). The npm package is a thin launcher around the native Rust binary — same CLI either way. See [Getting Started](docs/guide/getting-started.md).
+Or install globally (`npm i -g @jarooda/jlds`, then use the `jlds` command), or from source for Rust users (`cargo install --git https://github.com/jarooda/jlds.git jlds`). The npm package is a thin launcher around the native Rust binary — same CLI either way. See [Getting Started](docs/guide/getting-started.md).
 
 > Building the CLI from source for development? See [Contributing / CLI development](#getting-started-cli-development) below.
 
