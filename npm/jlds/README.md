@@ -19,8 +19,9 @@ Or install it globally:
 npm i -g jlds
 ```
 
-This package is a thin launcher: on install, npm pulls the prebuilt native binary for your
-platform (one of the `jlds-cli-*` packages) and `npx jlds`/`jlds` runs it directly.
+This package is a thin launcher: on first run it downloads the prebuilt native binary for your
+platform from the matching [GitHub Release](https://github.com/jarooda/jlds/releases), caches it
+by version, and runs it directly. Later runs reuse the cache (no network).
 
 ## Docs
 
