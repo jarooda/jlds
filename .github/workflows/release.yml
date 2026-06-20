@@ -19,15 +19,13 @@ jobs:
       matrix:
         include:
           - target: aarch64-apple-darwin
-            runner: macos-14
+            runner: macos-14 # Apple Silicon
           - target: x86_64-apple-darwin
-            runner: macos-14
+            runner: macos-13 # Intel
           - target: x86_64-unknown-linux-gnu
             runner: ubuntu-latest
-            zig: true
           - target: aarch64-unknown-linux-gnu
-            runner: ubuntu-latest
-            zig: true
+            runner: ubuntu-24.04-arm # native arm64 Linux runner
           - target: x86_64-pc-windows-msvc
             runner: windows-latest
     steps:
@@ -41,21 +39,8 @@ jobs:
         with:
           workspaces: cli
 
-      - uses: mlugg/setup-zig@v1
-        if: matrix.zig
-
-      - name: Install cargo-zigbuild
-        if: matrix.zig
-        run: cargo install --locked cargo-zigbuild
-
       - name: Build
-        shell: bash
-        run: |
-          if [ "${{ matrix.zig }}" = "true" ]; then
-            cargo zigbuild --manifest-path cli/Cargo.toml --release --target ${{ matrix.target }}
-          else
-            cargo build --manifest-path cli/Cargo.toml --release --target ${{ matrix.target }}
-          fi
+        run: cargo build --manifest-path cli/Cargo.toml --release --target ${{ matrix.target }}
 
       - name: Stage binary
         shell: bash
