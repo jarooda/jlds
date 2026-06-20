@@ -1,0 +1,33 @@
+#!/bin/sh
+# JLDS pre-commit hook.
+# Regenerates derived, committed artifacts and stages them so they never drift
+# from their sources. Currently: the HTML CSS bundle (registry/css/all.css),
+# which is just an @import list of every component stylesheet.
+#
+# Enable once per clone:  git config core.hooksPath .githooks
+#
+# Note: this only touches committed artifacts. Generated-but-gitignored output
+# (e.g. docs/public/css from sync-css, docs/.vitepress/dist) is intentionally
+# NOT handled here — it's rebuilt by the docs dev/build scripts and never committed.
+
+set -e
+
+repo_root=$(git rev-parse --show-toplevel)
+cd "$repo_root"
+
+if ! command -v node >/dev/null 2>&1; then
+  echo "pre-commit: node not found — skipping CSS bundle regeneration." >&2
+  exit 0
+fi
+
+# Regenerate the all-in-one CSS bundle.
+node registry/scripts/build-css-bundle.mjs >/dev/null
+
+# Stage it. `git add` on an unchanged file is a no-op; comparing the index to
+# HEAD afterwards reports a change whether the file is newly added or modified.
+git add registry/css/all.css
+if ! git diff --cached --quiet -- registry/css/all.css; then
+  echo "pre-commit: regenerated and staged registry/css/all.css"
+fi
+
+exit 0
