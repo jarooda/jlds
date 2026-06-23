@@ -16,9 +16,11 @@
 @import "./icon-button.css";
 @import "./input.css";
 @import "./kbd.css";
+@import "./number-input.css";
 @import "./pagination.css";
 @import "./progress.css";
 @import "./radio-group.css";
+@import "./segmented-control.css";
 @import "./select.css";
 @import "./skeleton.css";
 @import "./slider.css";
@@ -26,5 +28,6 @@
 @import "./spinner.css";
 @import "./stat.css";
 @import "./switch.css";
+@import "./tabs.css";
 @import "./tag.css";
 @import "./textarea.css";

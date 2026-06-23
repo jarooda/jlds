@@ -53,9 +53,11 @@ export default defineConfig({
             { text: 'Icon Button', link: '/components/icon-button' },
             { text: 'Input', link: '/components/input' },
             { text: 'Kbd', link: '/components/kbd' },
+            { text: 'Number Input', link: '/components/number-input' },
             { text: 'Pagination', link: '/components/pagination' },
             { text: 'Progress', link: '/components/progress' },
             { text: 'Radio Group', link: '/components/radio-group' },
+            { text: 'Segmented Control', link: '/components/segmented-control' },
             { text: 'Select', link: '/components/select' },
             { text: 'Skeleton', link: '/components/skeleton' },
             { text: 'Slider', link: '/components/slider' },
@@ -63,6 +65,7 @@ export default defineConfig({
             { text: 'Spinner', link: '/components/spinner' },
             { text: 'Stat', link: '/components/stat' },
             { text: 'Switch', link: '/components/switch' },
+            { text: 'Tabs', link: '/components/tabs' },
             { text: 'Tag', link: '/components/tag' },
             { text: 'Textarea', link: '/components/textarea' }
           ]

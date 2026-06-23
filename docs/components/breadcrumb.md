@@ -18,7 +18,8 @@ jlds add breadcrumb
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/css/index.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/css/breadcrumb.css">
 <!-- behavior layer: only needed for the collapse ("…") example below -->
-<script src="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/all.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/core.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/breadcrumb.js" defer></script>
 
 <nav class="jl-breadcrumb" aria-label="Breadcrumb">
   <ol class="jl-breadcrumb__list">

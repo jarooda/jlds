@@ -175,6 +175,27 @@
       "frameworks": ["react", "vue"],
       "dependencies": [],
       "devDependencies": []
+    },
+    {
+      "name": "segmented-control",
+      "description": "Compact single-select toggle for 2-5 mutually exclusive options, with a sliding thumb.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "tabs",
+      "description": "Horizontal section switcher. Underline or pill style; controlled, render your own panels.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "number-input",
+      "description": "Numeric field with -/+ steppers, min/max clamping, step increments, and arrow-key control.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
     }
   ]
 }

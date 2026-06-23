@@ -1,0 +1,14 @@
+{
+  "name": "segmented-control",
+  "description": "Compact single-select toggle for 2-5 mutually exclusive options, with a sliding thumb.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["segmented-control.tsx", "index.ts"],
+    "vue": ["SegmentedControl.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

@@ -3,13 +3,9 @@
 Copyable code. An inline single-line command pill by default, or a multi-line `block` with an
 optional title bar, language tag, and line numbers. Both include a one-click copy button.
 
-> The copy button needs JavaScript. With React/Vue it just works. For plain HTML, include the
-> JLDS [behavior layer](/guide/vanilla-html#interactivity-optional) and copy is wired up
-> automatically:
->
-> ```html
-> <script src="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/all.js" defer></script>
-> ```
+> The copy button needs JavaScript. With React/Vue it just works. For plain HTML, load the JLDS
+> [behavior layer](/guide/vanilla-html#interactivity-optional) — either the `all.js` bundle, or
+> just the minimal `core.js` + `util.js` + `snippet.js` shown in the HTML tab below.
 
 ```bash
 jlds add snippet
@@ -26,8 +22,10 @@ A single command, with a `$` prompt by default.
 ```html [HTML]
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/css/index.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/css/snippet.css">
-<!-- behavior layer: wires up the copy button -->
-<script src="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/all.js" defer></script>
+<!-- behavior layer: wires up the copy button (minimal set) -->
+<script src="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/core.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/util.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/snippet.js" defer></script>
 
 <span class="jl-snippet">
   <span class="jl-snippet__prompt">$</span>

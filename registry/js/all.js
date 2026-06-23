@@ -251,6 +251,157 @@
   });
 })();
 
+/* ---- number-input.js ---- */
+/* JLDS behavior — NumberInput steppers + keyboard. Requires core.js (or all.js).
+ * Contract: .jl-number with data-min / data-max / data-step / data-precision (all
+ * optional); a .jl-number__input (set its `value` for the initial number); and
+ * .jl-number__btn--dec / --inc buttons. Emits jl-number:change on commit. */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  function decimals(s) {
+    s = String(s);
+    return s.indexOf(".") >= 0 ? s.split(".")[1].length : 0;
+  }
+
+  function initNumber(el) {
+    if (el.__jlNum) return;
+    el.__jlNum = true;
+
+    var input = el.querySelector(".jl-number__input");
+    if (!input) return;
+    var dec = el.querySelector(".jl-number__btn--dec");
+    var inc = el.querySelector(".jl-number__btn--inc");
+
+    var min = el.dataset.min != null ? parseFloat(el.dataset.min) : -Infinity;
+    var max = el.dataset.max != null ? parseFloat(el.dataset.max) : Infinity;
+    var step = parseFloat(el.dataset.step) || 1;
+    var prec = el.dataset.precision != null ? parseInt(el.dataset.precision, 10) : decimals(step);
+
+    function clamp(n) {
+      return Math.min(max, Math.max(min, n));
+    }
+    function round(n) {
+      return Number(n.toFixed(prec));
+    }
+    function cur() {
+      var n = parseFloat(input.value);
+      return isNaN(n) ? null : n;
+    }
+    function sync() {
+      var c = cur();
+      if (dec) dec.disabled = c != null && c <= min;
+      if (inc) inc.disabled = c != null && c >= max;
+      input.setAttribute("aria-valuenow", c == null ? "" : c);
+    }
+    function commit(n) {
+      var next = n == null || isNaN(n) ? "" : round(clamp(n));
+      input.value = next === "" ? "" : String(next);
+      sync();
+      el.dispatchEvent(
+        new CustomEvent("jl-number:change", {
+          detail: { value: next === "" ? null : next },
+          bubbles: true,
+        })
+      );
+    }
+    function bump(dir) {
+      var b = cur();
+      var start = b == null ? (isFinite(min) ? min : 0) : b;
+      commit(start + dir * step);
+    }
+
+    if (dec) dec.addEventListener("click", function () { bump(-1); });
+    if (inc) inc.addEventListener("click", function () { bump(1); });
+    input.addEventListener("input", function () {
+      if (!/^-?\d*\.?\d*$/.test(input.value)) {
+        input.value = input.value.replace(/[^\d.-]/g, "");
+      }
+      sync();
+    });
+    input.addEventListener("blur", function () { commit(cur()); });
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowUp") { e.preventDefault(); bump(1); }
+      else if (e.key === "ArrowDown") { e.preventDefault(); bump(-1); }
+    });
+
+    // aria bounds
+    if (isFinite(min)) input.setAttribute("aria-valuemin", min);
+    if (isFinite(max)) input.setAttribute("aria-valuemax", max);
+    sync();
+  }
+
+  register("number", function (root) {
+    root.querySelectorAll(".jl-number").forEach(initNumber);
+  });
+})();
+
+/* ---- segmented-control.js ---- */
+/* JLDS behavior — SegmentedControl. Click an option to select it; the thumb slides
+ * to it. Emits jl-segmented:change. Requires core.js (or the all.js bundle).
+ * Contract: .jl-segmented holds a .jl-segmented__thumb and .jl-segmented__option
+ * buttons (one with aria-checked="true"); optional data-value per option. */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  function initSeg(seg) {
+    if (seg.__jlSeg) return;
+    seg.__jlSeg = true;
+
+    var thumb = seg.querySelector(".jl-segmented__thumb");
+    var opts = Array.prototype.slice.call(seg.querySelectorAll(".jl-segmented__option"));
+    if (!opts.length) return;
+
+    function moveThumb(btn) {
+      if (!thumb || !btn) return;
+      var pad = parseFloat(getComputedStyle(seg).paddingLeft) || 0;
+      thumb.style.transform = "translateX(" + (btn.offsetLeft - pad) + "px)";
+      thumb.style.width = btn.offsetWidth + "px";
+    }
+    function selected() {
+      return seg.querySelector('.jl-segmented__option[aria-checked="true"]') || opts[0];
+    }
+
+    opts.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        if (btn.disabled || btn.getAttribute("aria-checked") === "true") return;
+        opts.forEach(function (o) {
+          o.setAttribute("aria-checked", o === btn ? "true" : "false");
+        });
+        moveThumb(btn);
+        seg.dispatchEvent(
+          new CustomEvent("jl-segmented:change", {
+            detail: { value: btn.dataset.value || btn.textContent.trim() },
+            bubbles: true,
+          })
+        );
+      });
+    });
+
+    moveThumb(selected());
+    window.addEventListener("resize", function () {
+      moveThumb(selected());
+    });
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () {
+        moveThumb(selected());
+      });
+    }
+  }
+
+  register("segmented", function (root) {
+    root.querySelectorAll(".jl-segmented").forEach(initSeg);
+  });
+})();
+
 /* ---- slider.js ---- */
 /* JLDS behavior — Slider drag + keyboard. Requires core.js (or the all.js bundle).
  *
@@ -434,6 +585,74 @@
   register("snippet", function (root) {
     wire(root, ".jl-snippet__copy", ".jl-snippet", ".jl-snippet__code", "jl-snippet__copy--done");
     wire(root, ".jl-codeblock__copy", ".jl-codeblock", "code", "jl-codeblock__copy--done");
+  });
+})();
+
+/* ---- tabs.js ---- */
+/* JLDS behavior — Tabs. Click or arrow-key to switch tabs; if a tab has
+ * aria-controls, its panel is shown and the others hidden. Emits jl-tabs:change.
+ * Requires core.js (or the all.js bundle).
+ * Contract: .jl-tabs holds .jl-tab buttons (role="tab", aria-selected). Optional
+ * aria-controls="panelId" pairs each tab with an element to toggle. */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  function initTabs(strip) {
+    if (strip.__jlTabs) return;
+    strip.__jlTabs = true;
+
+    var tabs = Array.prototype.slice.call(strip.querySelectorAll(".jl-tab"));
+    if (!tabs.length) return;
+
+    function panelFor(tab) {
+      var id = tab.getAttribute("aria-controls");
+      return id ? document.getElementById(id) : null;
+    }
+    function applyState(active, emit) {
+      tabs.forEach(function (t) {
+        var on = t === active;
+        t.setAttribute("aria-selected", on ? "true" : "false");
+        t.tabIndex = on ? 0 : -1;
+        var p = panelFor(t);
+        if (p) p.hidden = !on;
+      });
+      if (emit) {
+        strip.dispatchEvent(
+          new CustomEvent("jl-tabs:change", {
+            detail: { value: active.dataset.value || active.textContent.trim() },
+            bubbles: true,
+          })
+        );
+      }
+    }
+
+    tabs.forEach(function (tab, i) {
+      tab.addEventListener("click", function () {
+        applyState(tab, true);
+      });
+      tab.addEventListener("keydown", function (e) {
+        var next;
+        if (e.key === "ArrowRight") next = tabs[(i + 1) % tabs.length];
+        else if (e.key === "ArrowLeft") next = tabs[(i - 1 + tabs.length) % tabs.length];
+        else if (e.key === "Home") next = tabs[0];
+        else if (e.key === "End") next = tabs[tabs.length - 1];
+        else return;
+        e.preventDefault();
+        next.focus();
+        applyState(next, true);
+      });
+    });
+
+    var selected = strip.querySelector('.jl-tab[aria-selected="true"]') || tabs[0];
+    applyState(selected, false);
+  }
+
+  register("tabs", function (root) {
+    root.querySelectorAll(".jl-tabs").forEach(initTabs);
   });
 })();
 

@@ -23,7 +23,8 @@ jlds add slider
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/css/index.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/css/slider.css">
 <!-- behavior layer: wires up drag + keyboard -->
-<script src="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/all.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/core.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/slider.js" defer></script>
 
 <!-- the script reads data-* and positions the fill/thumb -->
 <div class="jl-slider jl-slider--md" data-min="0" data-max="100" data-step="1">
