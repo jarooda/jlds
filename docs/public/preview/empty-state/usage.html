@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/empty-state.css">
+    <link rel="stylesheet" href="/css/button.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); }
+    </style>
+  </head>
+  <body>
+    <div class="jl-empty">
+      <span class="jl-empty__media">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M3 13h5l1.5 3h5L21 13" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M5 5h14l2 8v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+      <p class="jl-empty__title">No messages yet</p>
+      <p class="jl-empty__desc">When someone sends you a message, it'll show up here.</p>
+      <div class="jl-empty__actions">
+        <button class="jl-btn jl-btn--primary jl-btn--md">Compose</button>
+        <button class="jl-btn jl-btn--secondary jl-btn--md">Learn more</button>
+      </div>
+    </div>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

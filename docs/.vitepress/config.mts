@@ -49,6 +49,7 @@ export default defineConfig({
             { text: 'Card', link: '/components/card' },
             { text: 'Checkbox', link: '/components/checkbox' },
             { text: 'Divider', link: '/components/divider' },
+            { text: 'Empty State', link: '/components/empty-state' },
             { text: 'Field', link: '/components/field' },
             { text: 'Icon Button', link: '/components/icon-button' },
             { text: 'Input', link: '/components/input' },
@@ -64,10 +65,12 @@ export default defineConfig({
             { text: 'Snippet', link: '/components/snippet' },
             { text: 'Spinner', link: '/components/spinner' },
             { text: 'Stat', link: '/components/stat' },
+            { text: 'Stepper', link: '/components/stepper' },
             { text: 'Switch', link: '/components/switch' },
             { text: 'Tabs', link: '/components/tabs' },
             { text: 'Tag', link: '/components/tag' },
-            { text: 'Textarea', link: '/components/textarea' }
+            { text: 'Textarea', link: '/components/textarea' },
+            { text: 'Toggle', link: '/components/toggle' }
           ]
         }
       ],

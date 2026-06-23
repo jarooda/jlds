@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/stepper.css">
+    <style>
+      body { margin: 0; padding: var(--space-5) var(--space-4); }
+    </style>
+  </head>
+  <body>
+    <ol class="jl-stepper jl-stepper--horizontal">
+      <li class="jl-step" data-state="completed">
+        <div class="jl-step__indicator">
+          <span class="jl-step__marker"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="jl-step__line" aria-hidden="true"></span>
+        </div>
+        <div class="jl-step__body"><div class="jl-step__label">Account</div></div>
+      </li>
+      <li class="jl-step" data-state="current">
+        <div class="jl-step__indicator">
+          <span class="jl-step__marker" aria-current="step">2</span>
+          <span class="jl-step__line" aria-hidden="true"></span>
+        </div>
+        <div class="jl-step__body"><div class="jl-step__label">Profile</div></div>
+      </li>
+      <li class="jl-step" data-state="upcoming">
+        <div class="jl-step__indicator">
+          <span class="jl-step__marker">3</span>
+        </div>
+        <div class="jl-step__body"><div class="jl-step__label">Done</div></div>
+      </li>
+    </ol>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

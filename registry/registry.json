@@ -196,6 +196,27 @@
       "frameworks": ["react", "vue"],
       "dependencies": [],
       "devDependencies": []
+    },
+    {
+      "name": "toggle",
+      "description": "A single pressable on/off button (text and/or icon). ToggleGroup adds single/multiple select.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "empty-state",
+      "description": "Placeholder for a zero / blank view, with optional icon, copy, and actions.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "stepper",
+      "description": "Progress through an ordered sequence of steps. Horizontal or vertical; done / current / upcoming.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
     }
   ]
 }

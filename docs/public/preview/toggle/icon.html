@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/toggle.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+    </style>
+  </head>
+  <body>
+    <button type="button" class="jl-toggle jl-toggle--md jl-toggle--icon" aria-pressed="true" aria-label="Bold">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M7 5h6a3.5 3.5 0 0 1 0 7H7zM7 12h7a3.5 3.5 0 0 1 0 7H7z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button type="button" class="jl-toggle jl-toggle--md jl-toggle--icon" aria-pressed="false" aria-label="Italic">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 5h-6M11 19H5M15 5 9 19" stroke-linecap="round"/></svg>
+    </button>
+    <button type="button" class="jl-toggle jl-toggle--md jl-toggle--icon" aria-pressed="false" aria-label="Underline">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 4v6a5 5 0 0 0 10 0V4M5 20h14" stroke-linecap="round"/></svg>
+    </button>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>
