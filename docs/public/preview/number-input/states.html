@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/number-input.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); display: flex; flex-direction: column; gap: var(--space-3); max-width: 200px; }
+    </style>
+  </head>
+  <body>
+    <div class="jl-number jl-number--sm" data-step="1">
+      <button type="button" class="jl-number__btn jl-number__btn--dec" aria-label="Decrease" tabindex="-1"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg></button>
+      <input class="jl-number__input" type="text" inputmode="decimal" value="1" />
+      <button type="button" class="jl-number__btn jl-number__btn--inc" aria-label="Increase" tabindex="-1"><svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg></button>
+    </div>
+    <div class="jl-number jl-number--md jl-number--invalid" data-step="1">
+      <button type="button" class="jl-number__btn jl-number__btn--dec" aria-label="Decrease" tabindex="-1"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg></button>
+      <input class="jl-number__input" type="text" inputmode="decimal" value="1" aria-invalid="true" />
+      <button type="button" class="jl-number__btn jl-number__btn--inc" aria-label="Increase" tabindex="-1"><svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg></button>
+    </div>
+    <div class="jl-number jl-number--md jl-number--disabled" data-step="1">
+      <button type="button" class="jl-number__btn jl-number__btn--dec" aria-label="Decrease" tabindex="-1" disabled><svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg></button>
+      <input class="jl-number__input" type="text" inputmode="decimal" value="1" disabled />
+      <button type="button" class="jl-number__btn jl-number__btn--inc" aria-label="Increase" tabindex="-1" disabled><svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg></button>
+    </div>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

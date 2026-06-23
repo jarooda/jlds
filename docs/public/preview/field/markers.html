@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/field.css">
+    <link rel="stylesheet" href="/css/input.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); max-width: 360px; display: flex; flex-direction: column; gap: var(--space-4); }
+    </style>
+  </head>
+  <body>
+    <div class="jl-field">
+      <label class="jl-field__label" for="name">
+        Full name <span class="jl-field__req" aria-hidden="true">*</span>
+      </label>
+      <div class="jl-input-wrap jl-input-wrap--md"><input id="name" class="jl-input" /></div>
+    </div>
+    <div class="jl-field">
+      <label class="jl-field__label" for="company">
+        Company <span class="jl-field__optional">(optional)</span>
+      </label>
+      <div class="jl-input-wrap jl-input-wrap--md"><input id="company" class="jl-input" /></div>
+    </div>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

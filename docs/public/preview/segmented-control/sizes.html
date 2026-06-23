@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/segmented-control.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); }
+    </style>
+  </head>
+  <body>
+    <div class="jl-segmented jl-segmented--sm" role="radiogroup" aria-label="Range (small)">
+      <span class="jl-segmented__thumb" aria-hidden="true"></span>
+      <button type="button" role="radio" class="jl-segmented__option" data-value="day" aria-checked="true">Day</button>
+      <button type="button" role="radio" class="jl-segmented__option" data-value="week" aria-checked="false">Week</button>
+      <button type="button" role="radio" class="jl-segmented__option" data-value="month" aria-checked="false">Month</button>
+    </div>
+    <div class="jl-segmented" role="radiogroup" aria-label="Range">
+      <span class="jl-segmented__thumb" aria-hidden="true"></span>
+      <button type="button" role="radio" class="jl-segmented__option" data-value="day" aria-checked="true">Day</button>
+      <button type="button" role="radio" class="jl-segmented__option" data-value="week" aria-checked="false">Week</button>
+      <button type="button" role="radio" class="jl-segmented__option" data-value="month" aria-checked="false">Month</button>
+    </div>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

@@ -1,0 +1,68 @@
+.jl-number {
+  display: inline-flex;
+  align-items: stretch;
+  width: 100%;
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-input);
+  box-shadow: var(--shadow-xs);
+  transition: var(--transition-control);
+  overflow: hidden;
+}
+.jl-number:hover { border-color: var(--border-strong); }
+.jl-number:focus-within { border-color: var(--border-focus); box-shadow: var(--ring-focus); }
+.jl-number--invalid { border-color: var(--danger); }
+.jl-number--invalid:focus-within { box-shadow: var(--ring-danger); }
+.jl-number--disabled { opacity: 0.55; pointer-events: none; background: var(--bg-subtle); }
+.jl-number--sm { --_h: 32px; font-size: var(--text-sm); }
+.jl-number--md { --_h: 38px; font-size: var(--text-base); }
+.jl-number--lg { --_h: 44px; font-size: var(--text-md); }
+
+.jl-number__input {
+  flex: 1;
+  min-width: 0;
+  height: var(--_h);
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: inherit;
+  color: var(--text-primary);
+  text-align: center;
+  padding: 0 var(--space-2);
+  font-variant-numeric: tabular-nums;
+  -moz-appearance: textfield;
+}
+.jl-number__input::-webkit-outer-spin-button,
+.jl-number__input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.jl-number__input::placeholder { color: var(--text-tertiary); }
+.jl-number--left .jl-number__input { text-align: left; padding-left: var(--space-3); }
+
+.jl-number__btn {
+  flex: none;
+  width: var(--_h);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition-control);
+}
+.jl-number__btn:hover { background: var(--surface-muted); color: var(--text-primary); }
+.jl-number__btn:active { background: var(--surface-sunken); }
+.jl-number__btn:disabled { color: var(--text-disabled); cursor: not-allowed; background: transparent; }
+.jl-number__btn--dec { border-right: 1px solid var(--border-subtle); }
+.jl-number__btn--inc { border-left: 1px solid var(--border-subtle); }
+.jl-number__btn svg { width: 16px; height: 16px; }
+.jl-number__affix {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 var(--space-3);
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+  font-family: var(--font-sans);
+  background: var(--surface-sunken);
+  border-left: 1px solid var(--border-subtle);
+}

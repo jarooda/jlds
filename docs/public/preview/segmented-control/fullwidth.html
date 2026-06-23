@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/segmented-control.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); max-width: 360px; }
+    </style>
+  </head>
+  <body>
+    <div class="jl-segmented jl-segmented--full" role="radiogroup" aria-label="Billing">
+      <span class="jl-segmented__thumb" aria-hidden="true"></span>
+      <button type="button" role="radio" class="jl-segmented__option" data-value="monthly" aria-checked="true">Monthly</button>
+      <button type="button" role="radio" class="jl-segmented__option" data-value="yearly" aria-checked="false">Yearly</button>
+    </div>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

@@ -16,6 +16,9 @@ jlds add tag
 ```html [HTML]
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/css/index.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/css/tag.css">
+<!-- behavior layer (optional): wires up the × remove button -->
+<script src="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/core.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/tag.js" defer></script>
 
 <span class="jl-tag">Design</span>
 ```
@@ -72,7 +75,8 @@ make it a toggle button — that also adds hover affordance.
 ## Removable
 
 In React, pass `onRemove` to render the × button. In Vue, set `removable` and listen for the
-`remove` event. In HTML, include the `jl-tag__remove` button yourself.
+`remove` event. In HTML, include the `jl-tag__remove` button and load the
+[behavior layer](/guide/vanilla-html#interactivity-optional) — clicking × removes the tag.
 
 <Preview src="/preview/tag/removable.html" />
 

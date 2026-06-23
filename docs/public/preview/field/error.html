@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/field.css">
+    <link rel="stylesheet" href="/css/input.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); max-width: 360px; }
+    </style>
+  </head>
+  <body>
+    <div class="jl-field">
+      <label class="jl-field__label" for="pw">
+        Password <span class="jl-field__req" aria-hidden="true">*</span>
+      </label>
+      <div class="jl-input-wrap jl-input-wrap--md" data-invalid="true">
+        <input id="pw" class="jl-input" type="password" value="123" aria-invalid="true" />
+      </div>
+      <div class="jl-field__error" role="alert">Must be at least 8 characters.</div>
+    </div>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

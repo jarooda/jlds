@@ -6,6 +6,10 @@ center alignment, and sticky positioning.
 
 > Banner is **full-width**. For an inline, card-width status callout, use
 > [Alert](/components/alert).
+>
+> For plain-HTML dismiss, include the JLDS
+> [behavior layer](/guide/vanilla-html#interactivity-optional) — clicking `.jl-banner__close`
+> removes the banner automatically.
 
 ```bash
 jlds add banner
@@ -20,6 +24,9 @@ jlds add banner
 ```html [HTML]
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/css/index.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/css/banner.css">
+<!-- behavior layer (optional): wires up the dismiss button -->
+<script src="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/core.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/banner.js" defer></script>
 
 <div class="jl-banner jl-banner--subtle jl-banner--info" role="status">
   <span class="jl-banner__content">

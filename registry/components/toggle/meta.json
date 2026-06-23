@@ -1,0 +1,14 @@
+{
+  "name": "toggle",
+  "description": "A single pressable on/off button (text and/or icon). ToggleGroup adds single/multiple select.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["toggle.tsx", "index.ts"],
+    "vue": ["Toggle.vue", "ToggleGroup.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

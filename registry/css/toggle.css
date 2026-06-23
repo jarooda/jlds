@@ -1,0 +1,58 @@
+.jl-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: var(--_h, 38px);
+  padding: 0 var(--_px, var(--space-3));
+  font-family: var(--font-sans);
+  font-size: var(--_fs, var(--text-base));
+  font-weight: var(--weight-medium);
+  color: var(--text-secondary);
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-input);
+  cursor: pointer;
+  transition: var(--transition-control);
+  user-select: none;
+  white-space: nowrap;
+}
+.jl-toggle--sm { --_h: 30px; --_px: var(--space-2); --_fs: var(--text-sm); }
+.jl-toggle--md { --_h: 38px; --_px: var(--space-3); --_fs: var(--text-base); }
+.jl-toggle--lg { --_h: 44px; --_px: var(--space-4); --_fs: var(--text-md); }
+.jl-toggle--icon { padding: 0; width: var(--_h); }
+.jl-toggle:hover { border-color: var(--border-strong); background: var(--bg-subtle); color: var(--text-primary); }
+.jl-toggle:focus-visible { outline: none; box-shadow: var(--ring-focus); }
+.jl-toggle[aria-pressed="true"], .jl-toggle[data-on="true"] {
+  background: var(--accent-subtle);
+  border-color: var(--accent);
+  color: var(--text-brand);
+}
+.jl-toggle:disabled { opacity: 0.5; cursor: not-allowed; }
+.jl-toggle svg { width: 1.1em; height: 1.1em; }
+
+.jl-toggle-group { display: inline-flex; align-items: center; }
+.jl-toggle-group--attached {
+  gap: 0;
+  background: var(--surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-input);
+  padding: 3px;
+}
+.jl-toggle-group--attached .jl-toggle {
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  border-radius: var(--radius-sm);
+  --_h: 30px;
+}
+.jl-toggle-group--attached.jl-toggle-group--sm .jl-toggle { --_h: 26px; }
+.jl-toggle-group--attached.jl-toggle-group--lg .jl-toggle { --_h: 36px; }
+.jl-toggle-group--attached .jl-toggle:hover { background: var(--surface-muted); }
+.jl-toggle-group--attached .jl-toggle[aria-pressed="true"] {
+  background: var(--surface-card);
+  border: none;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-xs);
+}
+.jl-toggle-group--spaced { gap: var(--space-2); }

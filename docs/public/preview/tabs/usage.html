@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/tabs.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); }
+      [role="tabpanel"] { padding: var(--space-4) 0; color: var(--text-secondary); font-family: var(--font-sans); }
+    </style>
+  </head>
+  <body>
+    <div class="jl-tabs jl-tabs--line" role="tablist">
+      <button type="button" role="tab" class="jl-tab" aria-selected="true" aria-controls="p-overview">Overview</button>
+      <button type="button" role="tab" class="jl-tab" aria-selected="false" aria-controls="p-activity">Activity</button>
+      <button type="button" role="tab" class="jl-tab" aria-selected="false" aria-controls="p-settings">Settings</button>
+    </div>
+    <div id="p-overview" role="tabpanel">Overview panel — a summary of this project.</div>
+    <div id="p-activity" role="tabpanel" hidden>Activity panel — the recent event feed.</div>
+    <div id="p-settings" role="tabpanel" hidden>Settings panel — configuration for this project.</div>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

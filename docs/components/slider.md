@@ -4,9 +4,10 @@ A drag- and keyboard-driven numeric input. Single value by default, or a two-thu
 with `range`. Supports steps, tick marks, a value readout, and full keyboard control (arrows,
 Page Up/Down, Home/End).
 
-> The slider's drag/keyboard behavior is JavaScript-driven, so use the React or Vue component.
-> The HTML tab shows the markup structure for reference — wire up your own pointer/key handlers
-> (or copy the logic from the component) if you need a no-framework build.
+> The slider's drag/keyboard behavior is JavaScript-driven. With React/Vue it just works. For
+> plain HTML, include the [behavior layer](/guide/vanilla-html#interactivity-optional): it reads
+> `data-min`/`data-max`/`data-step` on the root and `data-value` on each thumb (two thumbs = a
+> range), wires up drag + keyboard, and emits a `jl-slider:change` event on the root.
 
 ```bash
 jlds add slider
@@ -21,12 +22,16 @@ jlds add slider
 ```html [HTML]
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/css/index.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/css/slider.css">
+<!-- behavior layer: wires up drag + keyboard -->
+<script src="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/core.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/slider.js" defer></script>
 
-<div class="jl-slider jl-slider--md">
+<!-- the script reads data-* and positions the fill/thumb -->
+<div class="jl-slider jl-slider--md" data-min="0" data-max="100" data-step="1">
   <div class="jl-slider__track">
-    <span class="jl-slider__fill" style="left: 0; width: 40%"></span>
-    <button type="button" class="jl-slider__thumb" style="left: 40%"
-      role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="40"></button>
+    <span class="jl-slider__fill"></span>
+    <button type="button" class="jl-slider__thumb" data-value="40"
+      role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="40" tabindex="0"></button>
   </div>
 </div>
 ```
@@ -64,15 +69,15 @@ Add a `label` and/or `showValue` for a header row. Use `formatValue` to format t
 ::: code-group
 
 ```html [HTML]
-<div class="jl-slider jl-slider--md">
+<div class="jl-slider jl-slider--md" data-min="0" data-max="100" data-step="1" data-suffix="%">
   <div class="jl-slider__head">
     <span class="jl-slider__label">Volume</span>
     <span class="jl-slider__value">65%</span>
   </div>
   <div class="jl-slider__track">
-    <span class="jl-slider__fill" style="left: 0; width: 65%"></span>
-    <button type="button" class="jl-slider__thumb" style="left: 65%" role="slider"
-      aria-valuemin="0" aria-valuemax="100" aria-valuenow="65"></button>
+    <span class="jl-slider__fill"></span>
+    <button type="button" class="jl-slider__thumb" data-value="65" role="slider"
+      aria-valuemin="0" aria-valuemax="100" aria-valuenow="65" tabindex="0"></button>
   </div>
 </div>
 ```
@@ -109,13 +114,13 @@ Set `range` for a two-thumb band (value is `[min, max]`), and `marks` for tick l
 ::: code-group
 
 ```html [HTML]
-<div class="jl-slider jl-slider--md">
+<div class="jl-slider jl-slider--md" data-min="0" data-max="100" data-step="1">
   <div class="jl-slider__track">
-    <span class="jl-slider__fill" style="left: 25%; right: 25%"></span>
-    <button type="button" class="jl-slider__thumb" style="left: 25%" role="slider"
-      aria-valuemin="0" aria-valuemax="100" aria-valuenow="25"></button>
-    <button type="button" class="jl-slider__thumb" style="left: 75%" role="slider"
-      aria-valuemin="0" aria-valuemax="100" aria-valuenow="75"></button>
+    <span class="jl-slider__fill"></span>
+    <button type="button" class="jl-slider__thumb" data-value="25" role="slider"
+      aria-valuemin="0" aria-valuemax="100" aria-valuenow="25" tabindex="0"></button>
+    <button type="button" class="jl-slider__thumb" data-value="75" role="slider"
+      aria-valuemin="0" aria-valuemax="100" aria-valuenow="75" tabindex="0"></button>
   </div>
   <div class="jl-slider__marks">
     <span class="jl-slider__mark" style="left: 0%">0</span>
@@ -188,3 +193,17 @@ takes a `(v: number) => string \| number` function.
 | `.jl-slider__fill` | The filled portion (set `left`/`width` or `left`/`right` for range) |
 | `.jl-slider__thumb` | A draggable thumb (`role="slider"` + `aria-value*`) |
 | `.jl-slider__marks` / `.jl-slider__mark` | Tick label row |
+
+### HTML data attributes (behavior layer)
+
+With the [behavior layer](/guide/vanilla-html#interactivity-optional) loaded, the script reads
+these and positions/updates everything — you don't set the `fill`/`thumb` `left`/`width` yourself.
+
+| Attribute | On | Default | Purpose |
+|---|---|---|---|
+| `data-min` / `data-max` / `data-step` | `.jl-slider` | `0` / `100` / `1` | Range and increment |
+| `data-suffix` | `.jl-slider` | — | Appended to the `__value` readout (e.g. `%`) |
+| `data-value` | `.jl-slider__thumb` | `min` | A thumb's initial value (two thumbs ⇒ range) |
+
+It emits a `jl-slider:change` event on the root: `el.detail.value` is a number, or `[min, max]`
+for a range.

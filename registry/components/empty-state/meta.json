@@ -1,0 +1,14 @@
+{
+  "name": "empty-state",
+  "description": "Placeholder for a zero / blank view, with optional icon, copy, and actions.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["empty-state.tsx", "index.ts"],
+    "vue": ["EmptyState.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

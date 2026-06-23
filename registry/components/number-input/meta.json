@@ -1,0 +1,14 @@
+{
+  "name": "number-input",
+  "description": "Numeric field with -/+ steppers, min/max clamping, step increments, and arrow-key control.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["number-input.tsx", "index.ts"],
+    "vue": ["NumberInput.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

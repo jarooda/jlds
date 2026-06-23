@@ -19,6 +19,9 @@ jlds add alert
 ```html [HTML]
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/css/index.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/css/alert.css">
+<!-- behavior layer (optional): wires up the dismiss button -->
+<script src="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/core.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/alert.js" defer></script>
 
 <div class="jl-alert jl-alert--info" role="status">
   <span class="jl-alert__icon">
@@ -84,7 +87,9 @@ import { Alert } from "@/components/ui/alert"
 ## Title & dismiss
 
 Add a `title` for a bold lead line. In React pass `onClose` to show the dismiss ×; in Vue set
-`dismissible` and listen for `close`.
+`dismissible` and listen for `close`. In plain HTML, include the JLDS
+[behavior layer](/guide/vanilla-html#interactivity-optional) and clicking `.jl-alert__close`
+removes the alert automatically.
 
 <Preview src="/preview/alert/title.html" />
 

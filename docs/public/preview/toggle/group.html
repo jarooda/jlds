@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/toggle.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); }
+    </style>
+  </head>
+  <body>
+    <div class="jl-toggle-group jl-toggle-group--attached jl-toggle-group--md" role="group" aria-label="Align">
+      <button type="button" class="jl-toggle jl-toggle--md" data-value="left" aria-pressed="true">Left</button>
+      <button type="button" class="jl-toggle jl-toggle--md" data-value="center" aria-pressed="false">Center</button>
+      <button type="button" class="jl-toggle jl-toggle--md" data-value="right" aria-pressed="false">Right</button>
+    </div>
+    <div class="jl-toggle-group jl-toggle-group--spaced jl-toggle-group--md" role="group" aria-label="Filters" data-type="multiple">
+      <button type="button" class="jl-toggle jl-toggle--md" data-value="new" aria-pressed="true">New</button>
+      <button type="button" class="jl-toggle jl-toggle--md" data-value="open" aria-pressed="true">Open</button>
+      <button type="button" class="jl-toggle jl-toggle--md" data-value="closed" aria-pressed="false">Closed</button>
+    </div>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

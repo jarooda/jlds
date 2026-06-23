@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/number-input.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); }
+    </style>
+  </head>
+  <body>
+    <div class="jl-number jl-number--md" data-min="0" data-max="10" data-step="1" style="max-width: 160px">
+      <button type="button" class="jl-number__btn jl-number__btn--dec" aria-label="Decrease" tabindex="-1">
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+      </button>
+      <input class="jl-number__input" type="text" inputmode="decimal" role="spinbutton" value="3" />
+      <button type="button" class="jl-number__btn jl-number__btn--inc" aria-label="Increase" tabindex="-1">
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+      </button>
+    </div>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

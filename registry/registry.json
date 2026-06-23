@@ -140,6 +140,83 @@
       "frameworks": ["react", "vue"],
       "dependencies": [],
       "devDependencies": []
+    },
+    {
+      "name": "field",
+      "description": "Labelled wrapper for a form control, with hint and error slots.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "card",
+      "description": "Primary surface container with flat/raised/floating elevation. Compose with header, body, footer.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "snippet",
+      "description": "Copyable code — inline command or a multi-line block with title, language, and line numbers.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "breadcrumb",
+      "description": "Hierarchical location trail. Data-driven items with chevron/slash separators and optional collapse.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "pagination",
+      "description": "Page navigation for tables and lists. Controlled, with sibling collapse and an optional summary.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "segmented-control",
+      "description": "Compact single-select toggle for 2-5 mutually exclusive options, with a sliding thumb.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "tabs",
+      "description": "Horizontal section switcher. Underline or pill style; controlled, render your own panels.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "number-input",
+      "description": "Numeric field with -/+ steppers, min/max clamping, step increments, and arrow-key control.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "toggle",
+      "description": "A single pressable on/off button (text and/or icon). ToggleGroup adds single/multiple select.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "empty-state",
+      "description": "Placeholder for a zero / blank view, with optional icon, copy, and actions.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "stepper",
+      "description": "Progress through an ordered sequence of steps. Horizontal or vertical; done / current / upcoming.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
     }
   ]
 }

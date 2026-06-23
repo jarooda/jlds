@@ -1,0 +1,14 @@
+{
+  "name": "tabs",
+  "description": "Horizontal section switcher. Underline or pill style; controlled, render your own panels.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["tabs.tsx", "index.ts"],
+    "vue": ["Tabs.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}
