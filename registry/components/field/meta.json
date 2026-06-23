@@ -1,0 +1,14 @@
+{
+  "name": "field",
+  "description": "Labelled wrapper for a form control, with hint and error slots. Pairs with Input/Select/Textarea.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["field.tsx", "index.ts"],
+    "vue": ["Field.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

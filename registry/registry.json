@@ -140,6 +140,41 @@
       "frameworks": ["react", "vue"],
       "dependencies": [],
       "devDependencies": []
+    },
+    {
+      "name": "field",
+      "description": "Labelled wrapper for a form control, with hint and error slots.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "card",
+      "description": "Primary surface container with flat/raised/floating elevation. Compose with header, body, footer.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "snippet",
+      "description": "Copyable code — inline command or a multi-line block with title, language, and line numbers.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "breadcrumb",
+      "description": "Hierarchical location trail. Data-driven items with chevron/slash separators and optional collapse.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "pagination",
+      "description": "Page navigation for tables and lists. Controlled, with sibling collapse and an optional summary.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
     }
   ]
 }

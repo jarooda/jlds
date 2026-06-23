@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/breadcrumb.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); }
+    </style>
+  </head>
+  <body>
+    <nav class="jl-breadcrumb" aria-label="Breadcrumb">
+      <ol class="jl-breadcrumb__list">
+        <li class="jl-breadcrumb__item">
+          <a class="jl-breadcrumb__link" href="#">Home</a>
+          <span class="jl-breadcrumb__sep" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+        </li>
+        <li class="jl-breadcrumb__item">
+          <button class="jl-breadcrumb__ellipsis" aria-label="Show all">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="5" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="19" cy="12" r="1.6" fill="currentColor"/></svg>
+          </button>
+          <span class="jl-breadcrumb__sep" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+        </li>
+        <li class="jl-breadcrumb__item jl-breadcrumb__collapsed" hidden>
+          <a class="jl-breadcrumb__link" href="#">Team</a>
+          <span class="jl-breadcrumb__sep" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+        </li>
+        <li class="jl-breadcrumb__item jl-breadcrumb__collapsed" hidden>
+          <a class="jl-breadcrumb__link" href="#">Projects</a>
+          <span class="jl-breadcrumb__sep" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+        </li>
+        <li class="jl-breadcrumb__item">
+          <span class="jl-breadcrumb__current" aria-current="page">Deep page</span>
+        </li>
+      </ol>
+    </nav>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

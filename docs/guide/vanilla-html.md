@@ -40,6 +40,42 @@ need:
 This is the most convenient option but ships the CSS for every component. For production sites
 where bundle size matters, prefer linking `index.css` + just the component files you use.
 
+## Interactivity (optional)
+
+Most components are pure CSS or native HTML controls and need no JavaScript. A few need a little
+behavior — Snippet's copy button, Alert/Banner dismiss, and (as they land) the overlay
+components like Dialog, Drawer, Dropdown, and Tabs. Drop in the JLDS **behavior layer** and it
+wires them up automatically:
+
+```html
+<script src="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/all.js" defer></script>
+```
+
+It's **progressive enhancement**: the markup renders correctly without it; the script only
+*adds* behavior. On load it scans the page for `.jl-*` markup and initializes it. For content you
+inject later (e.g. after a `fetch`), call `JLDS.init(container)` to wire up just that subtree:
+
+```js
+const el = document.querySelector("#new-content")
+el.innerHTML = await (await fetch("/fragment.html")).text()
+JLDS.init(el)   // activate any .jl-* behavior inside
+```
+
+Want only what you use? Each behavior also ships as `js/<name>.js` — load `js/core.js` and the
+shared `js/util.js` first, then the component files you need:
+
+```html
+<script src="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/core.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/util.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/snippet.js" defer></script>
+```
+
+`js/util.js` holds shared DOM helpers (`JLDS.util.copy`, click-outside, escape, scroll-lock,
+focus-trap) that the behaviors build on — the `all.js` bundle already includes it.
+
+This is opt-in, unlike the React/Vue components (which carry their own behavior in the copied
+source). The behaviors are idempotent and dependency-free.
+
 ## Single source of truth
 
 `registry/css/<name>.css` is the *only* place a component's styles are written. It's served

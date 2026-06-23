@@ -1,0 +1,36 @@
+.jl-pagination { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
+.jl-pagination__summary { font-size: var(--text-sm); color: var(--text-tertiary); }
+.jl-pagination__summary b { color: var(--text-secondary); font-weight: var(--weight-semibold); }
+.jl-pagination__spacer { flex: 1; }
+
+.jl-pagination__list { display: flex; align-items: center; gap: var(--space-1); }
+.jl-page {
+  --_sz: 34px;
+  min-width: var(--_sz);
+  height: var(--_sz);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--space-2);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-standard), color var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard);
+}
+.jl-page:hover:not(:disabled):not([aria-current="page"]) { background: var(--surface-hover); color: var(--text-primary); }
+.jl-page:focus-visible { outline: 2px solid var(--border-focus); outline-offset: 1px; }
+.jl-page[aria-current="page"] {
+  background: var(--accent);
+  color: var(--text-on-brand);
+  font-weight: var(--weight-semibold);
+}
+.jl-page:disabled { opacity: 0.4; cursor: not-allowed; }
+.jl-page--arrow { color: var(--text-secondary); }
+.jl-page--arrow svg { width: 17px; height: 17px; }
+.jl-page--ellipsis { cursor: default; color: var(--text-tertiary); pointer-events: none; }

@@ -9,17 +9,22 @@ All components are self-contained — each ships its own `.jl-*` CSS classes bui
 | [Avatar](/components/avatar) | React, Vue | Available |
 | [Badge](/components/badge) | React, Vue | Available |
 | [Banner](/components/banner) | React, Vue | Available |
+| [Breadcrumb](/components/breadcrumb) | React, Vue | Available |
 | [Button](/components/button) | React, Vue | Available |
+| [Card](/components/card) | React, Vue | Available |
 | [Checkbox](/components/checkbox) | React, Vue | Available |
 | [Divider](/components/divider) | React, Vue | Available |
+| [Field](/components/field) | React, Vue | Available |
 | [Icon Button](/components/icon-button) | React, Vue | Available |
 | [Input](/components/input) | React, Vue | Available |
 | [Kbd](/components/kbd) | React, Vue | Available |
+| [Pagination](/components/pagination) | React, Vue | Available |
 | [Progress](/components/progress) | React, Vue | Available |
 | [Radio Group](/components/radio-group) | React, Vue | Available |
 | [Select](/components/select) | React, Vue | Available |
 | [Skeleton](/components/skeleton) | React, Vue | Available |
 | [Slider](/components/slider) | React, Vue | Available |
+| [Snippet](/components/snippet) | React, Vue | Available |
 | [Spinner](/components/spinner) | React, Vue | Available |
 | [Stat](/components/stat) | React, Vue | Available |
 | [Switch](/components/switch) | React, Vue | Available |

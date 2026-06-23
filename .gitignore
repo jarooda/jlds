@@ -8,3 +8,4 @@ dist-ssr/
 **/.vitepress/cache/
 *.log
 docs/public/css/
+docs/public/js/

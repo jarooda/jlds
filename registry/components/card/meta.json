@@ -1,0 +1,14 @@
+{
+  "name": "card",
+  "description": "Primary surface container with flat/raised/floating elevation. Compose with header, body, footer.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["card.tsx", "index.ts"],
+    "vue": ["Card.vue", "CardHeader.vue", "CardBody.vue", "CardFooter.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

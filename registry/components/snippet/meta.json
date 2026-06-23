@@ -1,0 +1,14 @@
+{
+  "name": "snippet",
+  "description": "Copyable code — inline single-line command or a multi-line block with title, language, and line numbers.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["snippet.tsx", "index.ts"],
+    "vue": ["Snippet.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}
