@@ -5,6 +5,7 @@ All components are self-contained — each ships its own `.jl-*` CSS classes bui
 
 | Component | Frameworks | Status |
 |---|---|---|
+| [Accordion](/components/accordion) | React, Vue | Available |
 | [Alert](/components/alert) | React, Vue | Available |
 | [Avatar](/components/avatar) | React, Vue | Available |
 | [Badge](/components/badge) | React, Vue | Available |
@@ -13,7 +14,12 @@ All components are self-contained — each ships its own `.jl-*` CSS classes bui
 | [Button](/components/button) | React, Vue | Available |
 | [Card](/components/card) | React, Vue | Available |
 | [Checkbox](/components/checkbox) | React, Vue | Available |
+| [Combobox](/components/combobox) | React, Vue | Available |
+| [Command Palette](/components/command-palette) | React, Vue | Available |
+| [Dialog](/components/dialog) | React, Vue | Available |
 | [Divider](/components/divider) | React, Vue | Available |
+| [Drawer](/components/drawer) | React, Vue | Available |
+| [Dropdown Menu](/components/dropdown-menu) | React, Vue | Available |
 | [Empty State](/components/empty-state) | React, Vue | Available |
 | [Field](/components/field) | React, Vue | Available |
 | [Icon Button](/components/icon-button) | React, Vue | Available |
@@ -21,6 +27,7 @@ All components are self-contained — each ships its own `.jl-*` CSS classes bui
 | [Kbd](/components/kbd) | React, Vue | Available |
 | [Number Input](/components/number-input) | React, Vue | Available |
 | [Pagination](/components/pagination) | React, Vue | Available |
+| [Popover](/components/popover) | React, Vue | Available |
 | [Progress](/components/progress) | React, Vue | Available |
 | [Radio Group](/components/radio-group) | React, Vue | Available |
 | [Segmented Control](/components/segmented-control) | React, Vue | Available |
@@ -32,10 +39,13 @@ All components are self-contained — each ships its own `.jl-*` CSS classes bui
 | [Stat](/components/stat) | React, Vue | Available |
 | [Stepper](/components/stepper) | React, Vue | Available |
 | [Switch](/components/switch) | React, Vue | Available |
+| [Table](/components/table) | React, Vue | Available |
 | [Tabs](/components/tabs) | React, Vue | Available |
 | [Tag](/components/tag) | React, Vue | Available |
 | [Textarea](/components/textarea) | React, Vue | Available |
+| [Toast](/components/toast) | React, Vue | Available |
 | [Toggle](/components/toggle) | React, Vue | Available |
+| [Tooltip](/components/tooltip) | React, Vue | Available |
 
 Run `jlds list` from a project with `jlds.json` to see what's available for your detected
 framework — see [CLI: list](/cli/list).

@@ -1,0 +1,14 @@
+{
+  "name": "command-palette",
+  "description": "A Cmd-K launcher: fuzzy search, grouped results, full keyboard nav, scroll-lock overlay.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["command-palette.tsx", "index.ts"],
+    "vue": ["CommandPalette.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

@@ -1,0 +1,14 @@
+{
+  "name": "drawer",
+  "description": "A panel that slides in from an edge (right/left/bottom). Locks scroll; closes on overlay/Esc/x.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["drawer.tsx", "index.ts"],
+    "vue": ["Drawer.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

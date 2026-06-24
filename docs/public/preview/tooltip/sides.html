@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/tooltip.css">
+    <link rel="stylesheet" href="/css/button.css">
+    <style>
+      body { margin: 0; padding: var(--space-10) var(--space-4); display: flex; flex-wrap: wrap; gap: var(--space-5); justify-content: center; }
+    </style>
+  </head>
+  <body>
+    <span class="jl-tooltip">
+      <button class="jl-btn jl-btn--secondary jl-btn--md">Top</button>
+      <span class="jl-tooltip__pop" role="tooltip" data-side="top">On top<span class="jl-tooltip__arrow"></span></span>
+    </span>
+    <span class="jl-tooltip">
+      <button class="jl-btn jl-btn--secondary jl-btn--md">Right</button>
+      <span class="jl-tooltip__pop" role="tooltip" data-side="right">On the right<span class="jl-tooltip__arrow"></span></span>
+    </span>
+    <span class="jl-tooltip">
+      <button class="jl-btn jl-btn--secondary jl-btn--md">Bottom</button>
+      <span class="jl-tooltip__pop" role="tooltip" data-side="bottom">On bottom<span class="jl-tooltip__arrow"></span></span>
+    </span>
+    <span class="jl-tooltip">
+      <button class="jl-btn jl-btn--secondary jl-btn--md">Left</button>
+      <span class="jl-tooltip__pop" role="tooltip" data-side="left">On the left<span class="jl-tooltip__arrow"></span></span>
+    </span>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

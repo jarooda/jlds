@@ -1,0 +1,14 @@
+{
+  "name": "tooltip",
+  "description": "Hover/focus hint that wraps a single trigger element. Four sides, open delay.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["tooltip.tsx", "index.ts"],
+    "vue": ["Tooltip.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

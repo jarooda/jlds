@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/popover.css">
+    <link rel="stylesheet" href="/css/button.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); display: flex; justify-content: center; min-height: 180px; align-items: flex-start; }
+    </style>
+  </head>
+  <body>
+    <span class="jl-popover">
+      <button class="jl-btn jl-btn--secondary jl-btn--md">Share</button>
+      <div class="jl-popover__pop" role="dialog" data-side="bottom" data-align="center" hidden>
+        <span class="jl-popover__arrow" aria-hidden="true"></span>
+        <p style="margin:0 0 6px;font-weight:600;color:var(--text-primary)">Share this project</p>
+        <p style="margin:0;color:var(--text-secondary);font-size:var(--text-sm)">Anyone with the link can view. Outside-click or Esc to close.</p>
+      </div>
+    </span>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

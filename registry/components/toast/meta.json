@@ -1,0 +1,14 @@
+{
+  "name": "toast",
+  "description": "Transient notifications. Call toast() from anywhere; mount Toaster once. Tones, actions, auto-dismiss.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["toast.tsx", "index.ts"],
+    "vue": ["toast.ts", "Toaster.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

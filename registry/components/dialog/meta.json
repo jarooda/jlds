@@ -1,0 +1,14 @@
+{
+  "name": "dialog",
+  "description": "Centered modal dialog with overlay. Title, description, footer, sizes; closes on overlay/Esc/x.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["dialog.tsx", "index.ts"],
+    "vue": ["Dialog.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

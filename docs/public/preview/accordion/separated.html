@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/accordion.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); max-width: 520px; }
+    </style>
+  </head>
+  <body>
+    <div class="jl-accordion jl-accordion--separated">
+      <div class="jl-acc-item" data-open="true">
+        <h3 style="margin:0">
+          <button type="button" class="jl-acc-trigger" aria-expanded="true" aria-controls="s1">
+            <span class="jl-acc-trigger__label">Personal</span>
+            <span class="jl-acc-trigger__chevron"><svg viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+        </h3>
+        <div class="jl-acc-region" id="s1" role="region">
+          <div class="jl-acc-content"><div class="jl-acc-content__inner">For individuals. 1 project, community support.</div></div>
+        </div>
+      </div>
+      <div class="jl-acc-item">
+        <h3 style="margin:0">
+          <button type="button" class="jl-acc-trigger" aria-expanded="false" aria-controls="s2">
+            <span class="jl-acc-trigger__label">Team</span>
+            <span class="jl-acc-trigger__chevron"><svg viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+        </h3>
+        <div class="jl-acc-region" id="s2" role="region">
+          <div class="jl-acc-content"><div class="jl-acc-content__inner">For growing teams. Unlimited projects, priority support.</div></div>
+        </div>
+      </div>
+    </div>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

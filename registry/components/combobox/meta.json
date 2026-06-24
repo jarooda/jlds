@@ -1,0 +1,14 @@
+{
+  "name": "combobox",
+  "description": "Searchable select. Single or multiple (chips), creatable, and async. Controlled or uncontrolled.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["combobox.tsx", "index.ts"],
+    "vue": ["Combobox.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

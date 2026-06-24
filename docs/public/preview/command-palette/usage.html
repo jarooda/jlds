@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/command-palette.css">
+    <link rel="stylesheet" href="/css/button.css">
+    <style>
+      body { margin: 0; padding: var(--space-5) var(--space-4); min-height: 460px; }
+    </style>
+  </head>
+  <body>
+    <button class="jl-btn jl-btn--secondary jl-btn--md" data-cmdk-trigger>Open command palette ⌘K</button>
+
+    <div class="jl-cmdk__overlay" hidden>
+      <div class="jl-cmdk" role="dialog" aria-modal="true" aria-label="Command palette">
+        <div class="jl-cmdk__search">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.75"/><path d="m20 20-3.6-3.6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+          <input class="jl-cmdk__input" placeholder="Type a command or search…" aria-label="Search commands" />
+        </div>
+        <div class="jl-cmdk__list" role="listbox">
+          <div class="jl-cmdk__empty" style="display:none">No results found.</div>
+          <div role="group" aria-label="Actions">
+            <div class="jl-cmdk__group-label">Actions</div>
+            <a class="jl-cmdk__item" role="option" href="#new" data-keywords="create add"><span class="jl-cmdk__item-text"><span class="jl-cmdk__item-label">New project</span><span class="jl-cmdk__item-hint">Start from a template</span></span><span class="jl-cmdk__item-trail"><kbd class="jl-cmdk__key">N</kbd></span></a>
+            <a class="jl-cmdk__item" role="option" href="#invite" data-keywords="team member"><span class="jl-cmdk__item-text"><span class="jl-cmdk__item-label">Invite teammate</span></span></a>
+            <a class="jl-cmdk__item" role="option" href="#search"><span class="jl-cmdk__item-text"><span class="jl-cmdk__item-label">Search docs</span></span><span class="jl-cmdk__item-trail"><kbd class="jl-cmdk__key">/</kbd></span></a>
+          </div>
+          <div role="group" aria-label="Preferences">
+            <div class="jl-cmdk__group-label">Preferences</div>
+            <a class="jl-cmdk__item" role="option" href="#theme" data-keywords="dark light appearance"><span class="jl-cmdk__item-text"><span class="jl-cmdk__item-label">Toggle theme</span></span></a>
+            <a class="jl-cmdk__item" role="option" href="#account"><span class="jl-cmdk__item-text"><span class="jl-cmdk__item-label">Account settings</span></span></a>
+          </div>
+        </div>
+        <div class="jl-cmdk__footer">
+          <span class="jl-cmdk__footer-hint"><kbd class="jl-cmdk__key">↑↓</kbd> navigate</span>
+          <span class="jl-cmdk__footer-hint"><kbd class="jl-cmdk__key">↵</kbd> select</span>
+          <span class="jl-cmdk__footer-hint"><kbd class="jl-cmdk__key">esc</kbd> close</span>
+        </div>
+      </div>
+    </div>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

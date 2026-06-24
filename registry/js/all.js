@@ -179,6 +179,58 @@
   };
 })();
 
+/* ---- accordion.js ---- */
+/* JLDS behavior — Accordion. Clicking a .jl-acc-trigger opens/closes its
+ * .jl-acc-item (toggles data-open + aria-expanded). Single-open by default;
+ * set data-type="multiple" on the .jl-accordion to allow several open at once.
+ * Emits jl-accordion:toggle. Requires core.js (or the all.js bundle). */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  function initAccordion(acc) {
+    if (acc.__jlAcc) return;
+    acc.__jlAcc = true;
+    var multiple = acc.dataset.type === "multiple";
+    var items = Array.prototype.slice.call(acc.querySelectorAll(".jl-acc-item"));
+
+    function setOpen(item, open) {
+      var trigger = item.querySelector(".jl-acc-trigger");
+      if (open) item.setAttribute("data-open", "true");
+      else item.removeAttribute("data-open");
+      if (trigger) trigger.setAttribute("aria-expanded", open ? "true" : "false");
+    }
+
+    items.forEach(function (item) {
+      var trigger = item.querySelector(".jl-acc-trigger");
+      if (!trigger) return;
+      trigger.addEventListener("click", function () {
+        if (trigger.disabled) return;
+        var open = item.getAttribute("data-open") === "true";
+        if (!multiple) {
+          items.forEach(function (o) {
+            if (o !== item) setOpen(o, false);
+          });
+        }
+        setOpen(item, !open);
+        acc.dispatchEvent(
+          new CustomEvent("jl-accordion:toggle", {
+            detail: { value: trigger.getAttribute("aria-controls") || null, open: !open },
+            bubbles: true,
+          })
+        );
+      });
+    });
+  }
+
+  register("accordion", function (root) {
+    root.querySelectorAll(".jl-accordion").forEach(initAccordion);
+  });
+})();
+
 /* ---- alert.js ---- */
 /* JLDS behavior — Alert dismiss. Clicking .jl-alert__close removes its .jl-alert.
  * Requires core.js (or the all.js bundle). */
@@ -248,6 +300,439 @@
         if (item) item.hidden = true;
       });
     });
+  });
+})();
+
+/* ---- combobox.js ---- */
+/* JLDS behavior — Combobox (single-select, declarative). Enhances a .jl-combobox
+ * whose options are in the DOM (.jl-combobox__opt[data-value]): open on focus,
+ * filter by the typed text, arrow/enter/escape keyboard nav, and single-select.
+ * Emits jl-combobox:change { value }. Requires core.js + util.js (or all.js).
+ * (Multiple/chips, creatable, and async are React/Vue-only.) */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  var CHECK =
+    '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13 4.5 6.5 11 3 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  function initCombobox(cb) {
+    if (cb.__jlCombobox) return;
+    cb.__jlCombobox = true;
+
+    var control = cb.querySelector(".jl-combobox__control");
+    var input = cb.querySelector(".jl-combobox__input");
+    var single = cb.querySelector(".jl-combobox__single");
+    var pop = cb.querySelector(".jl-combobox__pop");
+    var opts = Array.prototype.slice.call(cb.querySelectorAll(".jl-combobox__opt"));
+    if (!input || !pop || !opts.length) return;
+
+    var active = 0;
+    var cleanup = null;
+
+    function labelOf(opt) {
+      var l = opt.querySelector(".jl-combobox__opt-label");
+      return (l ? l.textContent : opt.textContent).trim();
+    }
+    function visible() {
+      return opts.filter(function (o) {
+        return o.style.display !== "none" && o.getAttribute("aria-disabled") !== "true";
+      });
+    }
+    function setActive(i) {
+      var vis = visible();
+      active = Math.max(0, Math.min(vis.length - 1, i));
+      opts.forEach(function (o) { o.removeAttribute("data-active"); });
+      if (vis[active]) vis[active].setAttribute("data-active", "true");
+    }
+    function filter() {
+      var q = input.value.toLowerCase();
+      opts.forEach(function (o) {
+        o.style.display = labelOf(o).toLowerCase().indexOf(q) >= 0 ? "" : "none";
+      });
+      if (single) single.style.display = input.value ? "none" : "";
+      setActive(0);
+    }
+    function open() {
+      if (!pop.hidden) return;
+      pop.hidden = false;
+      cb.classList.add("jl-combobox--open");
+      input.setAttribute("aria-expanded", "true");
+      filter();
+      var u = window.JLDS && window.JLDS.util;
+      cleanup = u && u.onClickOutside ? u.onClickOutside(cb, close) : function () {};
+    }
+    function close() {
+      if (pop.hidden) return;
+      pop.hidden = true;
+      cb.classList.remove("jl-combobox--open");
+      input.setAttribute("aria-expanded", "false");
+      input.value = "";
+      if (single) single.style.display = "";
+      if (cleanup) { cleanup(); cleanup = null; }
+    }
+    function choose(opt) {
+      if (!opt || opt.getAttribute("aria-disabled") === "true") return;
+      cb.dataset.value = opt.dataset.value || labelOf(opt);
+      if (single) {
+        single.textContent = labelOf(opt);
+        single.classList.remove("jl-combobox__single--placeholder");
+      }
+      opts.forEach(function (o) {
+        o.setAttribute("aria-selected", o === opt ? "true" : "false");
+        var c = o.querySelector(".jl-combobox__opt-check");
+        if (o === opt && !c) {
+          var s = document.createElement("span");
+          s.className = "jl-combobox__opt-check";
+          s.innerHTML = CHECK;
+          o.appendChild(s);
+        } else if (o !== opt && c) {
+          c.remove();
+        }
+      });
+      close();
+      cb.dispatchEvent(new CustomEvent("jl-combobox:change", { detail: { value: cb.dataset.value }, bubbles: true }));
+    }
+
+    if (control) control.addEventListener("click", function () { open(); input.focus(); });
+    input.addEventListener("focus", open);
+    input.addEventListener("input", function () { if (pop.hidden) open(); filter(); });
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowDown") { e.preventDefault(); if (pop.hidden) return open(); setActive(active + 1); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); setActive(active - 1); }
+      else if (e.key === "Enter") { e.preventDefault(); choose(visible()[active]); }
+      else if (e.key === "Escape") { if (!pop.hidden) { e.preventDefault(); close(); } }
+    });
+    opts.forEach(function (opt) {
+      opt.addEventListener("mousemove", function () {
+        var i = visible().indexOf(opt);
+        if (i >= 0) setActive(i);
+      });
+      opt.addEventListener("click", function () { choose(opt); });
+    });
+  }
+
+  register("combobox", function (root) {
+    root.querySelectorAll(".jl-combobox").forEach(initCombobox);
+  });
+})();
+
+/* ---- command-palette.js ---- */
+/* JLDS behavior — CommandPalette (declarative HTML). Enhances a
+ * .jl-cmdk__overlay[hidden]: a global ⌘K/Ctrl-K toggle (or data-key), fuzzy
+ * filter over the .jl-cmdk__item rows (matches text + data-keywords), arrow/
+ * enter/escape nav, overlay-click + Esc close, and scroll-lock via JLDS.util.
+ * A `[data-cmdk-trigger]` element (optional data-cmdk-target="#id") also opens it.
+ * Requires core.js + util.js (or the all.js bundle). */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  function initOverlay(overlay) {
+    if (overlay.__jlCmdk) return;
+    overlay.__jlCmdk = true;
+    var input = overlay.querySelector(".jl-cmdk__input");
+    var list = overlay.querySelector(".jl-cmdk__list");
+    var items = Array.prototype.slice.call(overlay.querySelectorAll(".jl-cmdk__item"));
+    var emptyEl = overlay.querySelector(".jl-cmdk__empty");
+    var key = (overlay.dataset.key || "k").toLowerCase();
+    var active = 0;
+    var unlock = null;
+
+    function text(it) {
+      var l = it.querySelector(".jl-cmdk__item-label");
+      return ((l ? l.textContent : it.textContent) + " " + (it.dataset.keywords || "")).toLowerCase();
+    }
+    function visible() {
+      return items.filter(function (it) {
+        return it.style.display !== "none" && it.getAttribute("aria-disabled") !== "true";
+      });
+    }
+    function setActive(i) {
+      var vis = visible();
+      active = Math.max(0, Math.min(vis.length - 1, i));
+      items.forEach(function (it) { it.removeAttribute("data-active"); });
+      var el = vis[active];
+      if (!el) return;
+      el.setAttribute("data-active", "true");
+      if (list) {
+        var top = el.offsetTop;
+        var bottom = top + el.offsetHeight;
+        if (top < list.scrollTop) list.scrollTop = top - 8;
+        else if (bottom > list.scrollTop + list.clientHeight) list.scrollTop = bottom - list.clientHeight + 8;
+      }
+    }
+    function filter() {
+      var tokens = (input ? input.value : "").toLowerCase().split(/\s+/).filter(Boolean);
+      var any = false;
+      items.forEach(function (it) {
+        var ok = tokens.every(function (t) { return text(it).indexOf(t) >= 0; });
+        it.style.display = ok ? "" : "none";
+        if (ok) any = true;
+      });
+      if (emptyEl) emptyEl.style.display = any ? "none" : "";
+      setActive(0);
+    }
+    function open() {
+      if (!overlay.hidden) return;
+      overlay.hidden = false;
+      var u = window.JLDS && window.JLDS.util;
+      unlock = u && u.lockScroll ? u.lockScroll() : function () {};
+      if (input) input.value = "";
+      filter();
+      setTimeout(function () { input && input.focus(); }, 20);
+    }
+    function close() {
+      if (overlay.hidden) return;
+      overlay.hidden = true;
+      if (unlock) { unlock(); unlock = null; }
+    }
+    overlay.__cmdkOpen = open;
+    overlay.__cmdkClose = close;
+
+    document.addEventListener("keydown", function (e) {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === key) {
+        e.preventDefault();
+        if (overlay.hidden) open();
+        else close();
+      }
+    });
+    overlay.addEventListener("mousedown", function (e) {
+      if (e.target === overlay) close();
+    });
+    if (input) {
+      input.addEventListener("input", filter);
+      input.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowDown") { e.preventDefault(); setActive(active + 1); }
+        else if (e.key === "ArrowUp") { e.preventDefault(); setActive(active - 1); }
+        else if (e.key === "Enter") { e.preventDefault(); var it = visible()[active]; if (it) it.click(); }
+        else if (e.key === "Escape") { e.preventDefault(); close(); }
+      });
+    }
+    items.forEach(function (it) {
+      it.addEventListener("mousemove", function () {
+        var i = visible().indexOf(it);
+        if (i >= 0) setActive(i);
+      });
+      it.addEventListener("click", function () {
+        if (it.getAttribute("aria-disabled") === "true") return;
+        close();
+      });
+    });
+    if (!overlay.hasAttribute("hidden")) overlay.hidden = true;
+  }
+
+  register("cmdk", function (root) {
+    root.querySelectorAll(".jl-cmdk__overlay").forEach(initOverlay);
+    root.querySelectorAll("[data-cmdk-trigger]").forEach(function (trigger) {
+      if (trigger.__jlCmdkTrig) return;
+      trigger.__jlCmdkTrig = true;
+      trigger.addEventListener("click", function () {
+        var sel = trigger.getAttribute("data-cmdk-target");
+        var overlay = sel ? document.querySelector(sel) : document.querySelector(".jl-cmdk__overlay");
+        if (overlay && overlay.__cmdkOpen) overlay.__cmdkOpen();
+      });
+    });
+  });
+})();
+
+/* ---- dialog.js ---- */
+/* JLDS behavior — Dialog. A modal overlay (.jl-dialog__overlay[hidden]) opened by
+ * a [data-dialog-trigger] (optional data-dialog-target="#id"); closes on overlay
+ * click, Esc, .jl-dialog__close, or [data-dialog-close]. While open it locks body
+ * scroll and traps focus via JLDS.util. Requires core.js + util.js (or all.js). */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  function initOverlay(overlay) {
+    if (overlay.__jlDialog) return;
+    overlay.__jlDialog = true;
+    var panel = overlay.querySelector(".jl-dialog");
+    var cleanup = null;
+
+    function close() {
+      if (overlay.hidden) return;
+      overlay.hidden = true;
+      if (cleanup) {
+        cleanup();
+        cleanup = null;
+      }
+    }
+    function open() {
+      if (!overlay.hidden) return;
+      overlay.hidden = false;
+      var u = window.JLDS && window.JLDS.util;
+      var unlock = u && u.lockScroll ? u.lockScroll() : function () {};
+      var release = u && u.focusTrap && panel ? u.focusTrap(panel) : function () {};
+      var offEsc = u && u.onEscape ? u.onEscape(close) : function () {};
+      cleanup = function () {
+        unlock();
+        release();
+        offEsc();
+      };
+    }
+    overlay.__open = open;
+    overlay.__close = close;
+
+    overlay.addEventListener("mousedown", function (e) {
+      if (e.target === overlay) close();
+    });
+    overlay.querySelectorAll(".jl-dialog__close, [data-dialog-close]").forEach(function (b) {
+      b.addEventListener("click", close);
+    });
+    if (!overlay.hasAttribute("hidden")) overlay.hidden = true;
+  }
+
+  register("dialog", function (root) {
+    root.querySelectorAll(".jl-dialog__overlay").forEach(initOverlay);
+    root.querySelectorAll("[data-dialog-trigger]").forEach(function (trigger) {
+      if (trigger.__jlDialogTrig) return;
+      trigger.__jlDialogTrig = true;
+      trigger.addEventListener("click", function () {
+        var sel = trigger.getAttribute("data-dialog-target");
+        var overlay = sel ? document.querySelector(sel) : document.querySelector(".jl-dialog__overlay");
+        if (overlay && overlay.__open) overlay.__open();
+      });
+    });
+  });
+})();
+
+/* ---- drawer.js ---- */
+/* JLDS behavior — Drawer. A slide-in overlay (.jl-drawer__overlay[hidden][data-side])
+ * opened by a [data-drawer-trigger] (optional data-drawer-target="#id"); closes on
+ * overlay click, Esc, .jl-drawer__close, or [data-drawer-close]. Locks body scroll
+ * and traps focus via JLDS.util while open. Requires core.js + util.js (or all.js). */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  function initOverlay(overlay) {
+    if (overlay.__jlDrawer) return;
+    overlay.__jlDrawer = true;
+    var panel = overlay.querySelector(".jl-drawer");
+    var cleanup = null;
+
+    function close() {
+      if (overlay.hidden) return;
+      overlay.hidden = true;
+      if (cleanup) {
+        cleanup();
+        cleanup = null;
+      }
+    }
+    function open() {
+      if (!overlay.hidden) return;
+      overlay.hidden = false;
+      var u = window.JLDS && window.JLDS.util;
+      var unlock = u && u.lockScroll ? u.lockScroll() : function () {};
+      var release = u && u.focusTrap && panel ? u.focusTrap(panel) : function () {};
+      var offEsc = u && u.onEscape ? u.onEscape(close) : function () {};
+      cleanup = function () {
+        unlock();
+        release();
+        offEsc();
+      };
+    }
+    overlay.__open = open;
+    overlay.__close = close;
+
+    overlay.addEventListener("mousedown", function (e) {
+      if (e.target === overlay) close();
+    });
+    overlay.querySelectorAll(".jl-drawer__close, [data-drawer-close]").forEach(function (b) {
+      b.addEventListener("click", close);
+    });
+    if (!overlay.hasAttribute("hidden")) overlay.hidden = true;
+  }
+
+  register("drawer", function (root) {
+    root.querySelectorAll(".jl-drawer__overlay").forEach(initOverlay);
+    root.querySelectorAll("[data-drawer-trigger]").forEach(function (trigger) {
+      if (trigger.__jlDrawerTrig) return;
+      trigger.__jlDrawerTrig = true;
+      trigger.addEventListener("click", function () {
+        var sel = trigger.getAttribute("data-drawer-target");
+        var overlay = sel ? document.querySelector(sel) : document.querySelector(".jl-drawer__overlay");
+        if (overlay && overlay.__open) overlay.__open();
+      });
+    });
+  });
+})();
+
+/* ---- dropdown-menu.js ---- */
+/* JLDS behavior — DropdownMenu. Click the trigger to open the .jl-menu__pop
+ * (initially `hidden`); closes on item click, outside-click, or Esc (via
+ * JLDS.util). Requires core.js + util.js (or the all.js bundle).
+ * Contract: .jl-menu holds a trigger (first <button> / [data-menu-trigger]) and
+ * a .jl-menu__pop[hidden] with .jl-menu__item buttons. */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  function initMenu(menu) {
+    if (menu.__jlMenu) return;
+    menu.__jlMenu = true;
+    var trigger = menu.querySelector("[data-menu-trigger]") || menu.querySelector("button");
+    var pop = menu.querySelector(".jl-menu__pop");
+    if (!trigger || !pop) return;
+
+    var cleanup = null;
+    function close() {
+      if (pop.hidden) return;
+      pop.hidden = true;
+      trigger.setAttribute("aria-expanded", "false");
+      if (cleanup) {
+        cleanup();
+        cleanup = null;
+      }
+    }
+    function open() {
+      pop.hidden = false;
+      trigger.setAttribute("aria-expanded", "true");
+      var u = window.JLDS && window.JLDS.util;
+      var a = u && u.onClickOutside ? u.onClickOutside(menu, close) : function () {};
+      var b = u && u.onEscape ? u.onEscape(close) : function () {};
+      cleanup = function () {
+        a();
+        b();
+      };
+    }
+
+    trigger.setAttribute("aria-haspopup", "menu");
+    trigger.setAttribute("aria-expanded", "false");
+    if (!pop.hasAttribute("hidden")) pop.hidden = true;
+
+    trigger.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (pop.hidden) open();
+      else close();
+    });
+    pop.querySelectorAll(".jl-menu__item").forEach(function (item) {
+      item.addEventListener("click", function () {
+        if (item.getAttribute("aria-disabled") === "true") return;
+        close();
+      });
+    });
+  }
+
+  register("menu", function (root) {
+    root.querySelectorAll(".jl-menu").forEach(initMenu);
   });
 })();
 
@@ -337,6 +822,67 @@
 
   register("number", function (root) {
     root.querySelectorAll(".jl-number").forEach(initNumber);
+  });
+})();
+
+/* ---- popover.js ---- */
+/* JLDS behavior — Popover. Click the trigger to open the .jl-popover__pop panel
+ * (initially `hidden`); closes on outside-click or Esc via JLDS.util. Emits
+ * jl-popover:toggle. Requires core.js + util.js (or the all.js bundle).
+ * Contract: .jl-popover holds a trigger (first <button>, or [data-popover-trigger])
+ * and a `.jl-popover__pop[hidden]` panel. */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  function initPopover(pop) {
+    if (pop.__jlPop) return;
+    pop.__jlPop = true;
+    var trigger = pop.querySelector("[data-popover-trigger]") || pop.querySelector("button");
+    var panel = pop.querySelector(".jl-popover__pop");
+    if (!trigger || !panel) return;
+
+    var cleanup = null;
+
+    function close() {
+      if (panel.hidden) return;
+      panel.hidden = true;
+      trigger.setAttribute("aria-expanded", "false");
+      if (cleanup) {
+        cleanup();
+        cleanup = null;
+      }
+      pop.dispatchEvent(new CustomEvent("jl-popover:toggle", { detail: { open: false }, bubbles: true }));
+    }
+    function open() {
+      panel.hidden = false;
+      trigger.setAttribute("aria-expanded", "true");
+      var u = window.JLDS && window.JLDS.util;
+      var offOutside = u && u.onClickOutside ? u.onClickOutside(pop, close) : function () {};
+      var offEsc = u && u.onEscape ? u.onEscape(close) : function () {};
+      cleanup = function () {
+        offOutside();
+        offEsc();
+      };
+      pop.dispatchEvent(new CustomEvent("jl-popover:toggle", { detail: { open: true }, bubbles: true }));
+    }
+
+    trigger.setAttribute("aria-haspopup", "dialog");
+    trigger.setAttribute("aria-expanded", "false");
+    if (!panel.hasAttribute("hidden")) panel.hidden = true;
+
+    trigger.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (panel.hidden) open();
+      else close();
+    });
+  }
+
+  register("popover", function (root) {
+    root.querySelectorAll(".jl-popover").forEach(initPopover);
   });
 })();
 
@@ -588,6 +1134,148 @@
   });
 })();
 
+/* ---- table.js ---- */
+/* JLDS behavior — Table. Opt-in client-side enhancements for plain-HTML tables:
+ *   - Sorting: clicking a sortable header (a `.jl-th__btn`) sorts the tbody rows
+ *     by that column, cycling asc/desc. Numeric columns (.jl-th--num) sort by value.
+ *     Emits jl-table:sort { column, direction }.
+ *   - Selection: a `.jl-table__check` checkbox per row toggles .jl-tr--selected; a
+ *     header `.jl-table__check[data-select-all]` toggles all (with indeterminate).
+ *     Emits jl-table:select { values }.
+ * Requires core.js (or the all.js bundle). In React/Vue, sort/selection are
+ * controlled via props — this is for the no-framework path only.
+ */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  var ICONS = {
+    none: '<path d="M8 9l4-4 4 4M8 15l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>',
+    asc: '<path d="M8 14l4-4 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
+    desc: '<path d="M8 10l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
+  };
+
+  function cellText(row, idx) {
+    var c = row.children[idx];
+    return c ? c.textContent.trim() : "";
+  }
+
+  function initSort(table) {
+    var head = table.querySelector(".jl-table__head tr") || table.querySelector("thead tr");
+    var body = table.querySelector(".jl-table__body") || table.querySelector("tbody");
+    if (!head || !body) return;
+    var ths = Array.prototype.slice.call(head.children);
+
+    ths.forEach(function (th, idx) {
+      var btn = th.querySelector(".jl-th__btn");
+      if (!btn) return;
+      var svg = th.querySelector(".jl-th__sort svg");
+      btn.addEventListener("click", function () {
+        var dir = th.getAttribute("aria-sort") === "ascending" ? "desc" : "asc";
+        ths.forEach(function (o) {
+          if (o === th) return;
+          o.setAttribute("aria-sort", "none");
+          o.classList.remove("jl-th--active");
+          var s = o.querySelector(".jl-th__sort svg");
+          if (s) s.innerHTML = ICONS.none;
+        });
+        th.setAttribute("aria-sort", dir === "asc" ? "ascending" : "descending");
+        th.classList.add("jl-th--active");
+        if (svg) svg.innerHTML = ICONS[dir];
+
+        var numeric = th.classList.contains("jl-th--num");
+        var rows = Array.prototype.slice.call(body.querySelectorAll("tr"));
+        rows.sort(function (a, b) {
+          var av = cellText(a, idx);
+          var bv = cellText(b, idx);
+          if (numeric) {
+            av = parseFloat(av.replace(/[^0-9.eE+-]/g, ""));
+            bv = parseFloat(bv.replace(/[^0-9.eE+-]/g, ""));
+          }
+          if (av < bv) return dir === "asc" ? -1 : 1;
+          if (av > bv) return dir === "asc" ? 1 : -1;
+          return 0;
+        });
+        rows.forEach(function (r) {
+          body.appendChild(r);
+        });
+        table.dispatchEvent(
+          new CustomEvent("jl-table:sort", { detail: { column: idx, direction: dir }, bubbles: true })
+        );
+      });
+    });
+  }
+
+  function initSelect(table) {
+    var all = table.querySelector(".jl-table__check[data-select-all]");
+    var checks = Array.prototype.slice.call(
+      table.querySelectorAll(".jl-table__body .jl-table__check")
+    );
+    if (!checks.length) return;
+
+    function rowOf(cb) {
+      return cb.closest("tr");
+    }
+    function selectedValues() {
+      return checks
+        .filter(function (c) { return c.checked; })
+        .map(function (c) {
+          var tr = rowOf(c);
+          return c.value || (tr && tr.dataset.value) || "";
+        });
+    }
+    function emit() {
+      table.dispatchEvent(
+        new CustomEvent("jl-table:select", { detail: { values: selectedValues() }, bubbles: true })
+      );
+    }
+    function syncAll() {
+      if (!all) return;
+      var n = checks.filter(function (c) { return c.checked; }).length;
+      all.checked = n === checks.length;
+      all.indeterminate = n > 0 && n < checks.length;
+    }
+    function paint(cb) {
+      var tr = rowOf(cb);
+      if (tr) {
+        tr.classList.toggle("jl-tr--selected", cb.checked);
+        tr.setAttribute("aria-selected", cb.checked ? "true" : "false");
+      }
+    }
+
+    checks.forEach(function (cb) {
+      cb.addEventListener("change", function () {
+        paint(cb);
+        syncAll();
+        emit();
+      });
+    });
+    if (all) {
+      all.addEventListener("change", function () {
+        checks.forEach(function (cb) {
+          cb.checked = all.checked;
+          paint(cb);
+        });
+        all.indeterminate = false;
+        emit();
+      });
+    }
+    syncAll();
+  }
+
+  register("table", function (root) {
+    root.querySelectorAll(".jl-table").forEach(function (table) {
+      if (table.__jlTable) return;
+      table.__jlTable = true;
+      initSort(table);
+      initSelect(table);
+    });
+  });
+})();
+
 /* ---- tabs.js ---- */
 /* JLDS behavior — Tabs. Click or arrow-key to switch tabs; if a tab has
  * aria-controls, its panel is shown and the others hidden. Emits jl-tabs:change.
@@ -679,6 +1367,143 @@
   });
 })();
 
+/* ---- toast.js ---- */
+/* JLDS behavior — Toast. Imperative API for plain HTML: call JLDS.toast(...) from
+ * anywhere; it lazily creates a positioned toaster container and stacks toasts
+ * (tones, action, auto-dismiss). Requires core.js (or the all.js bundle).
+ *
+ *   JLDS.toast("Saved")                         // neutral
+ *   JLDS.toast.success("Profile updated")
+ *   JLDS.toast({ title: "Deploy failed", description: "...", tone: "danger",
+ *               action: { label: "Retry", onClick: fn }, duration: Infinity })
+ *   var el = JLDS.toast(...); JLDS.toast.dismiss(el)
+ */
+(function () {
+  var J = (window.JLDS = window.JLDS || {});
+
+  var ICONS = {
+    success: '<path d="M8 12.5l2.5 2.5 5.5-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
+    warning: '<path d="M12 8.5v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="16" r="0.6" fill="currentColor" stroke="none"/>',
+    danger: '<path d="M12 8v4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="16" r="0.6" fill="currentColor" stroke="none"/>',
+    info: '<path d="M12 11v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="8" r="0.7" fill="currentColor" stroke="none"/>',
+  };
+  var CLOSE_SVG =
+    '<svg viewBox="0 0 16 16" width="16" height="16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+
+  function ensureToaster(position) {
+    position = position || "bottom-right";
+    var t = document.querySelector('.jl-toaster[data-pos="' + position + '"]');
+    if (!t) {
+      t = document.createElement("div");
+      t.className = "jl-toaster";
+      t.setAttribute("data-pos", position);
+      document.body.appendChild(t);
+    }
+    return t;
+  }
+
+  function dismiss(el) {
+    if (!el || el.__leaving) return;
+    el.__leaving = true;
+    el.setAttribute("data-leaving", "true");
+    setTimeout(function () {
+      if (el.parentNode) el.parentNode.removeChild(el);
+    }, 200);
+  }
+
+  function show(opts) {
+    if (typeof document === "undefined") return null;
+    if (typeof opts === "string") opts = { description: opts };
+    opts = opts || {};
+    var position = opts.position || "bottom-right";
+    var toaster = ensureToaster(position);
+
+    var el = document.createElement("div");
+    el.className = "jl-toast" + (opts.tone ? " jl-toast--" + opts.tone : "");
+    el.setAttribute("role", "status");
+
+    if (opts.tone && ICONS[opts.tone]) {
+      var icon = document.createElement("span");
+      icon.className = "jl-toast__icon";
+      icon.innerHTML =
+        '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" opacity="0.35"/>' +
+        ICONS[opts.tone] +
+        "</svg>";
+      el.appendChild(icon);
+    }
+
+    var body = document.createElement("div");
+    body.className = "jl-toast__body";
+    if (opts.title) {
+      var ti = document.createElement("div");
+      ti.className = "jl-toast__title";
+      ti.textContent = opts.title;
+      body.appendChild(ti);
+    }
+    if (opts.description) {
+      var de = document.createElement("div");
+      de.className = "jl-toast__desc";
+      de.textContent = opts.description;
+      body.appendChild(de);
+    }
+
+    var timer;
+    function remove() {
+      if (timer) clearTimeout(timer);
+      dismiss(el);
+    }
+
+    if (opts.action && opts.action.label) {
+      var ab = document.createElement("button");
+      ab.type = "button";
+      ab.className = "jl-toast__action";
+      ab.textContent = opts.action.label;
+      ab.addEventListener("click", function () {
+        if (opts.action.onClick) opts.action.onClick();
+        remove();
+      });
+      body.appendChild(ab);
+    }
+    el.appendChild(body);
+
+    var close = document.createElement("button");
+    close.type = "button";
+    close.className = "jl-toast__close";
+    close.setAttribute("aria-label", "Dismiss");
+    close.innerHTML = CLOSE_SVG;
+    close.addEventListener("click", remove);
+    el.appendChild(close);
+
+    // newest on top for top-* positions
+    if (position.indexOf("top") === 0) toaster.insertBefore(el, toaster.firstChild);
+    else toaster.appendChild(el);
+
+    if (opts.duration !== Infinity && opts.duration !== 0) {
+      timer = setTimeout(remove, opts.duration || 4500);
+    }
+    return el;
+  }
+
+  function toned(tone) {
+    return function (description, opts) {
+      var o = { tone: tone, description: description };
+      if (opts) for (var k in opts) o[k] = opts[k];
+      return show(o);
+    };
+  }
+
+  J.toast = function (opts) {
+    return show(opts);
+  };
+  J.toast.success = toned("success");
+  J.toast.warning = toned("warning");
+  J.toast.danger = toned("danger");
+  J.toast.info = toned("info");
+  J.toast.dismiss = function (el) {
+    dismiss(el);
+  };
+})();
+
 /* ---- toggle.js ---- */
 /* JLDS behavior — Toggle. A standalone .jl-toggle flips its own aria-pressed;
  * a .jl-toggle-group manages single (default) or data-type="multiple" selection.
@@ -744,5 +1569,46 @@
   register("toggle", function (root) {
     root.querySelectorAll(".jl-toggle-group").forEach(initGroup);
     root.querySelectorAll(".jl-toggle").forEach(initStandalone);
+  });
+})();
+
+/* ---- tooltip.js ---- */
+/* JLDS behavior — Tooltip. Shows the .jl-tooltip__pop on hover/focus of the
+ * .jl-tooltip wrapper (after an optional data-delay). Requires core.js (or all.js).
+ * Positioning is pure CSS via the pop's data-side. */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  function initTooltip(tip) {
+    if (tip.__jlTip) return;
+    tip.__jlTip = true;
+    var pop = tip.querySelector(".jl-tooltip__pop");
+    if (!pop) return;
+    var delay = parseInt(tip.dataset.delay, 10);
+    if (isNaN(delay)) delay = 120;
+    var timer;
+
+    function open() {
+      timer = setTimeout(function () {
+        pop.setAttribute("data-show", "true");
+      }, delay);
+    }
+    function close() {
+      clearTimeout(timer);
+      pop.removeAttribute("data-show");
+    }
+
+    tip.addEventListener("mouseenter", open);
+    tip.addEventListener("mouseleave", close);
+    tip.addEventListener("focusin", open);
+    tip.addEventListener("focusout", close);
+  }
+
+  register("tooltip", function (root) {
+    root.querySelectorAll(".jl-tooltip").forEach(initTooltip);
   });
 })();

@@ -40,6 +40,7 @@ export default defineConfig({
           text: 'Components',
           items: [
             { text: 'Overview', link: '/components/' },
+            { text: 'Accordion', link: '/components/accordion' },
             { text: 'Alert', link: '/components/alert' },
             { text: 'Avatar', link: '/components/avatar' },
             { text: 'Badge', link: '/components/badge' },
@@ -48,7 +49,12 @@ export default defineConfig({
             { text: 'Button', link: '/components/button' },
             { text: 'Card', link: '/components/card' },
             { text: 'Checkbox', link: '/components/checkbox' },
+            { text: 'Combobox', link: '/components/combobox' },
+            { text: 'Command Palette', link: '/components/command-palette' },
+            { text: 'Dialog', link: '/components/dialog' },
             { text: 'Divider', link: '/components/divider' },
+            { text: 'Drawer', link: '/components/drawer' },
+            { text: 'Dropdown Menu', link: '/components/dropdown-menu' },
             { text: 'Empty State', link: '/components/empty-state' },
             { text: 'Field', link: '/components/field' },
             { text: 'Icon Button', link: '/components/icon-button' },
@@ -56,6 +62,7 @@ export default defineConfig({
             { text: 'Kbd', link: '/components/kbd' },
             { text: 'Number Input', link: '/components/number-input' },
             { text: 'Pagination', link: '/components/pagination' },
+            { text: 'Popover', link: '/components/popover' },
             { text: 'Progress', link: '/components/progress' },
             { text: 'Radio Group', link: '/components/radio-group' },
             { text: 'Segmented Control', link: '/components/segmented-control' },
@@ -67,10 +74,13 @@ export default defineConfig({
             { text: 'Stat', link: '/components/stat' },
             { text: 'Stepper', link: '/components/stepper' },
             { text: 'Switch', link: '/components/switch' },
+            { text: 'Table', link: '/components/table' },
             { text: 'Tabs', link: '/components/tabs' },
             { text: 'Tag', link: '/components/tag' },
             { text: 'Textarea', link: '/components/textarea' },
-            { text: 'Toggle', link: '/components/toggle' }
+            { text: 'Toast', link: '/components/toast' },
+            { text: 'Toggle', link: '/components/toggle' },
+            { text: 'Tooltip', link: '/components/tooltip' }
           ]
         }
       ],

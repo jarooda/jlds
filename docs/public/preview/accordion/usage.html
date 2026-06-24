@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/accordion.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); max-width: 520px; }
+    </style>
+  </head>
+  <body>
+    <div class="jl-accordion jl-accordion--bordered">
+      <div class="jl-acc-item" data-open="true">
+        <h3 style="margin:0">
+          <button type="button" class="jl-acc-trigger" aria-expanded="true" aria-controls="a1">
+            <span class="jl-acc-trigger__label">What is JLDS?</span>
+            <span class="jl-acc-trigger__chevron"><svg viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+        </h3>
+        <div class="jl-acc-region" id="a1" role="region">
+          <div class="jl-acc-content"><div class="jl-acc-content__inner">A design system and component CLI — components are copied into your project, so you own and customize the code.</div></div>
+        </div>
+      </div>
+      <div class="jl-acc-item">
+        <h3 style="margin:0">
+          <button type="button" class="jl-acc-trigger" aria-expanded="false" aria-controls="a2">
+            <span class="jl-acc-trigger__label">How does it work?</span>
+            <span class="jl-acc-trigger__chevron"><svg viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+        </h3>
+        <div class="jl-acc-region" id="a2" role="region">
+          <div class="jl-acc-content"><div class="jl-acc-content__inner">Run <code>jlds add &lt;name&gt;</code> and the component files land in your project under the path you configured.</div></div>
+        </div>
+      </div>
+      <div class="jl-acc-item">
+        <h3 style="margin:0">
+          <button type="button" class="jl-acc-trigger" aria-expanded="false" aria-controls="a3">
+            <span class="jl-acc-trigger__label">Do I need Tailwind?</span>
+            <span class="jl-acc-trigger__chevron"><svg viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+        </h3>
+        <div class="jl-acc-region" id="a3" role="region">
+          <div class="jl-acc-content"><div class="jl-acc-content__inner">No. Every component ships self-contained <code>.jl-*</code> CSS built on design tokens.</div></div>
+        </div>
+      </div>
+    </div>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>
