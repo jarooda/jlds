@@ -22,6 +22,7 @@ All components are self-contained — each ships its own `.jl-*` CSS classes bui
 | [Kbd](/components/kbd) | React, Vue | Available |
 | [Number Input](/components/number-input) | React, Vue | Available |
 | [Pagination](/components/pagination) | React, Vue | Available |
+| [Popover](/components/popover) | React, Vue | Available |
 | [Progress](/components/progress) | React, Vue | Available |
 | [Radio Group](/components/radio-group) | React, Vue | Available |
 | [Segmented Control](/components/segmented-control) | React, Vue | Available |
@@ -37,7 +38,9 @@ All components are self-contained — each ships its own `.jl-*` CSS classes bui
 | [Tabs](/components/tabs) | React, Vue | Available |
 | [Tag](/components/tag) | React, Vue | Available |
 | [Textarea](/components/textarea) | React, Vue | Available |
+| [Toast](/components/toast) | React, Vue | Available |
 | [Toggle](/components/toggle) | React, Vue | Available |
+| [Tooltip](/components/tooltip) | React, Vue | Available |
 
 Run `jlds list` from a project with `jlds.json` to see what's available for your detected
 framework — see [CLI: list](/cli/list).

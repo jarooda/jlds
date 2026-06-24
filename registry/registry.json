@@ -231,6 +231,27 @@
       "frameworks": ["react", "vue"],
       "dependencies": [],
       "devDependencies": []
+    },
+    {
+      "name": "tooltip",
+      "description": "Hover/focus hint that wraps a single trigger element. Four sides, open delay.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "popover",
+      "description": "A floating panel anchored to a trigger. Click to open; closes on outside-click or Esc.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "toast",
+      "description": "Transient notifications. Call toast() from anywhere; mount Toaster once. Tones, actions, auto-dismiss.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
     }
   ]
 }

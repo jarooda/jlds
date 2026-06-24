@@ -1,0 +1,14 @@
+{
+  "name": "popover",
+  "description": "A floating panel anchored to a trigger. Click to open; closes on outside-click or Esc.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["popover.tsx", "index.ts"],
+    "vue": ["Popover.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

@@ -57,6 +57,7 @@ export default defineConfig({
             { text: 'Kbd', link: '/components/kbd' },
             { text: 'Number Input', link: '/components/number-input' },
             { text: 'Pagination', link: '/components/pagination' },
+            { text: 'Popover', link: '/components/popover' },
             { text: 'Progress', link: '/components/progress' },
             { text: 'Radio Group', link: '/components/radio-group' },
             { text: 'Segmented Control', link: '/components/segmented-control' },
@@ -72,7 +73,9 @@ export default defineConfig({
             { text: 'Tabs', link: '/components/tabs' },
             { text: 'Tag', link: '/components/tag' },
             { text: 'Textarea', link: '/components/textarea' },
-            { text: 'Toggle', link: '/components/toggle' }
+            { text: 'Toast', link: '/components/toast' },
+            { text: 'Toggle', link: '/components/toggle' },
+            { text: 'Tooltip', link: '/components/tooltip' }
           ]
         }
       ],
