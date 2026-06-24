@@ -3,6 +3,7 @@
 
 @import "./index.css";
 
+@import "./accordion.css";
 @import "./alert.css";
 @import "./avatar.css";
 @import "./badge.css";
@@ -30,6 +31,7 @@
 @import "./stat.css";
 @import "./stepper.css";
 @import "./switch.css";
+@import "./table.css";
 @import "./tabs.css";
 @import "./tag.css";
 @import "./textarea.css";

@@ -217,6 +217,20 @@
       "frameworks": ["react", "vue"],
       "dependencies": [],
       "devDependencies": []
+    },
+    {
+      "name": "table",
+      "description": "Data table — sortable columns, hover/selected rows, numeric alignment. Compose head/body/row/cells.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "accordion",
+      "description": "Collapsible sections. Single-open by default or multiple; bordered or separated.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
     }
   ]
 }

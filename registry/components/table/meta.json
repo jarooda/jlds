@@ -1,0 +1,14 @@
+{
+  "name": "table",
+  "description": "Data table — sortable columns, hover/selected rows, numeric alignment. Compose head/body/row/cells.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["table.tsx", "index.ts"],
+    "vue": ["Table.vue", "TableHead.vue", "TableBody.vue", "TableRow.vue", "TableHeaderCell.vue", "TableCell.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

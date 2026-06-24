@@ -5,6 +5,7 @@ All components are self-contained — each ships its own `.jl-*` CSS classes bui
 
 | Component | Frameworks | Status |
 |---|---|---|
+| [Accordion](/components/accordion) | React, Vue | Available |
 | [Alert](/components/alert) | React, Vue | Available |
 | [Avatar](/components/avatar) | React, Vue | Available |
 | [Badge](/components/badge) | React, Vue | Available |
@@ -32,6 +33,7 @@ All components are self-contained — each ships its own `.jl-*` CSS classes bui
 | [Stat](/components/stat) | React, Vue | Available |
 | [Stepper](/components/stepper) | React, Vue | Available |
 | [Switch](/components/switch) | React, Vue | Available |
+| [Table](/components/table) | React, Vue | Available |
 | [Tabs](/components/tabs) | React, Vue | Available |
 | [Tag](/components/tag) | React, Vue | Available |
 | [Textarea](/components/textarea) | React, Vue | Available |

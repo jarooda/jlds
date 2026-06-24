@@ -1,0 +1,14 @@
+{
+  "name": "accordion",
+  "description": "Collapsible sections. Single-open by default or multiple; bordered or separated.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["accordion.tsx", "index.ts"],
+    "vue": ["Accordion.vue", "AccordionItem.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

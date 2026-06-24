@@ -40,6 +40,7 @@ export default defineConfig({
           text: 'Components',
           items: [
             { text: 'Overview', link: '/components/' },
+            { text: 'Accordion', link: '/components/accordion' },
             { text: 'Alert', link: '/components/alert' },
             { text: 'Avatar', link: '/components/avatar' },
             { text: 'Badge', link: '/components/badge' },
@@ -67,6 +68,7 @@ export default defineConfig({
             { text: 'Stat', link: '/components/stat' },
             { text: 'Stepper', link: '/components/stepper' },
             { text: 'Switch', link: '/components/switch' },
+            { text: 'Table', link: '/components/table' },
             { text: 'Tabs', link: '/components/tabs' },
             { text: 'Tag', link: '/components/tag' },
             { text: 'Textarea', link: '/components/textarea' },
