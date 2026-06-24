@@ -273,6 +273,20 @@
       "frameworks": ["react", "vue"],
       "dependencies": [],
       "devDependencies": []
+    },
+    {
+      "name": "dialog",
+      "description": "Centered modal dialog with overlay. Title, description, footer, sizes; closes on overlay/Esc/x.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "drawer",
+      "description": "A panel that slides in from an edge (right/left/bottom). Locks scroll; closes on overlay/Esc/x.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
     }
   ]
 }

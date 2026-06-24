@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/drawer.css">
+    <link rel="stylesheet" href="/css/button.css">
+    <style>
+      body { margin: 0; padding: var(--space-5) var(--space-4); min-height: 360px; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+      .jl-drawer__overlay { position: absolute; }
+    </style>
+  </head>
+  <body>
+    <button class="jl-btn jl-btn--secondary jl-btn--md" data-drawer-trigger data-drawer-target="#d-left">From left</button>
+    <button class="jl-btn jl-btn--secondary jl-btn--md" data-drawer-trigger data-drawer-target="#d-bottom">From bottom</button>
+
+    <div class="jl-drawer__overlay" id="d-left" data-side="left" hidden>
+      <div class="jl-drawer" role="dialog" aria-modal="true" style="--_size: 300px">
+        <div class="jl-drawer__header">
+          <div class="jl-drawer__header-text"><div class="jl-drawer__title">Navigation</div></div>
+          <button type="button" class="jl-drawer__close" aria-label="Close"><svg viewBox="0 0 18 18" width="18" height="18" fill="none"><path d="M5 5l8 8M13 5l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+        </div>
+        <div class="jl-drawer__body">Slides in from the left edge.</div>
+      </div>
+    </div>
+
+    <div class="jl-drawer__overlay" id="d-bottom" data-side="bottom" hidden>
+      <div class="jl-drawer" role="dialog" aria-modal="true" style="--_size: 220px">
+        <div class="jl-drawer__header">
+          <div class="jl-drawer__header-text"><div class="jl-drawer__title">Quick actions</div></div>
+          <button type="button" class="jl-drawer__close" aria-label="Close"><svg viewBox="0 0 18 18" width="18" height="18" fill="none"><path d="M5 5l8 8M13 5l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+        </div>
+        <div class="jl-drawer__body">Slides up from the bottom — good for mobile sheets.</div>
+      </div>
+    </div>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>
