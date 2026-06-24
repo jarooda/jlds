@@ -303,6 +303,309 @@
   });
 })();
 
+/* ---- combobox.js ---- */
+/* JLDS behavior — Combobox (single-select, declarative). Enhances a .jl-combobox
+ * whose options are in the DOM (.jl-combobox__opt[data-value]): open on focus,
+ * filter by the typed text, arrow/enter/escape keyboard nav, and single-select.
+ * Emits jl-combobox:change { value }. Requires core.js + util.js (or all.js).
+ * (Multiple/chips, creatable, and async are React/Vue-only.) */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  var CHECK =
+    '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13 4.5 6.5 11 3 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  function initCombobox(cb) {
+    if (cb.__jlCombobox) return;
+    cb.__jlCombobox = true;
+
+    var control = cb.querySelector(".jl-combobox__control");
+    var input = cb.querySelector(".jl-combobox__input");
+    var single = cb.querySelector(".jl-combobox__single");
+    var pop = cb.querySelector(".jl-combobox__pop");
+    var opts = Array.prototype.slice.call(cb.querySelectorAll(".jl-combobox__opt"));
+    if (!input || !pop || !opts.length) return;
+
+    var active = 0;
+    var cleanup = null;
+
+    function labelOf(opt) {
+      var l = opt.querySelector(".jl-combobox__opt-label");
+      return (l ? l.textContent : opt.textContent).trim();
+    }
+    function visible() {
+      return opts.filter(function (o) {
+        return o.style.display !== "none" && o.getAttribute("aria-disabled") !== "true";
+      });
+    }
+    function setActive(i) {
+      var vis = visible();
+      active = Math.max(0, Math.min(vis.length - 1, i));
+      opts.forEach(function (o) { o.removeAttribute("data-active"); });
+      if (vis[active]) vis[active].setAttribute("data-active", "true");
+    }
+    function filter() {
+      var q = input.value.toLowerCase();
+      opts.forEach(function (o) {
+        o.style.display = labelOf(o).toLowerCase().indexOf(q) >= 0 ? "" : "none";
+      });
+      if (single) single.style.display = input.value ? "none" : "";
+      setActive(0);
+    }
+    function open() {
+      if (!pop.hidden) return;
+      pop.hidden = false;
+      cb.classList.add("jl-combobox--open");
+      input.setAttribute("aria-expanded", "true");
+      filter();
+      var u = window.JLDS && window.JLDS.util;
+      cleanup = u && u.onClickOutside ? u.onClickOutside(cb, close) : function () {};
+    }
+    function close() {
+      if (pop.hidden) return;
+      pop.hidden = true;
+      cb.classList.remove("jl-combobox--open");
+      input.setAttribute("aria-expanded", "false");
+      input.value = "";
+      if (single) single.style.display = "";
+      if (cleanup) { cleanup(); cleanup = null; }
+    }
+    function choose(opt) {
+      if (!opt || opt.getAttribute("aria-disabled") === "true") return;
+      cb.dataset.value = opt.dataset.value || labelOf(opt);
+      if (single) {
+        single.textContent = labelOf(opt);
+        single.classList.remove("jl-combobox__single--placeholder");
+      }
+      opts.forEach(function (o) {
+        o.setAttribute("aria-selected", o === opt ? "true" : "false");
+        var c = o.querySelector(".jl-combobox__opt-check");
+        if (o === opt && !c) {
+          var s = document.createElement("span");
+          s.className = "jl-combobox__opt-check";
+          s.innerHTML = CHECK;
+          o.appendChild(s);
+        } else if (o !== opt && c) {
+          c.remove();
+        }
+      });
+      close();
+      cb.dispatchEvent(new CustomEvent("jl-combobox:change", { detail: { value: cb.dataset.value }, bubbles: true }));
+    }
+
+    if (control) control.addEventListener("click", function () { open(); input.focus(); });
+    input.addEventListener("focus", open);
+    input.addEventListener("input", function () { if (pop.hidden) open(); filter(); });
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowDown") { e.preventDefault(); if (pop.hidden) return open(); setActive(active + 1); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); setActive(active - 1); }
+      else if (e.key === "Enter") { e.preventDefault(); choose(visible()[active]); }
+      else if (e.key === "Escape") { if (!pop.hidden) { e.preventDefault(); close(); } }
+    });
+    opts.forEach(function (opt) {
+      opt.addEventListener("mousemove", function () {
+        var i = visible().indexOf(opt);
+        if (i >= 0) setActive(i);
+      });
+      opt.addEventListener("click", function () { choose(opt); });
+    });
+  }
+
+  register("combobox", function (root) {
+    root.querySelectorAll(".jl-combobox").forEach(initCombobox);
+  });
+})();
+
+/* ---- command-palette.js ---- */
+/* JLDS behavior — CommandPalette (declarative HTML). Enhances a
+ * .jl-cmdk__overlay[hidden]: a global ⌘K/Ctrl-K toggle (or data-key), fuzzy
+ * filter over the .jl-cmdk__item rows (matches text + data-keywords), arrow/
+ * enter/escape nav, overlay-click + Esc close, and scroll-lock via JLDS.util.
+ * A `[data-cmdk-trigger]` element (optional data-cmdk-target="#id") also opens it.
+ * Requires core.js + util.js (or the all.js bundle). */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  function initOverlay(overlay) {
+    if (overlay.__jlCmdk) return;
+    overlay.__jlCmdk = true;
+    var input = overlay.querySelector(".jl-cmdk__input");
+    var list = overlay.querySelector(".jl-cmdk__list");
+    var items = Array.prototype.slice.call(overlay.querySelectorAll(".jl-cmdk__item"));
+    var emptyEl = overlay.querySelector(".jl-cmdk__empty");
+    var key = (overlay.dataset.key || "k").toLowerCase();
+    var active = 0;
+    var unlock = null;
+
+    function text(it) {
+      var l = it.querySelector(".jl-cmdk__item-label");
+      return ((l ? l.textContent : it.textContent) + " " + (it.dataset.keywords || "")).toLowerCase();
+    }
+    function visible() {
+      return items.filter(function (it) {
+        return it.style.display !== "none" && it.getAttribute("aria-disabled") !== "true";
+      });
+    }
+    function setActive(i) {
+      var vis = visible();
+      active = Math.max(0, Math.min(vis.length - 1, i));
+      items.forEach(function (it) { it.removeAttribute("data-active"); });
+      var el = vis[active];
+      if (!el) return;
+      el.setAttribute("data-active", "true");
+      if (list) {
+        var top = el.offsetTop;
+        var bottom = top + el.offsetHeight;
+        if (top < list.scrollTop) list.scrollTop = top - 8;
+        else if (bottom > list.scrollTop + list.clientHeight) list.scrollTop = bottom - list.clientHeight + 8;
+      }
+    }
+    function filter() {
+      var tokens = (input ? input.value : "").toLowerCase().split(/\s+/).filter(Boolean);
+      var any = false;
+      items.forEach(function (it) {
+        var ok = tokens.every(function (t) { return text(it).indexOf(t) >= 0; });
+        it.style.display = ok ? "" : "none";
+        if (ok) any = true;
+      });
+      if (emptyEl) emptyEl.style.display = any ? "none" : "";
+      setActive(0);
+    }
+    function open() {
+      if (!overlay.hidden) return;
+      overlay.hidden = false;
+      var u = window.JLDS && window.JLDS.util;
+      unlock = u && u.lockScroll ? u.lockScroll() : function () {};
+      if (input) input.value = "";
+      filter();
+      setTimeout(function () { input && input.focus(); }, 20);
+    }
+    function close() {
+      if (overlay.hidden) return;
+      overlay.hidden = true;
+      if (unlock) { unlock(); unlock = null; }
+    }
+    overlay.__cmdkOpen = open;
+    overlay.__cmdkClose = close;
+
+    document.addEventListener("keydown", function (e) {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === key) {
+        e.preventDefault();
+        if (overlay.hidden) open();
+        else close();
+      }
+    });
+    overlay.addEventListener("mousedown", function (e) {
+      if (e.target === overlay) close();
+    });
+    if (input) {
+      input.addEventListener("input", filter);
+      input.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowDown") { e.preventDefault(); setActive(active + 1); }
+        else if (e.key === "ArrowUp") { e.preventDefault(); setActive(active - 1); }
+        else if (e.key === "Enter") { e.preventDefault(); var it = visible()[active]; if (it) it.click(); }
+        else if (e.key === "Escape") { e.preventDefault(); close(); }
+      });
+    }
+    items.forEach(function (it) {
+      it.addEventListener("mousemove", function () {
+        var i = visible().indexOf(it);
+        if (i >= 0) setActive(i);
+      });
+      it.addEventListener("click", function () {
+        if (it.getAttribute("aria-disabled") === "true") return;
+        close();
+      });
+    });
+    if (!overlay.hasAttribute("hidden")) overlay.hidden = true;
+  }
+
+  register("cmdk", function (root) {
+    root.querySelectorAll(".jl-cmdk__overlay").forEach(initOverlay);
+    root.querySelectorAll("[data-cmdk-trigger]").forEach(function (trigger) {
+      if (trigger.__jlCmdkTrig) return;
+      trigger.__jlCmdkTrig = true;
+      trigger.addEventListener("click", function () {
+        var sel = trigger.getAttribute("data-cmdk-target");
+        var overlay = sel ? document.querySelector(sel) : document.querySelector(".jl-cmdk__overlay");
+        if (overlay && overlay.__cmdkOpen) overlay.__cmdkOpen();
+      });
+    });
+  });
+})();
+
+/* ---- dropdown-menu.js ---- */
+/* JLDS behavior — DropdownMenu. Click the trigger to open the .jl-menu__pop
+ * (initially `hidden`); closes on item click, outside-click, or Esc (via
+ * JLDS.util). Requires core.js + util.js (or the all.js bundle).
+ * Contract: .jl-menu holds a trigger (first <button> / [data-menu-trigger]) and
+ * a .jl-menu__pop[hidden] with .jl-menu__item buttons. */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  function initMenu(menu) {
+    if (menu.__jlMenu) return;
+    menu.__jlMenu = true;
+    var trigger = menu.querySelector("[data-menu-trigger]") || menu.querySelector("button");
+    var pop = menu.querySelector(".jl-menu__pop");
+    if (!trigger || !pop) return;
+
+    var cleanup = null;
+    function close() {
+      if (pop.hidden) return;
+      pop.hidden = true;
+      trigger.setAttribute("aria-expanded", "false");
+      if (cleanup) {
+        cleanup();
+        cleanup = null;
+      }
+    }
+    function open() {
+      pop.hidden = false;
+      trigger.setAttribute("aria-expanded", "true");
+      var u = window.JLDS && window.JLDS.util;
+      var a = u && u.onClickOutside ? u.onClickOutside(menu, close) : function () {};
+      var b = u && u.onEscape ? u.onEscape(close) : function () {};
+      cleanup = function () {
+        a();
+        b();
+      };
+    }
+
+    trigger.setAttribute("aria-haspopup", "menu");
+    trigger.setAttribute("aria-expanded", "false");
+    if (!pop.hasAttribute("hidden")) pop.hidden = true;
+
+    trigger.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (pop.hidden) open();
+      else close();
+    });
+    pop.querySelectorAll(".jl-menu__item").forEach(function (item) {
+      item.addEventListener("click", function () {
+        if (item.getAttribute("aria-disabled") === "true") return;
+        close();
+      });
+    });
+  }
+
+  register("menu", function (root) {
+    root.querySelectorAll(".jl-menu").forEach(initMenu);
+  });
+})();
+
 /* ---- number-input.js ---- */
 /* JLDS behavior — NumberInput steppers + keyboard. Requires core.js (or all.js).
  * Contract: .jl-number with data-min / data-max / data-step / data-precision (all

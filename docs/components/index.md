@@ -14,7 +14,10 @@ All components are self-contained — each ships its own `.jl-*` CSS classes bui
 | [Button](/components/button) | React, Vue | Available |
 | [Card](/components/card) | React, Vue | Available |
 | [Checkbox](/components/checkbox) | React, Vue | Available |
+| [Combobox](/components/combobox) | React, Vue | Available |
+| [Command Palette](/components/command-palette) | React, Vue | Available |
 | [Divider](/components/divider) | React, Vue | Available |
+| [Dropdown Menu](/components/dropdown-menu) | React, Vue | Available |
 | [Empty State](/components/empty-state) | React, Vue | Available |
 | [Field](/components/field) | React, Vue | Available |
 | [Icon Button](/components/icon-button) | React, Vue | Available |

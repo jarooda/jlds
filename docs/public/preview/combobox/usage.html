@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/combobox.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); max-width: 320px; min-height: 240px; }
+    </style>
+  </head>
+  <body>
+    <div class="jl-combobox jl-combobox--md">
+      <div class="jl-combobox__control">
+        <span class="jl-combobox__field">
+          <span class="jl-combobox__single jl-combobox__single--placeholder">Select a framework…</span>
+          <input class="jl-combobox__input" role="combobox" aria-expanded="false" aria-autocomplete="list" />
+        </span>
+        <span class="jl-combobox__adorn">
+          <span class="jl-combobox__btn jl-combobox__chevron" aria-hidden="true">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </span>
+      </div>
+      <div class="jl-combobox__pop" role="listbox" hidden>
+        <div class="jl-combobox__opt" role="option" data-value="react"><span class="jl-combobox__opt-label">React</span></div>
+        <div class="jl-combobox__opt" role="option" data-value="vue"><span class="jl-combobox__opt-label">Vue</span></div>
+        <div class="jl-combobox__opt" role="option" data-value="svelte"><span class="jl-combobox__opt-label">Svelte</span></div>
+        <div class="jl-combobox__opt" role="option" data-value="angular"><span class="jl-combobox__opt-label">Angular</span></div>
+        <div class="jl-combobox__opt" role="option" data-value="solid"><span class="jl-combobox__opt-label">Solid</span></div>
+        <div class="jl-combobox__opt" role="option" data-value="qwik"><span class="jl-combobox__opt-label">Qwik</span></div>
+      </div>
+    </div>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

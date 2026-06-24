@@ -252,6 +252,27 @@
       "frameworks": ["react", "vue"],
       "dependencies": [],
       "devDependencies": []
+    },
+    {
+      "name": "dropdown-menu",
+      "description": "A trigger that opens a floating list of actions. Items, labels, separators, danger tone.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "combobox",
+      "description": "Searchable select. Single or multiple (chips), creatable, and async. Controlled or uncontrolled.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "command-palette",
+      "description": "A Cmd-K launcher: fuzzy search, grouped results, full keyboard nav, scroll-lock overlay.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
     }
   ]
 }
