@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, useSlots, useAttrs } from "vue";
+import { computed, useAttrs } from "vue";
 
 const props = withDefaults(
   defineProps<{
@@ -11,11 +11,10 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-  (e: "remove", event: MouseEvent): void;
+  remove: [event: MouseEvent];
 }>();
 
 const attrs = useAttrs();
-const slots = useSlots();
 
 const interactive = computed(() => "onClick" in attrs);
 

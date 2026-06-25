@@ -9,11 +9,11 @@ const props = withDefaults(
     title?: string;
     dismissible?: boolean;
   }>(),
-  { tone: "info", dismissible: false }
+  { tone: "info", title: "", dismissible: false }
 );
 
 const emit = defineEmits<{
-  (e: "close"): void;
+  close: [];
 }>();
 
 const slots = useSlots();

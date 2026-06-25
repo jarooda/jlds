@@ -14,7 +14,7 @@ const props = withDefaults(
     showValue?: boolean;
     indeterminate?: boolean;
   }>(),
-  { value: 0, max: 100, size: "md", tone: "brand", showValue: false, indeterminate: false }
+  { value: 0, max: 100, size: "md", tone: "brand", label: "", showValue: false, indeterminate: false }
 );
 
 const pct = computed(() => Math.max(0, Math.min(100, (props.value / props.max) * 100)));

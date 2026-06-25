@@ -10,11 +10,11 @@ const props = withDefaults(
     disabled?: boolean;
     modelValue?: string | number;
   }>(),
-  { size: "md", invalid: false, disabled: false }
+  { size: "md", invalid: false, disabled: false, modelValue: "" }
 );
 
 const emit = defineEmits<{
-  (e: "update:modelValue", value: string): void;
+  "update:modelValue": [value: string];
 }>();
 
 const slots = useSlots();

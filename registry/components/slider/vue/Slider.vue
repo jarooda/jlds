@@ -23,11 +23,14 @@ const props = withDefaults(
     min: 0,
     max: 100,
     step: 1,
+    modelValue: undefined,
     range: false,
     disabled: false,
     size: "md",
+    marks: undefined,
     showValue: false,
     formatValue: (v: number) => v,
+    label: "",
   }
 );
 

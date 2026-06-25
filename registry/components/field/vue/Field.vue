@@ -8,7 +8,7 @@ withDefaults(
     optional?: boolean;
     htmlFor?: string;
   }>(),
-  { required: false, optional: false }
+  { label: "", hint: "", error: "", required: false, optional: false, htmlFor: undefined }
 );
 </script>
 

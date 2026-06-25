@@ -11,7 +11,7 @@ const props = withDefaults(
   { align: "left", numeric: false, sortable: false, sortDirection: null }
 );
 
-const emit = defineEmits<{ (e: "sort", ev: MouseEvent): void }>();
+const emit = defineEmits<{ sort: [event: MouseEvent] }>();
 
 const active = computed(
   () => props.sortDirection === "asc" || props.sortDirection === "desc"

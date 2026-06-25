@@ -58,7 +58,7 @@ const popStyle = computed(() => ({
 </script>
 
 <template>
-  <span class="jl-popover" ref="root">
+  <span ref="root" class="jl-popover">
     <span class="jl-popover__trigger" :aria-haspopup="'dialog'" :aria-expanded="open" @click="toggle">
       <slot name="trigger" />
     </span>

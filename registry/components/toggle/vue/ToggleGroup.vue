@@ -17,7 +17,7 @@ const props = withDefaults(
     variant?: "attached" | "spaced";
     disabled?: boolean;
   }>(),
-  { type: "single", size: "md", variant: "attached", disabled: false }
+  { type: "single", modelValue: null, size: "md", variant: "attached", disabled: false }
 );
 
 const emit = defineEmits<{

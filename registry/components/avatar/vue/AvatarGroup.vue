@@ -8,7 +8,7 @@ const props = withDefaults(
     max?: number;
     size?: AvatarSize | number;
   }>(),
-  { size: "md" }
+  { max: undefined, size: "md" }
 );
 
 const SIZES: Record<AvatarSize, number> = { xs: 22, sm: 28, md: 36, lg: 48, xl: 64 };

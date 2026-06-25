@@ -14,11 +14,11 @@ const props = withDefaults(
     align?: BannerAlign;
     dismissible?: boolean;
   }>(),
-  { tone: "info", variant: "subtle", sticky: false, align: "left", dismissible: false }
+  { tone: "info", variant: "subtle", title: "", sticky: false, align: "left", dismissible: false }
 );
 
 const emit = defineEmits<{
-  (e: "dismiss"): void;
+  dismiss: [];
 }>();
 
 const slots = useSlots();

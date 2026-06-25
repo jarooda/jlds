@@ -38,7 +38,7 @@ const origin = computed(
 </script>
 
 <template>
-  <span class="jl-menu" ref="root">
+  <span ref="root" class="jl-menu">
     <span :aria-haspopup="'menu'" :aria-expanded="open" @click="toggle">
       <slot name="trigger" />
     </span>

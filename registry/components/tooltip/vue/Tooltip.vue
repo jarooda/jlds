@@ -5,7 +5,7 @@ type TooltipSide = "top" | "bottom" | "left" | "right";
 
 const props = withDefaults(
   defineProps<{ content?: string; side?: TooltipSide; delay?: number }>(),
-  { side: "top", delay: 120 }
+  { content: "", side: "top", delay: 120 }
 );
 
 const show = ref(false);

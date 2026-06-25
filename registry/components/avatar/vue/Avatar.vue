@@ -13,7 +13,7 @@ const props = withDefaults(
     status?: AvatarStatus;
     ring?: boolean;
   }>(),
-  { name: "", size: "md", square: false, ring: false }
+  { src: "", name: "", size: "md", square: false, status: undefined, ring: false }
 );
 
 const SIZES: Record<AvatarSize, number> = { xs: 22, sm: 28, md: 36, lg: 48, xl: 64 };

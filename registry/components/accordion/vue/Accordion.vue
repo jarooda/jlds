@@ -7,7 +7,7 @@ const props = withDefaults(
     variant?: "bordered" | "separated";
     defaultValue?: string | string[];
   }>(),
-  { type: "single", variant: "bordered" }
+  { type: "single", variant: "bordered", defaultValue: undefined }
 );
 
 const initial =

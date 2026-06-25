@@ -8,11 +8,11 @@ const props = withDefaults(
     disabled?: boolean;
     modelValue?: boolean;
   }>(),
-  { size: "md", disabled: false, modelValue: false }
+  { label: "", size: "md", disabled: false, modelValue: false }
 );
 
 const emit = defineEmits<{
-  (e: "update:modelValue", value: boolean): void;
+  "update:modelValue": [value: boolean];
 }>();
 
 function onChange(event: Event) {

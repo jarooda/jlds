@@ -16,13 +16,17 @@ const props = withDefaults(
     placeholder?: string;
   }>(),
   {
+    modelValue: null,
     min: -Infinity,
     max: Infinity,
     step: 1,
+    precision: undefined,
     size: "md",
     align: "center",
+    suffix: "",
     disabled: false,
     invalid: false,
+    placeholder: "",
   }
 );
 

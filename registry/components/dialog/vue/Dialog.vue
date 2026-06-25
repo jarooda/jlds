@@ -9,10 +9,10 @@ const props = withDefaults(
     size?: "sm" | "md" | "lg";
     showClose?: boolean;
   }>(),
-  { size: "md", showClose: true }
+  { title: "", description: "", size: "md", showClose: true }
 );
 
-const emit = defineEmits<{ (e: "close"): void; (e: "update:open", v: boolean): void }>();
+const emit = defineEmits<{ close: []; "update:open": [open: boolean] }>();
 
 function close() {
   emit("close");

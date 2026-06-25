@@ -12,11 +12,11 @@ const props = withDefaults(
     modelValue?: string;
     disabled?: boolean;
   }>(),
-  { size: "md", options: () => [], disabled: false }
+  { size: "md", options: () => [], placeholder: undefined, modelValue: "", disabled: false }
 );
 
 const emit = defineEmits<{
-  (e: "update:modelValue", value: string): void;
+  "update:modelValue": [value: string];
 }>();
 
 const normalized = computed(() =>

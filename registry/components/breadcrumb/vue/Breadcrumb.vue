@@ -13,7 +13,7 @@ const props = withDefaults(
     separator?: "chevron" | "slash";
     maxItems?: number;
   }>(),
-  { separator: "chevron", maxItems: 0 }
+  { items: undefined, separator: "chevron", maxItems: 0 }
 );
 
 const expanded = ref(false);

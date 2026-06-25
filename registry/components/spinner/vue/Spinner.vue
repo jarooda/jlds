@@ -9,7 +9,7 @@ const props = withDefaults(
     size?: SpinnerSize | number;
     tone?: SpinnerTone;
   }>(),
-  { size: "md" }
+  { size: "md", tone: undefined }
 );
 
 const SIZES: Record<SpinnerSize, number> = { sm: 16, md: 20, lg: 28 };

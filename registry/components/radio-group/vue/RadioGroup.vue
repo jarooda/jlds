@@ -13,7 +13,7 @@ const props = withDefaults(
     direction?: "column" | "row";
     disabled?: boolean;
   }>(),
-  { direction: "column", disabled: false }
+  { modelValue: "", direction: "column", disabled: false }
 );
 
 const emit = defineEmits<{
