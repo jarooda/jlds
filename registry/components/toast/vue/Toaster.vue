@@ -1,5 +1,5 @@
 <script lang="ts">
-import { ref } from "vue";
+import { computed, onBeforeUnmount, ref, watch } from "vue";
 
 export type ToastTone = "success" | "warning" | "danger" | "info";
 
@@ -47,8 +47,6 @@ export const toast = Object.assign(
 </script>
 
 <script setup lang="ts">
-import { computed, watch, onBeforeUnmount } from "vue";
-
 const props = withDefaults(
   defineProps<{
     position?: "bottom-right" | "bottom-left" | "top-right" | "top-left" | "top-center";
