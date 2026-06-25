@@ -8,7 +8,7 @@
   "files": {
     "shared": [],
     "react": ["toast.tsx", "index.ts"],
-    "vue": ["toast.ts", "Toaster.vue", "index.ts"]
+    "vue": ["Toaster.vue", "index.ts"]
   },
   "registryDependencies": []
 }

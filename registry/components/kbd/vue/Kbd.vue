@@ -8,7 +8,7 @@ const props = withDefaults(
     keys?: string[];
     size?: KbdSize;
   }>(),
-  { size: "md" }
+  { keys: undefined, size: "md" }
 );
 
 const PRETTY: Record<string, string> = {

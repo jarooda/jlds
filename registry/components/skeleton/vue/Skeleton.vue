@@ -11,7 +11,7 @@ const props = withDefaults(
     lines?: number;
     radius?: number | string;
   }>(),
-  { variant: "text", lines: 1 }
+  { variant: "text", width: undefined, height: undefined, lines: 1, radius: undefined }
 );
 
 const dim = (v?: number | string) => (typeof v === "number" ? `${v}px` : v);

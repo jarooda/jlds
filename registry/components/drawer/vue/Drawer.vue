@@ -10,10 +10,10 @@ const props = withDefaults(
     description?: string;
     showClose?: boolean;
   }>(),
-  { side: "right", showClose: true }
+  { side: "right", size: undefined, title: "", description: "", showClose: true }
 );
 
-const emit = defineEmits<{ (e: "close"): void; (e: "update:open", v: boolean): void }>();
+const emit = defineEmits<{ close: []; "update:open": [open: boolean] }>();
 
 function close() {
   emit("close");

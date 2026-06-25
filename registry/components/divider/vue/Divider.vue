@@ -8,7 +8,7 @@ const props = withDefaults(
     orientation?: DividerOrientation;
     label?: string;
   }>(),
-  { orientation: "horizontal" }
+  { orientation: "horizontal", label: undefined }
 );
 
 const slots = useSlots();

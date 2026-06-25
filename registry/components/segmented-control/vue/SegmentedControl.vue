@@ -14,7 +14,7 @@ const props = withDefaults(
     size?: "sm" | "md";
     fullWidth?: boolean;
   }>(),
-  { size: "md", fullWidth: false }
+  { modelValue: undefined, size: "md", fullWidth: false }
 );
 
 const emit = defineEmits<{

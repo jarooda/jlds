@@ -13,7 +13,15 @@ const props = withDefaults(
     lineNumbers?: boolean;
     copyable?: boolean;
   }>(),
-  { variant: "inline", lineNumbers: false, copyable: true }
+  {
+    code: undefined,
+    variant: "inline",
+    prompt: undefined,
+    language: "",
+    title: "",
+    lineNumbers: false,
+    copyable: true,
+  }
 );
 
 const promptGlyph = computed(() =>

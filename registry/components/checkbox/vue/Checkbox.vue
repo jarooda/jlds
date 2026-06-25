@@ -9,7 +9,7 @@ const props = withDefaults(
     disabled?: boolean;
     modelValue?: boolean;
   }>(),
-  { indeterminate: false, disabled: false, modelValue: false }
+  { label: "", description: "", indeterminate: false, disabled: false, modelValue: false }
 );
 
 const emit = defineEmits<{

@@ -14,7 +14,7 @@ const props = withDefaults(
     plain?: boolean;
     size?: StatSize;
   }>(),
-  { plain: false, size: "md" }
+  { label: "", delta: undefined, deltaTone: undefined, caption: "", plain: false, size: "md" }
 );
 
 const slots = useSlots();

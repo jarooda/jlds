@@ -3,9 +3,9 @@ import { inject, computed, useSlots } from "vue";
 
 const props = withDefaults(
   defineProps<{ tone?: "default" | "danger"; disabled?: boolean; shortcut?: string }>(),
-  { tone: "default", disabled: false }
+  { tone: "default", disabled: false, shortcut: "" }
 );
-const emit = defineEmits<{ (e: "select", ev: MouseEvent): void }>();
+const emit = defineEmits<{ select: [event: MouseEvent] }>();
 const menu = inject<{ close: () => void }>("jlMenu", { close: () => {} });
 const slots = useSlots();
 

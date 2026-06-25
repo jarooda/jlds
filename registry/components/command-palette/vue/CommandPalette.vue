@@ -139,14 +139,14 @@ function flatIndex(it: CommandItem) {
         </svg>
         <input
           ref="inputRef"
+          v-model="query"
           class="jl-cmdk__input"
           :placeholder="placeholder"
-          v-model="query"
           aria-label="Search commands"
         />
       </div>
 
-      <div class="jl-cmdk__list" ref="listRef" role="listbox">
+      <div ref="listRef" class="jl-cmdk__list" role="listbox">
         <div v-if="flat.length === 0" class="jl-cmdk__empty">{{ emptyMessage }}</div>
         <div v-for="g in groups" :key="g.name || '_'" role="group" :aria-label="g.name || undefined">
           <div v-if="g.name" class="jl-cmdk__group-label">{{ g.name }}</div>

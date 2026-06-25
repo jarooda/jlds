@@ -3,7 +3,7 @@ import { inject, computed, type Ref } from "vue";
 
 const props = withDefaults(
   defineProps<{ value: string; title?: string; disabled?: boolean }>(),
-  { disabled: false }
+  { title: "", disabled: false }
 );
 
 const ctx = inject<{ open: Ref<string[]>; toggle: (v: string) => void }>("jlAccordion")!;
@@ -29,7 +29,7 @@ const id = `jlacc-${Math.random().toString(36).slice(2, 8)}`;
         </span>
       </button>
     </h3>
-    <div class="jl-acc-region" :id="id" role="region">
+    <div :id="id" class="jl-acc-region" role="region">
       <div class="jl-acc-content"><div class="jl-acc-content__inner"><slot /></div></div>
     </div>
   </div>

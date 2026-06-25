@@ -10,12 +10,12 @@ const props = withDefaults(
     siblingCount?: number;
     showSummary?: boolean;
   }>(),
-  { page: 1, siblingCount: 1, showSummary: false }
+  { page: 1, total: undefined, pageSize: undefined, siblingCount: 1, showSummary: false }
 );
 
 const emit = defineEmits<{
-  (e: "update:page", page: number): void;
-  (e: "change", page: number): void;
+  "update:page": [page: number];
+  change: [page: number];
 }>();
 
 function go(p: number) {

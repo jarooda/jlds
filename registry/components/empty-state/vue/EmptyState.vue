@@ -8,7 +8,7 @@ const props = withDefaults(
     size?: "sm" | "md";
     bordered?: boolean;
   }>(),
-  { size: "md", bordered: false }
+  { title: "", description: "", size: "md", bordered: false }
 );
 
 const slots = useSlots();

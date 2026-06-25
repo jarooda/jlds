@@ -15,8 +15,8 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-  (e: "update:modelValue", v: string): void;
-  (e: "change", v: string): void;
+  "update:modelValue": [value: string];
+  change: [value: string];
 }>();
 
 const norm = computed(() =>

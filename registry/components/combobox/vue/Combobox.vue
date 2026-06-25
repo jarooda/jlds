@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, watch, nextTick, onBeforeUnmount } from "vue";
+import { ref, computed, watch, onBeforeUnmount, type Component } from "vue";
 
-interface Opt { value: string; label: string; icon?: any; group?: string; disabled?: boolean }
+interface Opt { value: string; label: string; icon?: Component; group?: string; disabled?: boolean }
 type OptionInput = string | Opt;
 
 const props = withDefaults(
@@ -20,6 +20,7 @@ const props = withDefaults(
     size?: "sm" | "md" | "lg";
   }>(),
   {
+    modelValue: null,
     multiple: false,
     creatable: false,
     loading: false,
@@ -192,7 +193,7 @@ const cls = computed(() =>
 </script>
 
 <template>
-  <div :class="cls" ref="root">
+  <div ref="root" :class="cls">
     <div class="jl-combobox__control" @click="openPop(); inputRef?.focus()">
       <span v-for="val in (multiple ? (selected as string[]) || [] : [])" :key="val" class="jl-combobox__chip">
         {{ labelFor(val) }}

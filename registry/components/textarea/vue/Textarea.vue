@@ -4,11 +4,11 @@ const props = withDefaults(
     invalid?: boolean;
     modelValue?: string;
   }>(),
-  { invalid: false }
+  { invalid: false, modelValue: "" }
 );
 
 const emit = defineEmits<{
-  (e: "update:modelValue", value: string): void;
+  "update:modelValue": [value: string];
 }>();
 
 function onInput(event: Event) {
