@@ -4,8 +4,16 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 pub const CONFIG_FILE: &str = "jlds.json";
-pub const DEFAULT_REGISTRY: &str =
-    "https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry";
+
+/// Registry content is served from jsDelivr's GitHub mirror pinned to this build's own
+/// release tag (not `@main`), so `npx jlds add` always matches the CLI version that fetched
+/// it — and jsDelivr treats tags as immutable, so the cache never goes stale.
+pub fn default_registry() -> String {
+    format!(
+        "https://cdn.jsdelivr.net/gh/jarooda/jlds@v{}/registry",
+        env!("CARGO_PKG_VERSION")
+    )
+}
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
@@ -44,10 +52,6 @@ pub struct TailwindConfig {
 pub struct PathsConfig {
     pub components: String,
     pub utils: String,
-}
-
-fn default_registry() -> String {
-    DEFAULT_REGISTRY.to_string()
 }
 
 impl Config {

@@ -5,7 +5,7 @@ use serde::Deserialize;
 use std::fs;
 use std::path::Path;
 
-use crate::config::{Config, Framework, PathsConfig, TailwindConfig, DEFAULT_REGISTRY};
+use crate::config::{default_registry, Config, Framework, PathsConfig, TailwindConfig};
 
 pub async fn run() -> Result<()> {
     println!("{}", "Initializing JLDS in your project...".bold());
@@ -61,7 +61,7 @@ pub async fn run() -> Result<()> {
             components: components_path,
             utils: utils_path,
         },
-        registry: DEFAULT_REGISTRY.to_string(),
+        registry: default_registry(),
     };
 
     config.save()?;
