@@ -113,7 +113,12 @@ export default defineConfig({
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/jarooda/jlds' }
-    ]
+    ],
+
+    footer: {
+      message: 'Released under the MIT License.',
+      copyright: 'Copyright © 2026-present <a href="https://jaluwibowo.id" target="_blank" rel="noopener">Jalu Wibowo Aji</a>'
+    }
   },
   base: '/'
 })
