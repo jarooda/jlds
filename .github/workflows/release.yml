@@ -41,6 +41,13 @@ jobs:
         with:
           workspaces: cli
 
+      - name: Set crate version from tag
+        shell: bash
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          sed -i.bak "0,/^version = /s/^version = \".*\"/version = \"${version}\"/" cli/Cargo.toml
+          rm -f cli/Cargo.toml.bak
+
       - name: Build
         run: cargo build --manifest-path cli/Cargo.toml --release --target ${{ matrix.target }}
 
