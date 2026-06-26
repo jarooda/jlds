@@ -92,7 +92,13 @@ export function CommandPalette({
     return () => document.removeEventListener("keydown", onKey);
   }, [open, setOpen, shortcut]);
 
-  React.useEffect(() => setActive(0), [query, open]);
+  // Reset the active item whenever the query or open state changes, derived
+  // during render (React docs "adjust state during render" pattern).
+  const [activeResetKey, setActiveResetKey] = React.useState(`${query}|${open}`);
+  if (activeResetKey !== `${query}|${open}`) {
+    setActiveResetKey(`${query}|${open}`);
+    setActive(0);
+  }
 
   React.useEffect(() => {
     if (!open) return;

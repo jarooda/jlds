@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import * as React from "react";
 import "./card.css";
 
@@ -8,14 +9,15 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   interactive?: boolean;
 }
 
-export interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface CardHeaderProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
   title?: React.ReactNode;
   subtitle?: React.ReactNode;
   icon?: React.ReactNode;
   action?: React.ReactNode;
 }
 
-export interface CardSectionProps extends React.HTMLAttributes<HTMLDivElement> {}
+export type CardSectionProps = React.HTMLAttributes<HTMLDivElement>;
 
 function CardRoot({
   elevation = "flat",

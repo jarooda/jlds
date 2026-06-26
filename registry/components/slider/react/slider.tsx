@@ -49,7 +49,9 @@ export function Slider({
 
   const trackRef = React.useRef<HTMLDivElement>(null);
   const valsRef = React.useRef<number[]>(vals);
-  valsRef.current = vals;
+  React.useEffect(() => {
+    valsRef.current = vals;
+  });
   const dragRef = React.useRef<number | null>(null);
 
   const clamp = (v: number) => Math.min(max, Math.max(min, v));
@@ -107,7 +109,7 @@ export function Slider({
     if (disabled) return;
     const cur = valsRef.current[i];
     const big = step * 10;
-    let v = cur;
+    let v: number;
     switch (e.key) {
       case "ArrowRight":
       case "ArrowUp":

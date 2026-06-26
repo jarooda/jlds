@@ -22,7 +22,7 @@ const PALETTE = ["#1b8a64", "#2ea67c", "#0ea5e9", "#f59e0b", "#7c5cff", "#ef4444
 function hashColor(str = ""): string {
   let h = 0;
   for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0;
-  return PALETTE[h % PALETTE.length];
+  return PALETTE[h % PALETTE.length]!;
 }
 
 function initials(name = ""): string {

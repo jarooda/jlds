@@ -100,6 +100,7 @@ watch([query, open], () => (active.value = 0));
 function onGlobalKey(e: KeyboardEvent) {
   const wantMod = props.shortcut.some((k) => ["mod", "cmd", "meta", "ctrl"].includes(k));
   const key = props.shortcut[props.shortcut.length - 1];
+  if (!key) return;
   if ((!wantMod || e.metaKey || e.ctrlKey) && e.key.toLowerCase() === key.toLowerCase()) {
     e.preventDefault();
     setOpen(!open.value);

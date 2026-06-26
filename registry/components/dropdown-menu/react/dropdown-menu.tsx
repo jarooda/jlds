@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import * as React from "react";
 import "./dropdown-menu.css";
 
@@ -10,12 +11,18 @@ export interface DropdownMenuProps {
 }
 
 export interface DropdownMenuItemProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onSelect"> {
   icon?: React.ReactNode;
   shortcut?: React.ReactNode;
   tone?: "default" | "danger";
   disabled?: boolean;
   onSelect?: (e: React.MouseEvent) => void;
+}
+
+interface TriggerProps {
+  onClick?: (e: React.MouseEvent) => void;
+  "aria-haspopup"?: React.AriaAttributes["aria-haspopup"];
+  "aria-expanded"?: boolean;
 }
 
 const MenuCtx = React.createContext<{ close: () => void }>({ close: () => {} });
@@ -48,9 +55,9 @@ function DropdownMenuRoot({
   }, [open]);
 
   const triggerEl = React.isValidElement(trigger)
-    ? React.cloneElement(trigger as React.ReactElement<any>, {
+    ? React.cloneElement(trigger as React.ReactElement<TriggerProps>, {
         onClick: (e: React.MouseEvent) => {
-          (trigger.props as any).onClick?.(e);
+          (trigger.props as TriggerProps).onClick?.(e);
           setOpen((v) => !v);
         },
         "aria-haspopup": "menu",

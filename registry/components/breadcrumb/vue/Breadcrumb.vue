@@ -23,7 +23,7 @@ type RenderItem = BreadcrumbItemData & { _ellipsis?: boolean };
 const list = computed<RenderItem[]>(() => {
   const items = props.items ?? [];
   if (props.maxItems > 0 && items.length > props.maxItems && !expanded.value) {
-    return [items[0], { _ellipsis: true, label: "" }, ...items.slice(items.length - (props.maxItems - 1))];
+    return [items[0]!, { _ellipsis: true, label: "" }, ...items.slice(items.length - (props.maxItems - 1))];
   }
   return items;
 });

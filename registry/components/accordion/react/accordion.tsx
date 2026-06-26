@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import * as React from "react";
 import "./accordion.css";
 
@@ -26,7 +27,6 @@ interface Ctx {
   toggle: (value: string) => void;
 }
 const AccCtx = React.createContext<Ctx | null>(null);
-let _uid = 0;
 
 function AccordionRoot({
   type = "single",
@@ -78,10 +78,10 @@ function AccordionItem({
   ...rest
 }: AccordionItemProps) {
   const ctx = React.useContext(AccCtx)!;
-  const fallback = React.useRef(value ?? `acc-${++_uid}`);
-  const v = value ?? fallback.current;
+  const reactId = React.useId();
+  const v = value ?? reactId;
   const isOpen = ctx.open.includes(v);
-  const id = React.useMemo(() => `jlacc-${Math.random().toString(36).slice(2, 8)}`, []);
+  const id = `jlacc-${reactId}`;
 
   return (
     <div
