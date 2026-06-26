@@ -66,4 +66,4 @@
   color: #fff;
   box-shadow: var(--shadow-xs);
 }
-.jl-btn--danger:hover:not(:disabled) { background: #f87171; }
+.jl-btn--danger:hover:not(:disabled) { background: var(--danger-hover); }

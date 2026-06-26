@@ -1,0 +1,64 @@
+.jl-table-wrap { width: 100%; overflow-x: auto; }
+.jl-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--text-primary);
+}
+.jl-table--sticky .jl-table__head th { position: sticky; top: 0; z-index: 1; }
+
+.jl-table th, .jl-table td {
+  text-align: left;
+  vertical-align: middle;
+  padding: var(--_py, var(--space-3)) var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.jl-table--compact { --_py: var(--space-2); }
+
+.jl-table th {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  color: var(--text-tertiary);
+  background: var(--surface-sunken);
+  white-space: nowrap;
+  user-select: none;
+}
+.jl-table__head th:first-child { border-top-left-radius: var(--radius-lg); }
+.jl-table__head th:last-child  { border-top-right-radius: var(--radius-lg); }
+
+.jl-th--right  { text-align: right; }
+.jl-th--center { text-align: center; }
+.jl-td--right  { text-align: right; }
+.jl-td--center { text-align: center; }
+.jl-td--num, .jl-th--num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: 0; }
+.jl-th--num { font-family: var(--font-sans); }
+
+.jl-th__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-transform: inherit;
+}
+.jl-th--right .jl-th__btn  { flex-direction: row-reverse; }
+.jl-th__btn:hover { color: var(--text-secondary); }
+.jl-th__sort { display: inline-flex; opacity: 0.55; transition: opacity var(--duration-fast) var(--ease-standard); }
+.jl-th__btn:hover .jl-th__sort { opacity: 0.9; }
+.jl-th__sort svg { width: 13px; height: 13px; }
+.jl-th--active .jl-th__sort { opacity: 1; color: var(--text-brand); }
+
+.jl-table__body tr { transition: background var(--duration-fast) var(--ease-standard); }
+.jl-table__body tr:last-child td { border-bottom: none; }
+.jl-tr--interactive { cursor: pointer; }
+.jl-table__body tr.jl-tr--interactive:hover { background: var(--surface-hover); }
+.jl-table__body tr.jl-tr--selected { background: var(--accent-subtle); }
+.jl-table__body tr.jl-tr--selected:hover { background: var(--accent-muted); }

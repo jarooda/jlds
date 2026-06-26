@@ -1,0 +1,62 @@
+.jl-accordion { display: flex; flex-direction: column; }
+.jl-accordion--bordered {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  background: var(--surface-card);
+  overflow: hidden;
+}
+.jl-accordion--separated { gap: var(--space-3); }
+
+.jl-acc-item { border-bottom: 1px solid var(--border-subtle); }
+.jl-accordion--bordered .jl-acc-item:last-child { border-bottom: none; }
+.jl-accordion--separated .jl-acc-item {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  background: var(--surface-card);
+  overflow: hidden;
+}
+
+.jl-acc-trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  padding: var(--space-4) var(--space-5);
+  font-family: var(--font-sans);
+  font-size: var(--text-md);
+  font-weight: var(--weight-medium);
+  color: var(--text-primary);
+  background: transparent;
+  border: none;
+  transition: background var(--duration-fast) var(--ease-standard);
+}
+.jl-acc-trigger:hover { background: var(--surface-hover); }
+.jl-acc-trigger:focus-visible { outline: 2px solid var(--border-focus); outline-offset: -2px; }
+.jl-acc-trigger:disabled { opacity: 0.5; cursor: not-allowed; }
+.jl-acc-trigger__icon { flex: none; display: inline-flex; color: var(--text-tertiary); }
+.jl-acc-trigger__icon svg { width: 18px; height: 18px; }
+.jl-acc-trigger__label { flex: 1; min-width: 0; }
+.jl-acc-trigger__chevron {
+  flex: none;
+  display: inline-flex;
+  color: var(--text-tertiary);
+  transition: transform var(--duration-base) var(--ease-emphasized);
+}
+.jl-acc-trigger__chevron svg { width: 18px; height: 18px; }
+.jl-acc-item[data-open="true"] .jl-acc-trigger__chevron { transform: rotate(180deg); }
+
+.jl-acc-region { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--duration-base) var(--ease-emphasized); }
+.jl-acc-item[data-open="true"] .jl-acc-region { grid-template-rows: 1fr; }
+.jl-acc-content { overflow: hidden; }
+.jl-acc-content__inner {
+  padding: 0 var(--space-5) var(--space-5);
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jl-acc-region, .jl-acc-trigger__chevron { transition: none; }
+}
