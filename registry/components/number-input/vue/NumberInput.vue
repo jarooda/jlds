@@ -42,7 +42,8 @@ watch(
 
 function decimals(step: number) {
   const s = String(step);
-  return s.includes(".") ? s.split(".")[1].length : 0;
+  const frac = s.split(".")[1];
+  return frac ? frac.length : 0;
 }
 const prec = computed(() => (props.precision != null ? props.precision : decimals(props.step)));
 const clamp = (n: number) => Math.min(props.max, Math.max(props.min, n));

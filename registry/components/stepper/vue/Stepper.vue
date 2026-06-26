@@ -24,6 +24,12 @@ function stateOf(i: number) {
   return i < props.active ? "completed" : i === props.active ? "current" : "upcoming";
 }
 
+function onStepClick(i: number) {
+  if (!props.clickable) return;
+  const s = props.steps[i];
+  if (s) emit("step-click", i, s);
+}
+
 const cls = computed(() =>
   [
     "jl-stepper",
@@ -44,7 +50,7 @@ const cls = computed(() =>
           class="jl-step__marker"
           :type="clickable ? 'button' : undefined"
           :aria-current="stateOf(i) === 'current' ? 'step' : undefined"
-          @click="clickable && emit('step-click', i, steps[i])"
+          @click="onStepClick(i)"
         >
           <svg v-if="stateOf(i) === 'completed'" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
           <template v-else>{{ i + 1 }}</template>
