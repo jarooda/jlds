@@ -38,12 +38,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       .filter(Boolean)
       .join(" ");
 
+    const Component = Tag as React.ElementType;
     return (
-      <Tag ref={ref as React.Ref<HTMLButtonElement>} className={cls} {...props}>
+      <Component ref={ref} className={cls} {...props}>
         {icon}
         {children != null && <span>{children}</span>}
         {trailingIcon}
-      </Tag>
+      </Component>
     );
   }
 );

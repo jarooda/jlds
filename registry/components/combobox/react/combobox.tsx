@@ -74,6 +74,12 @@ export function Combobox({
     onChange?.(v);
   };
 
+  const close = React.useCallback(() => {
+    setOpen(false);
+    setQuery("");
+    onInputChange?.("");
+  }, [onInputChange]);
+
   const labelFor = (val: string) => {
     const o = opts.find((x) => x.value === val);
     return o ? o.label : val;
@@ -105,7 +111,13 @@ export function Combobox({
     ...(showCreate ? [{ type: "create" as const }] : []),
   ];
 
-  React.useEffect(() => setActive(0), [query, open]);
+  // Reset the active option whenever the query or open state changes, derived
+  // during render (React docs "adjust state during render" pattern).
+  const [activeResetKey, setActiveResetKey] = React.useState(`${query}|${open}`);
+  if (activeResetKey !== `${query}|${open}`) {
+    setActiveResetKey(`${query}|${open}`);
+    setActive(0);
+  }
 
   React.useEffect(() => {
     if (!open) return;
@@ -114,7 +126,7 @@ export function Combobox({
     };
     document.addEventListener("mousedown", onDoc);
     return () => document.removeEventListener("mousedown", onDoc);
-  }, [open]);
+  }, [open, close]);
 
   React.useEffect(() => {
     if (!open || !rootRef.current) return;
@@ -129,11 +141,6 @@ export function Combobox({
 
   const openPop = () => {
     if (!disabled) setOpen(true);
-  };
-  const close = () => {
-    setOpen(false);
-    setQuery("");
-    onInputChange?.("");
   };
 
   const choose = (o: Opt) => {

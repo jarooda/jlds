@@ -3,7 +3,8 @@ import "./alert.css";
 
 export type AlertTone = "info" | "success" | "warning" | "danger";
 
-export interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface AlertProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
   tone?: AlertTone;
   title?: React.ReactNode;
   /** Override the default tone icon. */

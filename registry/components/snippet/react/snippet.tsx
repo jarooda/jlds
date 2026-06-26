@@ -4,7 +4,7 @@ import "./snippet.css";
 export type SnippetVariant = "inline" | "block";
 
 export interface SnippetProps
-  extends Omit<React.HTMLAttributes<HTMLElement>, "children"> {
+  extends Omit<React.HTMLAttributes<HTMLElement>, "children" | "title"> {
   children?: React.ReactNode;
   /** Explicit copy text — use when children is styled/non-string. */
   code?: string;
