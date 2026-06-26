@@ -5,7 +5,8 @@ export type BannerTone = "info" | "success" | "warning" | "danger" | "accent" | 
 export type BannerVariant = "subtle" | "solid";
 export type BannerAlign = "left" | "center";
 
-export interface BannerProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface BannerProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
   tone?: BannerTone;
   variant?: BannerVariant;
   title?: React.ReactNode;

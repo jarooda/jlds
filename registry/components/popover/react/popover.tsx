@@ -4,6 +4,12 @@ import "./popover.css";
 export type PopoverSide = "bottom" | "top";
 export type PopoverAlign = "start" | "center" | "end";
 
+interface TriggerProps {
+  onClick?: (e: React.MouseEvent) => void;
+  "aria-haspopup"?: React.AriaAttributes["aria-haspopup"];
+  "aria-expanded"?: boolean;
+}
+
 export interface PopoverProps {
   trigger: React.ReactElement;
   side?: PopoverSide;
@@ -59,9 +65,9 @@ export function Popover({
   }, [open, setOpen]);
 
   const triggerEl = React.isValidElement(trigger)
-    ? React.cloneElement(trigger as React.ReactElement<any>, {
+    ? React.cloneElement(trigger as React.ReactElement<TriggerProps>, {
         onClick: (e: React.MouseEvent) => {
-          (trigger.props as any).onClick?.(e);
+          (trigger.props as TriggerProps).onClick?.(e);
           setOpen(!open);
         },
         "aria-haspopup": "dialog",

@@ -47,9 +47,13 @@ export function NumberInput({
   const raw = isControlled ? value : unc;
   const [text, setText] = React.useState(raw === "" || raw == null ? "" : String(raw));
 
-  React.useEffect(() => {
-    if (isControlled) setText(value === "" || value == null ? "" : String(value));
-  }, [isControlled, value]);
+  // Sync the text field to a controlled value, derived during render (React docs
+  // "adjust state during render" pattern) instead of resetting via an effect.
+  const [prevValue, setPrevValue] = React.useState(value);
+  if (isControlled && value !== prevValue) {
+    setPrevValue(value);
+    setText(value === "" || value == null ? "" : String(value));
+  }
 
   const prec = precision != null ? precision : decimals(step);
   const clamp = (n: number) => Math.min(max, Math.max(min, n));
