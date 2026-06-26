@@ -137,7 +137,8 @@ function onInput(e: Event) {
   emit("inputChange", query.value);
 }
 function flatItemAt(i: number): { type: "opt"; o: Opt } | { type: "create" } | null {
-  if (i < filtered.value.length) return { type: "opt", o: filtered.value[i] };
+  const o = filtered.value[i];
+  if (o) return { type: "opt", o };
   if (showCreate.value && i === filtered.value.length) return { type: "create" };
   return null;
 }

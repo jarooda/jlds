@@ -55,13 +55,10 @@ const roundStep = (v: number) =>
 const pct = (v: number) => ((v - props.min) / (props.max - props.min)) * 100;
 
 function applyThumb(i: number, v: number, end: boolean) {
-  const cur = vals.value;
   let next: SliderValue;
   if (props.range) {
-    const arr = [...cur];
-    if (i === 0) arr[0] = Math.min(v, cur[1]);
-    else arr[1] = Math.max(v, cur[0]);
-    next = [arr[0], arr[1]];
+    const [lo = props.min, hi = props.max] = vals.value;
+    next = i === 0 ? [Math.min(v, hi), hi] : [lo, Math.max(v, lo)];
   } else {
     next = v;
   }
@@ -78,8 +75,8 @@ function valueFromClient(clientX: number) {
 function onTrackPointerDown(e: PointerEvent) {
   if (props.disabled) return;
   const v = valueFromClient(e.clientX);
-  const cur = vals.value;
-  const i = props.range ? (Math.abs(cur[0] - v) <= Math.abs(cur[1] - v) ? 0 : 1) : 0;
+  const [lo = props.min, hi = props.max] = vals.value;
+  const i = props.range ? (Math.abs(lo - v) <= Math.abs(hi - v) ? 0 : 1) : 0;
   dragIndex.value = i;
   applyThumb(i, v, false);
   const move = (ev: PointerEvent) => applyThumb(dragIndex.value!, valueFromClient(ev.clientX), false);
@@ -96,6 +93,7 @@ function onTrackPointerDown(e: PointerEvent) {
 function onThumbKeyDown(i: number, e: KeyboardEvent) {
   if (props.disabled) return;
   const cur = vals.value[i];
+  if (cur == null) return;
   const big = props.step * 10;
   let v = cur;
   switch (e.key) {
@@ -126,17 +124,19 @@ function onThumbKeyDown(i: number, e: KeyboardEvent) {
   applyThumb(i, roundStep(v), true);
 }
 
-const fillStyle = computed(() =>
-  props.range
-    ? { left: `${pct(vals.value[0])}%`, right: `${100 - pct(vals.value[1])}%` }
-    : { left: "0", width: `${pct(vals.value[0])}%` }
-);
+const fillStyle = computed(() => {
+  const [lo = props.min, hi = props.max] = vals.value;
+  return props.range
+    ? { left: `${pct(lo)}%`, right: `${100 - pct(hi)}%` }
+    : { left: "0", width: `${pct(lo)}%` };
+});
 
-const valueText = computed(() =>
-  props.range
-    ? `${props.formatValue(vals.value[0])} – ${props.formatValue(vals.value[1])}`
-    : `${props.formatValue(vals.value[0])}`
-);
+const valueText = computed(() => {
+  const [lo = props.min, hi = props.max] = vals.value;
+  return props.range
+    ? `${props.formatValue(lo)} – ${props.formatValue(hi)}`
+    : `${props.formatValue(lo)}`;
+});
 
 const normalizedMarks = computed(() =>
   (props.marks ?? []).map((m) => (typeof m === "object" ? m : { value: m, label: String(m) }))
