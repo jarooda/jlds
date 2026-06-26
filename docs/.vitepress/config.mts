@@ -1,5 +1,21 @@
 import { defineConfig } from 'vitepress'
 
+// Resolve the latest published version at build time so the nav can show it
+// without a client-side request. Falls back to empty (hidden) if npm is
+// unreachable during the build.
+async function getNpmVersion(): Promise<string> {
+  try {
+    const res = await fetch('https://registry.npmjs.org/@jarooda/jlds/latest')
+    if (!res.ok) return ''
+    const data = (await res.json()) as { version?: string }
+    return data.version ?? ''
+  } catch {
+    return ''
+  }
+}
+
+const npmVersion = await getNpmVersion()
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "jlds",
@@ -10,6 +26,8 @@ export default defineConfig({
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     logo: '/favicon.svg',
+    // Exposed to the custom Layout slot (see theme/index.ts → NpmVersion.vue).
+    npmVersion,
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Guide', link: '/guide/what-is-jlds' },
