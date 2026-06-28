@@ -287,6 +287,34 @@
       "frameworks": ["react", "vue"],
       "dependencies": [],
       "devDependencies": []
+    },
+    {
+      "name": "timeline",
+      "description": "A vertical activity feed: a dot-and-rail list of events with title, time, description, and optional icon.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "rating",
+      "description": "A row of stars for displaying or capturing a score. Half values, hover preview, read-only with value/count label.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "file-upload",
+      "description": "A drag-and-drop dropzone with click-to-browse and a list of selected files showing size, progress, and status.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "date-picker",
+      "description": "A trigger button that opens a Calendar in a popover. Exports a standalone Calendar for inline month grids.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
     }
   ]
 }

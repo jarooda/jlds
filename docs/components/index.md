@@ -16,9 +16,11 @@ All components are self-contained — each ships its own `.jl-*` CSS classes bui
 | [Checkbox](/components/checkbox) | React, Vue | Available |
 | [Combobox](/components/combobox) | React, Vue | Available |
 | [Command Palette](/components/command-palette) | React, Vue | Available |
+| [Date Picker](/components/date-picker) | React, Vue | Available |
 | [Dialog](/components/dialog) | React, Vue | Available |
 | [Divider](/components/divider) | React, Vue | Available |
 | [Drawer](/components/drawer) | React, Vue | Available |
+| [File Upload](/components/file-upload) | React, Vue | Available |
 | [Dropdown Menu](/components/dropdown-menu) | React, Vue | Available |
 | [Empty State](/components/empty-state) | React, Vue | Available |
 | [Field](/components/field) | React, Vue | Available |
@@ -30,6 +32,7 @@ All components are self-contained — each ships its own `.jl-*` CSS classes bui
 | [Popover](/components/popover) | React, Vue | Available |
 | [Progress](/components/progress) | React, Vue | Available |
 | [Radio Group](/components/radio-group) | React, Vue | Available |
+| [Rating](/components/rating) | React, Vue | Available |
 | [Segmented Control](/components/segmented-control) | React, Vue | Available |
 | [Select](/components/select) | React, Vue | Available |
 | [Skeleton](/components/skeleton) | React, Vue | Available |
@@ -43,6 +46,7 @@ All components are self-contained — each ships its own `.jl-*` CSS classes bui
 | [Tabs](/components/tabs) | React, Vue | Available |
 | [Tag](/components/tag) | React, Vue | Available |
 | [Textarea](/components/textarea) | React, Vue | Available |
+| [Timeline](/components/timeline) | React, Vue | Available |
 | [Toast](/components/toast) | React, Vue | Available |
 | [Toggle](/components/toggle) | React, Vue | Available |
 | [Tooltip](/components/tooltip) | React, Vue | Available |

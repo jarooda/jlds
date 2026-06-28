@@ -1,0 +1,78 @@
+/* ---------- Calendar ---------- */
+.jl-cal { font-family: var(--font-sans); width: max-content; user-select: none; }
+.jl-cal__header { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); margin-bottom: var(--space-3); }
+.jl-cal__title { font-size: var(--text-base); font-weight: var(--weight-semibold); color: var(--text-primary); letter-spacing: var(--tracking-tight); font-variant-numeric: tabular-nums; }
+.jl-cal__nav {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; padding: 0; flex: none;
+  background: transparent; border: 1px solid var(--border-subtle); border-radius: var(--radius-md);
+  color: var(--text-secondary); cursor: pointer; transition: var(--transition-control);
+}
+.jl-cal__nav:hover { background: var(--surface-hover); border-color: var(--border-strong); color: var(--text-primary); }
+.jl-cal__nav:focus-visible { outline: none; box-shadow: var(--ring-focus); }
+.jl-cal__nav svg { width: 16px; height: 16px; }
+
+.jl-cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.jl-cal__weekday {
+  display: flex; align-items: center; justify-content: center; height: 28px;
+  font-size: var(--text-2xs); font-weight: var(--weight-semibold); text-transform: uppercase;
+  letter-spacing: var(--tracking-wide); color: var(--text-tertiary);
+}
+.jl-cal__day {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 36px; height: 34px; padding: 0; position: relative;
+  font-size: var(--text-sm); font-variant-numeric: tabular-nums; font-weight: var(--weight-medium);
+  background: transparent; border: none; border-radius: var(--radius-md);
+  color: var(--text-secondary); cursor: pointer; transition: var(--transition-control);
+}
+.jl-cal--sm .jl-cal__day { width: 32px; height: 30px; }
+.jl-cal__day:hover { background: var(--surface-hover); color: var(--text-primary); }
+.jl-cal__day:focus-visible { outline: none; box-shadow: var(--ring-focus); z-index: 1; }
+.jl-cal__day[data-outside="true"] { color: var(--text-disabled); }
+.jl-cal__day[data-today="true"]::after {
+  content: ""; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%);
+  width: 4px; height: 4px; border-radius: 50%; background: var(--accent);
+}
+.jl-cal__day[data-selected="true"] {
+  background: var(--accent); color: var(--text-on-brand); font-weight: var(--weight-semibold);
+}
+.jl-cal__day[data-selected="true"]:hover { background: var(--accent-hover); }
+.jl-cal__day[data-selected="true"][data-today="true"]::after { background: var(--text-on-brand); }
+.jl-cal__day[data-in-range="true"] { background: var(--accent-subtle); color: var(--text-brand); border-radius: 0; }
+.jl-cal__day[data-range-start="true"] { border-top-left-radius: var(--radius-md); border-bottom-left-radius: var(--radius-md); }
+.jl-cal__day[data-range-end="true"] { border-top-right-radius: var(--radius-md); border-bottom-right-radius: var(--radius-md); }
+.jl-cal__day:disabled { color: var(--text-disabled); cursor: not-allowed; background: transparent; }
+.jl-cal__day:disabled:hover { background: transparent; }
+
+/* ---------- DatePicker trigger + popover ---------- */
+.jl-datepicker { position: relative; display: inline-flex; font-family: var(--font-sans); }
+.jl-datepicker__trigger {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  min-width: 0; width: 100%; box-sizing: border-box;
+  height: 38px; padding: 0 var(--space-3);
+  font: inherit; font-size: var(--text-base); text-align: left;
+  background: var(--surface-card); color: var(--text-primary);
+  border: 1px solid var(--border-default); border-radius: var(--radius-input);
+  cursor: pointer; transition: var(--transition-control);
+}
+.jl-datepicker--sm .jl-datepicker__trigger { height: 32px; font-size: var(--text-sm); }
+.jl-datepicker__trigger:hover { border-color: var(--border-strong); }
+.jl-datepicker__trigger:focus-visible { outline: none; border-color: var(--border-focus); box-shadow: var(--ring-focus); }
+.jl-datepicker__trigger[aria-expanded="true"] { border-color: var(--border-focus); box-shadow: var(--ring-focus); }
+.jl-datepicker__trigger:disabled { opacity: 0.55; cursor: not-allowed; }
+.jl-datepicker__icon { flex: none; color: var(--text-tertiary); display: inline-flex; }
+.jl-datepicker__icon svg { width: 16px; height: 16px; }
+.jl-datepicker__value { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.jl-datepicker__value[data-placeholder="true"] { color: var(--text-tertiary); }
+
+.jl-datepicker__pop {
+  position: absolute; top: 100%; left: 0; z-index: 70; margin-top: var(--space-2);
+  background: var(--surface-overlay); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl); box-shadow: var(--elevation-popover);
+  padding: var(--space-4); transform-origin: top left;
+  animation: jl-datepicker-in var(--duration-fast) var(--ease-emphasized);
+}
+.jl-datepicker__pop[data-align="end"] { left: auto; right: 0; transform-origin: top right; }
+@keyframes jl-datepicker-in { from { opacity: 0; transform: translateY(-4px) scale(0.98); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) { .jl-cal__day, .jl-cal__nav, .jl-datepicker__pop { transition: none; animation: none; } }

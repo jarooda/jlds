@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/file-upload.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); max-width: 460px; }
+    </style>
+  </head>
+  <body>
+    <div class="jl-upload">
+      <div class="jl-upload__zone" role="button" tabindex="0">
+        <span class="jl-upload__mark">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 16V4m0 0L7 9m5-5 5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <div class="jl-upload__title"><b>Click to upload</b> or drag and drop</div>
+        <div class="jl-upload__hint">PNG, JPG, PDF · up to 5 MB</div>
+        <input type="file" accept=".png,.jpg,.pdf" multiple style="display:none" />
+      </div>
+    </div>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "date-picker",
+  "description": "A trigger button that opens a Calendar in a popover. Exports a standalone Calendar for inline month grids.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["date-picker.tsx", "index.ts"],
+    "vue": ["Calendar.vue", "DatePicker.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}
