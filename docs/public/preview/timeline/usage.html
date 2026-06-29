@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/timeline.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); max-width: 460px; }
+    </style>
+  </head>
+  <body>
+    <ol class="jl-timeline">
+      <li class="jl-timeline__item">
+        <div class="jl-timeline__rail">
+          <span class="jl-timeline__dot" data-tone="accent" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="jl-timeline__line" aria-hidden="true"></span>
+        </div>
+        <div class="jl-timeline__body">
+          <div class="jl-timeline__head">
+            <span class="jl-timeline__title">Order placed</span>
+            <span class="jl-timeline__time">2h ago</span>
+          </div>
+          <div class="jl-timeline__desc">We received your order and sent a confirmation email.</div>
+        </div>
+      </li>
+      <li class="jl-timeline__item">
+        <div class="jl-timeline__rail">
+          <span class="jl-timeline__dot" data-tone="success" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="jl-timeline__line" aria-hidden="true"></span>
+        </div>
+        <div class="jl-timeline__body">
+          <div class="jl-timeline__head">
+            <span class="jl-timeline__title">Payment confirmed</span>
+            <span class="jl-timeline__time">1h ago</span>
+          </div>
+          <div class="jl-timeline__desc">Your card was charged $48.00.</div>
+        </div>
+      </li>
+      <li class="jl-timeline__item">
+        <div class="jl-timeline__rail">
+          <span class="jl-timeline__dot" data-tone="muted" data-plain="true" aria-hidden="true"></span>
+          <span class="jl-timeline__line" aria-hidden="true"></span>
+        </div>
+        <div class="jl-timeline__body">
+          <div class="jl-timeline__head">
+            <span class="jl-timeline__title">Preparing shipment</span>
+            <span class="jl-timeline__time">Now</span>
+          </div>
+          <div class="jl-timeline__desc">Your items are being packed at the warehouse.</div>
+        </div>
+      </li>
+    </ol>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

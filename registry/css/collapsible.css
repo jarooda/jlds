@@ -1,0 +1,54 @@
+.jl-collapsible { display: block; }
+.jl-collapsible--bordered {
+  border: 1px solid var(--border-subtle); border-radius: var(--radius-xl);
+  background: var(--surface-card); overflow: hidden;
+}
+
+.jl-collapsible__trigger {
+  display: flex; align-items: center; gap: var(--space-3); width: 100%;
+  text-align: left; cursor: pointer; box-sizing: border-box;
+  font-family: var(--font-sans); font-size: var(--text-base); font-weight: var(--weight-medium);
+  color: var(--text-primary); background: transparent; border: none;
+  border-radius: var(--radius-lg);
+  padding: var(--space-2) var(--space-3);
+  transition: background var(--duration-fast) var(--ease-standard);
+}
+.jl-collapsible--bordered .jl-collapsible__trigger {
+  border-radius: 0; padding: var(--space-4) var(--space-5);
+}
+.jl-collapsible__trigger:hover { background: var(--surface-hover); }
+.jl-collapsible__trigger:focus-visible { outline: none; box-shadow: var(--ring-focus); }
+.jl-collapsible__trigger:disabled { opacity: 0.5; cursor: not-allowed; }
+.jl-collapsible__trigger[data-chevron="start"] { flex-direction: row; }
+
+.jl-collapsible__chevron {
+  flex: none; display: inline-flex; color: var(--text-tertiary);
+  transition: transform var(--duration-base) var(--ease-emphasized);
+}
+.jl-collapsible__chevron svg { width: 16px; height: 16px; }
+.jl-collapsible__trigger[data-chevron="end"] .jl-collapsible__chevron { margin-left: auto; }
+.jl-collapsible[data-open="true"] > .jl-collapsible__trigger .jl-collapsible__chevron { transform: rotate(90deg); }
+.jl-collapsible__trigger[data-chevron="start"] .jl-collapsible__chevron { order: -1; }
+
+.jl-collapsible__label { flex: 1 1 auto; min-width: 0; }
+.jl-collapsible__trigger[data-chevron="start"] .jl-collapsible__label { flex: 0 1 auto; }
+.jl-collapsible__leadicon { flex: none; display: inline-flex; color: var(--text-tertiary); }
+.jl-collapsible__leadicon svg { width: 18px; height: 18px; }
+
+.jl-collapsible__region {
+  display: grid; grid-template-rows: 0fr;
+  transition: grid-template-rows var(--duration-base) var(--ease-emphasized);
+}
+.jl-collapsible[data-open="true"] > .jl-collapsible__region { grid-template-rows: 1fr; }
+.jl-collapsible__content { overflow: hidden; min-height: 0; }
+.jl-collapsible__inner {
+  padding: var(--space-1) var(--space-3) var(--space-3);
+  font-size: var(--text-base); color: var(--text-secondary); line-height: var(--leading-normal);
+}
+.jl-collapsible--bordered .jl-collapsible__inner {
+  padding: 0 var(--space-5) var(--space-5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jl-collapsible__region, .jl-collapsible__chevron { transition: none; }
+}

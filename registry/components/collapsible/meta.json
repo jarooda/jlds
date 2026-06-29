@@ -1,0 +1,14 @@
+{
+  "name": "collapsible",
+  "description": "A single show/hide region with a trigger. Lighter than Accordion; ghost or bordered.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["collapsible.tsx", "index.ts"],
+    "vue": ["Collapsible.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

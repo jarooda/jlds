@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/app-shell.css">
+    <link rel="stylesheet" href="/css/sidebar.css">
+    <style>
+      body { margin: 0; }
+      /* The preview iframe sizes itself to its body, so give the shell a fixed
+         height here instead of the 100dvh the component uses in a real app. */
+      .jl-appshell { height: 440px; }
+      .hdr { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-5); background: var(--surface-card); border-bottom: 1px solid var(--border-subtle); }
+      .hdr h1 { margin: 0; font-size: var(--text-md); font-weight: var(--weight-semibold); color: var(--text-primary); font-family: var(--font-display); }
+      .body-copy { font-family: var(--font-sans); color: var(--text-secondary); font-size: var(--text-sm); max-width: 60ch; line-height: var(--leading-normal); }
+      .body-copy h2 { color: var(--text-primary); font-family: var(--font-display); }
+    </style>
+  </head>
+  <body>
+    <div class="jl-appshell" data-mobile-breakpoint="400">
+      <div class="jl-appshell__aside">
+        <aside class="jl-sidebar">
+          <div class="jl-sidebar__header">
+            <div style="display:flex;align-items:center;gap:var(--space-2);font-weight:var(--weight-semibold);color:var(--text-primary);padding:0 var(--space-2)">
+              <span style="width:26px;height:26px;border-radius:var(--radius-md);background:var(--accent);display:inline-flex;align-items:center;justify-content:center;color:var(--text-on-brand);font-size:var(--text-sm)">A</span>
+              Acme
+            </div>
+          </div>
+          <nav class="jl-sidebar__body">
+            <button type="button" class="jl-sidebar__item" data-active="true"><span class="jl-sidebar__item-label">Dashboard</span></button>
+            <button type="button" class="jl-sidebar__item"><span class="jl-sidebar__item-label">Projects</span></button>
+            <button type="button" class="jl-sidebar__item"><span class="jl-sidebar__item-label">Settings</span></button>
+          </nav>
+        </aside>
+      </div>
+      <div class="jl-appshell__backdrop" aria-hidden="true"></div>
+      <div class="jl-appshell__main">
+        <div class="jl-appshell__header">
+          <div class="hdr">
+            <button type="button" class="jl-appshell__menubtn" aria-label="Open navigation"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.85" stroke-linecap="round"/></svg></button>
+            <h1>Dashboard</h1>
+          </div>
+        </div>
+        <div class="jl-appshell__content jl-appshell__content--padded">
+          <div class="body-copy">
+            <h2>Welcome back</h2>
+            <p>The content area scrolls independently of the fixed sidebar and sticky header. Below the mobile breakpoint the sidebar becomes an overlay drawer toggled by the menu button in the header.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

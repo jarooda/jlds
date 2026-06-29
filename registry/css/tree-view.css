@@ -1,0 +1,39 @@
+.jl-tree { list-style: none; margin: 0; padding: var(--space-1); font-family: var(--font-sans); }
+.jl-tree, .jl-tree__group { display: flex; flex-direction: column; }
+.jl-tree__group { list-style: none; margin: 0; padding: 0; }
+.jl-tree__group[hidden] { display: none; }
+.jl-tree__li { list-style: none; }
+
+.jl-tree--guides .jl-tree__group { position: relative; margin-left: 22px; padding-left: 0; }
+.jl-tree--guides .jl-tree__group::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+  border-left: 1px solid var(--border-subtle);
+}
+
+.jl-tree__row {
+  display: flex; align-items: center; gap: var(--space-2); width: 100%; box-sizing: border-box;
+  min-height: 32px; padding: 0 var(--space-2); cursor: pointer; text-align: left;
+  font-size: var(--text-base); font-weight: var(--weight-medium); color: var(--text-secondary);
+  background: transparent; border: none; border-radius: var(--radius-md);
+  transition: background var(--duration-fast) var(--ease-standard), color var(--duration-fast) var(--ease-standard);
+}
+.jl-tree__row:hover { background: var(--surface-hover); color: var(--text-primary); }
+.jl-tree__row:focus-visible { outline: none; box-shadow: var(--ring-focus); }
+.jl-tree__row[data-selected="true"] { background: var(--accent-subtle); color: var(--text-brand); font-weight: var(--weight-semibold); }
+.jl-tree__row[aria-disabled="true"] { opacity: 0.5; pointer-events: none; }
+
+.jl-tree__twist {
+  flex: none; display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; color: var(--text-tertiary);
+}
+.jl-tree__twist svg { width: 14px; height: 14px; transition: transform var(--duration-fast) var(--ease-standard); }
+.jl-tree__row[data-expanded="true"] .jl-tree__twist svg { transform: rotate(90deg); }
+.jl-tree__twist--leaf { visibility: hidden; }
+
+.jl-tree__icon { flex: none; display: inline-flex; color: var(--text-tertiary); }
+.jl-tree__icon svg { width: 16px; height: 16px; }
+.jl-tree__row[data-selected="true"] .jl-tree__icon { color: var(--text-brand); }
+.jl-tree__label { flex: 1 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.jl-tree__trail { flex: none; display: inline-flex; align-items: center; color: var(--text-tertiary); font-size: var(--text-xs); }
+
+@media (prefers-reduced-motion: reduce) { .jl-tree__twist svg { transition: none; } }

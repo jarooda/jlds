@@ -253,6 +253,71 @@
   });
 })();
 
+/* ---- app-shell.js ---- */
+/* JLDS behavior — AppShell responsive drawer. Below the breakpoint (the shell's
+ * data-mobile-breakpoint, default 880px) the .jl-appshell gets data-mobile and
+ * its sidebar becomes an overlay drawer: the .jl-appshell__menubtn toggles
+ * data-open, the .jl-appshell__backdrop and Escape close it. Leaving mobile
+ * closes the drawer. Emits jl-appshell:toggle. Requires core.js (or all.js). */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  function initAppShell(shell) {
+    if (shell.__jlShell) return;
+    shell.__jlShell = true;
+    var bp = parseInt(shell.getAttribute("data-mobile-breakpoint"), 10) || 880;
+    var mql = window.matchMedia ? window.matchMedia("(max-width: " + bp + "px)") : null;
+
+    function isOpen() {
+      return shell.getAttribute("data-open") === "true";
+    }
+    function setOpen(open) {
+      if (open) shell.setAttribute("data-open", "true");
+      else shell.removeAttribute("data-open");
+      var btn = shell.querySelector(".jl-appshell__menubtn");
+      if (btn) {
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+        btn.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
+      }
+      shell.dispatchEvent(
+        new CustomEvent("jl-appshell:toggle", { detail: { open: open }, bubbles: true })
+      );
+    }
+    function applyMobile() {
+      var mobile = mql ? mql.matches : false;
+      if (mobile) shell.setAttribute("data-mobile", "true");
+      else {
+        shell.removeAttribute("data-mobile");
+        if (isOpen()) setOpen(false);
+      }
+    }
+
+    var btn = shell.querySelector(".jl-appshell__menubtn");
+    if (btn) btn.addEventListener("click", function () { setOpen(!isOpen()); });
+
+    var backdrop = shell.querySelector(".jl-appshell__backdrop");
+    if (backdrop) backdrop.addEventListener("click", function () { setOpen(false); });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && isOpen()) setOpen(false);
+    });
+
+    if (mql) {
+      if (mql.addEventListener) mql.addEventListener("change", applyMobile);
+      else mql.addListener(applyMobile);
+    }
+    applyMobile();
+  }
+
+  register("app-shell", function (root) {
+    root.querySelectorAll(".jl-appshell").forEach(initAppShell);
+  });
+})();
+
 /* ---- banner.js ---- */
 /* JLDS behavior — Banner dismiss. Clicking .jl-banner__close removes its .jl-banner.
  * Requires core.js (or the all.js bundle). */
@@ -300,6 +365,39 @@
         if (item) item.hidden = true;
       });
     });
+  });
+})();
+
+/* ---- collapsible.js ---- */
+/* JLDS behavior — Collapsible. Clicking a .jl-collapsible__trigger toggles its
+ * .jl-collapsible (data-open + aria-expanded), animating the grid-rows region.
+ * Emits jl-collapsible:toggle. Requires core.js (or the all.js bundle). */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  function initCollapsible(root) {
+    if (root.__jlCol) return;
+    root.__jlCol = true;
+    var trigger = root.querySelector(".jl-collapsible__trigger");
+    if (!trigger) return;
+    trigger.addEventListener("click", function () {
+      if (trigger.disabled) return;
+      var open = root.getAttribute("data-open") === "true";
+      if (open) root.removeAttribute("data-open");
+      else root.setAttribute("data-open", "true");
+      trigger.setAttribute("aria-expanded", open ? "false" : "true");
+      root.dispatchEvent(
+        new CustomEvent("jl-collapsible:toggle", { detail: { open: !open }, bubbles: true })
+      );
+    });
+  }
+
+  register("collapsible", function (root) {
+    root.querySelectorAll(".jl-collapsible").forEach(initCollapsible);
   });
 })();
 
@@ -542,6 +640,168 @@
   });
 })();
 
+/* ---- date-picker.js ---- */
+/* JLDS behavior — DatePicker / Calendar. Builds the month grid for any .jl-cal
+ * (nav between months, click to select; emits jl-cal:change) and wires
+ * .jl-datepicker triggers to open that calendar in a popover, reflecting the
+ * pick on .jl-datepicker__value + data-value (emits jl-datepicker:change).
+ * Native Date math, no deps beyond core.js + util.js (or the all.js bundle).
+ * Read the selected date from data-value (YYYY-MM-DD); set data-week-start to
+ * start weeks on Monday (1). */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  var WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  var CHEV_L = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 6-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var CHEV_R = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  function startOfDay(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+  function sameDay(a, b) { return a && b && a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate(); }
+  function parseISO(s) {
+    if (!s) return null;
+    var d = new Date(s);
+    return isNaN(d.getTime()) ? null : d;
+  }
+  function toISO(d) {
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  }
+  function fmt(d) { return d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }); }
+
+  /* Render the grid of a .jl-cal into `cal`, using internal state. onPick(date) fires on select. */
+  function mountCal(cal, onPick) {
+    var weekStart = parseInt(cal.getAttribute("data-week-start") || "0", 10) || 0;
+    var selected = parseISO(cal.getAttribute("data-value"));
+    var view = new Date((selected || new Date()).getFullYear(), (selected || new Date()).getMonth(), 1);
+    var today = startOfDay(new Date());
+
+    function render() {
+      var ordered = WEEKDAYS.slice(weekStart).concat(WEEKDAYS.slice(0, weekStart));
+      var first = new Date(view.getFullYear(), view.getMonth(), 1);
+      var lead = (first.getDay() - weekStart + 7) % 7;
+      var cur = new Date(first);
+      cur.setDate(1 - lead);
+
+      var html = '<div class="jl-cal__header">' +
+        '<button type="button" class="jl-cal__nav" data-nav="-1" aria-label="Previous month">' + CHEV_L + "</button>" +
+        '<div class="jl-cal__title" aria-live="polite">' + MONTHS[view.getMonth()] + " " + view.getFullYear() + "</div>" +
+        '<button type="button" class="jl-cal__nav" data-nav="1" aria-label="Next month">' + CHEV_R + "</button>" +
+        "</div><div class=\"jl-cal__grid\" role=\"grid\">";
+      ordered.forEach(function (w) { html += '<div class="jl-cal__weekday" role="columnheader">' + w + "</div>"; });
+      for (var i = 0; i < 42; i++) {
+        var d = new Date(cur);
+        var outside = d.getMonth() !== view.getMonth();
+        html += '<button type="button" class="jl-cal__day" role="gridcell" data-iso="' + toISO(d) + '"' +
+          (outside ? ' data-outside="true"' : "") +
+          (sameDay(d, today) ? ' data-today="true"' : "") +
+          (sameDay(d, selected) ? ' data-selected="true" aria-selected="true"' : "") +
+          ">" + d.getDate() + "</button>";
+        cur.setDate(cur.getDate() + 1);
+      }
+      html += "</div>";
+      cal.innerHTML = html;
+    }
+
+    cal.addEventListener("click", function (e) {
+      var nav = e.target.closest(".jl-cal__nav");
+      if (nav) {
+        view = new Date(view.getFullYear(), view.getMonth() + parseInt(nav.getAttribute("data-nav"), 10), 1);
+        render();
+        return;
+      }
+      var day = e.target.closest(".jl-cal__day");
+      if (day) {
+        selected = parseISO(day.getAttribute("data-iso"));
+        cal.setAttribute("data-value", day.getAttribute("data-iso"));
+        render();
+        cal.dispatchEvent(new CustomEvent("jl-cal:change", { detail: { value: cal.getAttribute("data-value") }, bubbles: true }));
+        if (onPick) onPick(selected);
+      }
+    });
+
+    render();
+  }
+
+  function initCal(cal) {
+    if (cal.__jlCal) return;
+    cal.__jlCal = true;
+    mountCal(cal, null);
+  }
+
+  function initDatePicker(dp) {
+    if (dp.__jlDatePicker) return;
+    dp.__jlDatePicker = true;
+
+    var trigger = dp.querySelector(".jl-datepicker__trigger");
+    var valueEl = dp.querySelector(".jl-datepicker__value");
+    if (!trigger) return;
+
+    var pop = dp.querySelector(".jl-datepicker__pop");
+    var cal = pop && pop.querySelector(".jl-cal");
+    var cleanup = null;
+
+    function close() {
+      if (!pop || pop.hidden) return;
+      pop.hidden = true;
+      trigger.setAttribute("aria-expanded", "false");
+      if (cleanup) { cleanup(); cleanup = null; }
+    }
+    function open() {
+      if (!pop) {
+        pop = document.createElement("div");
+        pop.className = "jl-datepicker__pop";
+        pop.setAttribute("role", "dialog");
+        pop.setAttribute("data-align", dp.getAttribute("data-align") || "start");
+        cal = document.createElement("div");
+        cal.className = "jl-cal";
+        if (dp.getAttribute("data-value")) cal.setAttribute("data-value", dp.getAttribute("data-value"));
+        pop.appendChild(cal);
+        dp.appendChild(pop);
+        mountCal(cal, function (d) {
+          dp.setAttribute("data-value", toISO(d));
+          if (valueEl) { valueEl.textContent = fmt(d); valueEl.removeAttribute("data-placeholder"); }
+          dp.dispatchEvent(new CustomEvent("jl-datepicker:change", { detail: { value: toISO(d) }, bubbles: true }));
+          close();
+        });
+      }
+      pop.hidden = false;
+      trigger.setAttribute("aria-expanded", "true");
+      var u = window.JLDS && window.JLDS.util;
+      var offOutside = u && u.onClickOutside ? u.onClickOutside(dp, close) : function () {};
+      var offEsc = u && u.onEscape ? u.onEscape(close) : function () {};
+      cleanup = function () { offOutside(); offEsc(); };
+    }
+
+    if (cal && pop) {
+      // Calendar already in the DOM: wire selection back to the trigger.
+      pop.hidden = true;
+      mountCal(cal, function (d) {
+        dp.setAttribute("data-value", toISO(d));
+        if (valueEl) { valueEl.textContent = fmt(d); valueEl.removeAttribute("data-placeholder"); }
+        dp.dispatchEvent(new CustomEvent("jl-datepicker:change", { detail: { value: toISO(d) }, bubbles: true }));
+        close();
+      });
+    }
+
+    trigger.addEventListener("click", function () {
+      if (pop && !pop.hidden) close();
+      else open();
+    });
+  }
+
+  register("date-picker", function (root) {
+    // Standalone calendars first, but skip ones inside a datepicker (handled there).
+    root.querySelectorAll(".jl-cal").forEach(function (cal) {
+      if (!cal.closest(".jl-datepicker")) initCal(cal);
+    });
+    root.querySelectorAll(".jl-datepicker").forEach(initDatePicker);
+  });
+})();
+
 /* ---- dialog.js ---- */
 /* JLDS behavior — Dialog. A modal overlay (.jl-dialog__overlay[hidden]) opened by
  * a [data-dialog-trigger] (optional data-dialog-target="#id"); closes on overlay
@@ -736,6 +996,109 @@
   });
 })();
 
+/* ---- file-upload.js ---- */
+/* JLDS behavior — FileUpload. Enhances a .jl-upload: click/keyboard opens the
+ * hidden file input, drag-over highlights the zone (data-dragging), and dropped
+ * or picked files render as rows in .jl-upload__list (created if absent) with a
+ * working × remove button. Reflects the selection and emits
+ * jl-upload:change { files }. Requires core.js (or the all.js bundle). */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  var FILE_ICON =
+    '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M14 3v5h5" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/></svg>';
+  var CHECK_ICON =
+    '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var X_ICON =
+    '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>';
+
+  function formatBytes(n) {
+    if (n == null) return "";
+    if (n < 1024) return n + " B";
+    var u = ["KB", "MB", "GB"];
+    var i = -1;
+    do {
+      n /= 1024;
+      i++;
+    } while (n >= 1024 && i < u.length - 1);
+    return n.toFixed(n < 10 ? 1 : 0) + " " + u[i];
+  }
+
+  function initUpload(el) {
+    if (el.__jlUpload) return;
+    el.__jlUpload = true;
+
+    var zone = el.querySelector(".jl-upload__zone");
+    var input = el.querySelector('input[type="file"]');
+    if (!zone || !input) return;
+    var disabled = zone.getAttribute("data-disabled") === "true";
+
+    function listEl() {
+      var ul = el.querySelector(".jl-upload__list");
+      if (!ul) {
+        ul = document.createElement("ul");
+        ul.className = "jl-upload__list";
+        el.appendChild(ul);
+      }
+      return ul;
+    }
+
+    function row(file) {
+      var li = document.createElement("li");
+      li.className = "jl-upload__item";
+      li.setAttribute("data-status", "done");
+      li.innerHTML =
+        '<span class="jl-upload__fileicon">' + FILE_ICON + "</span>" +
+        '<div class="jl-upload__meta"><div class="jl-upload__name"></div><div class="jl-upload__size"></div></div>' +
+        '<span class="jl-upload__status" data-status="done">' + CHECK_ICON + "</span>" +
+        '<button type="button" class="jl-upload__remove"></button>';
+      li.querySelector(".jl-upload__name").textContent = file.name;
+      li.querySelector(".jl-upload__size").textContent = formatBytes(file.size);
+      var rm = li.querySelector(".jl-upload__remove");
+      rm.setAttribute("aria-label", "Remove " + file.name);
+      rm.innerHTML = X_ICON;
+      rm.addEventListener("click", function () { li.remove(); });
+      return li;
+    }
+
+    function accept(files) {
+      if (!files || !files.length) return;
+      var multiple = input.multiple;
+      var ul = listEl();
+      if (!multiple) ul.innerHTML = "";
+      var arr = Array.prototype.slice.call(files);
+      (multiple ? arr : arr.slice(0, 1)).forEach(function (f) { ul.appendChild(row(f)); });
+      el.dispatchEvent(new CustomEvent("jl-upload:change", { detail: { files: arr }, bubbles: true }));
+    }
+
+    if (!disabled) {
+      zone.addEventListener("click", function () { input.click(); });
+      zone.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); input.click(); }
+      });
+      zone.addEventListener("dragover", function (e) { e.preventDefault(); zone.setAttribute("data-dragging", "true"); });
+      zone.addEventListener("dragleave", function () { zone.removeAttribute("data-dragging"); });
+      zone.addEventListener("drop", function (e) {
+        e.preventDefault();
+        zone.removeAttribute("data-dragging");
+        if (e.dataTransfer && e.dataTransfer.files) accept(e.dataTransfer.files);
+      });
+      input.addEventListener("change", function () {
+        accept(input.files);
+        input.value = "";
+      });
+    }
+  }
+
+  register("file-upload", function (root) {
+    root.querySelectorAll(".jl-upload").forEach(initUpload);
+  });
+})();
+
 /* ---- number-input.js ---- */
 /* JLDS behavior — NumberInput steppers + keyboard. Requires core.js (or all.js).
  * Contract: .jl-number with data-min / data-max / data-step / data-precision (all
@@ -883,6 +1246,237 @@
 
   register("popover", function (root) {
     root.querySelectorAll(".jl-popover").forEach(initPopover);
+  });
+})();
+
+/* ---- rating.js ---- */
+/* JLDS behavior — Rating. Enhances an interactive .jl-rating: hover previews the
+ * score, click sets it (half values when data-allow-half is present), arrow keys
+ * adjust. Updates each .jl-rating__btn[data-fill] and the optional
+ * .jl-rating__value, and reflects the choice on the host's data-value.
+ * Read-only / disabled ratings ([data-readonly] / [data-disabled]) are left as-is.
+ * Emits jl-rating:change { value }. Requires core.js (or the all.js bundle). */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  function initRating(el) {
+    if (el.__jlRating) return;
+    el.__jlRating = true;
+    if (el.getAttribute("data-readonly") === "true" || el.getAttribute("data-disabled") === "true") return;
+
+    var btns = Array.prototype.slice.call(el.querySelectorAll(".jl-rating__btn"));
+    if (!btns.length) return;
+    var max = btns.length;
+    var half = el.getAttribute("data-allow-half") === "true";
+    var valueEl = el.querySelector(".jl-rating__value");
+    var current = parseFloat(el.getAttribute("data-value") || "0") || 0;
+
+    function fillFor(i, display) {
+      var starVal = i + 1;
+      if (display >= starVal) return "full";
+      if (half && display >= starVal - 0.5) return "half";
+      return "empty";
+    }
+    function paint(display) {
+      btns.forEach(function (b, i) {
+        b.setAttribute("data-fill", fillFor(i, display));
+      });
+    }
+    function valueAt(i, e) {
+      if (!half) return i + 1;
+      var r = btns[i].getBoundingClientRect();
+      return e.clientX - r.left < r.width / 2 ? i + 0.5 : i + 1;
+    }
+    function commit(v) {
+      current = v;
+      el.setAttribute("data-value", String(v));
+      paint(v);
+      if (valueEl) {
+        var count = valueEl.querySelector(".jl-rating__count");
+        valueEl.textContent = v.toFixed(half ? 1 : 0);
+        if (count) valueEl.appendChild(count);
+      }
+      el.dispatchEvent(new CustomEvent("jl-rating:change", { detail: { value: v }, bubbles: true }));
+    }
+
+    paint(current);
+
+    btns.forEach(function (b, i) {
+      b.addEventListener("mousemove", function (e) { paint(half ? valueAt(i, e) : i + 1); });
+      b.addEventListener("click", function (e) { commit(valueAt(i, e)); });
+      b.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowRight" || e.key === "ArrowUp") { e.preventDefault(); commit(Math.min(max, current + (half ? 0.5 : 1))); }
+        if (e.key === "ArrowLeft" || e.key === "ArrowDown") { e.preventDefault(); commit(Math.max(0, current - (half ? 0.5 : 1))); }
+      });
+    });
+    el.addEventListener("mouseleave", function () { paint(current); });
+  }
+
+  register("rating", function (root) {
+    root.querySelectorAll(".jl-rating").forEach(initRating);
+  });
+})();
+
+/* ---- resizable.js ---- */
+/* JLDS behavior — Resizable split panes. A .jl-resizable (horizontal/vertical)
+ * holds .jl-resizable__panel elements separated by .jl-resizable__handle
+ * elements. Dragging (or arrow keys on a focused handle) resizes the two
+ * adjacent panels, keeping their combined size constant. Authors set the
+ * starting split via each panel's flex-basis (e.g. style="flex-basis:40%") and
+ * an optional data-min-size (percent, default 8). Emits jl-resizable:resize.
+ * Requires core.js (or the all.js bundle). */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  function initResizable(root) {
+    if (root.__jlRz) return;
+    root.__jlRz = true;
+    var horizontal = !root.classList.contains("jl-resizable--vertical");
+
+    function panels() {
+      return Array.prototype.slice.call(root.children).filter(function (c) {
+        return c.classList.contains("jl-resizable__panel");
+      });
+    }
+    function minOf(panel) {
+      var v = parseFloat(panel.getAttribute("data-min-size"));
+      return isNaN(v) ? 8 : v;
+    }
+    function pct(panel) {
+      var total = horizontal ? root.clientWidth : root.clientHeight;
+      var size = horizontal ? panel.offsetWidth : panel.offsetHeight;
+      return total ? (size / total) * 100 : 0;
+    }
+    function setPair(a, b, sa, sb) {
+      a.style.flex = "0 0 " + sa + "%";
+      b.style.flex = "0 0 " + sb + "%";
+      root.dispatchEvent(
+        new CustomEvent("jl-resizable:resize", {
+          detail: { sizes: panels().map(pct) },
+          bubbles: true,
+        })
+      );
+    }
+
+    var drag = null;
+
+    function neighbors(handle) {
+      var a = handle.previousElementSibling;
+      var b = handle.nextElementSibling;
+      return a && b ? { a: a, b: b } : null;
+    }
+
+    root.querySelectorAll(":scope > .jl-resizable__handle").forEach(function (handle) {
+      handle.addEventListener("pointerdown", function (e) {
+        var nb = neighbors(handle);
+        if (!nb) return;
+        e.preventDefault();
+        var total = horizontal ? root.clientWidth : root.clientHeight;
+        drag = {
+          handle: handle,
+          a: nb.a,
+          b: nb.b,
+          start: horizontal ? e.clientX : e.clientY,
+          total: total,
+          sa: pct(nb.a),
+          sb: pct(nb.b),
+        };
+        document.body.setAttribute("data-jl-resizing", horizontal ? "x" : "y");
+        handle.setAttribute("data-dragging", "true");
+        if (handle.setPointerCapture) handle.setPointerCapture(e.pointerId);
+      });
+      handle.addEventListener("pointermove", function (e) {
+        if (!drag || drag.handle !== handle) return;
+        var pos = horizontal ? e.clientX : e.clientY;
+        var delta = ((pos - drag.start) / drag.total) * 100;
+        delta = Math.max(delta, -(drag.sa - minOf(drag.a)));
+        delta = Math.min(delta, drag.sb - minOf(drag.b));
+        setPair(drag.a, drag.b, drag.sa + delta, drag.sb - delta);
+      });
+      function end(e) {
+        if (!drag) return;
+        drag = null;
+        document.body.removeAttribute("data-jl-resizing");
+        handle.removeAttribute("data-dragging");
+        if (handle.releasePointerCapture && e.pointerId != null) {
+          try {
+            handle.releasePointerCapture(e.pointerId);
+          } catch (_) {}
+        }
+      }
+      handle.addEventListener("pointerup", end);
+      handle.addEventListener("pointercancel", end);
+
+      handle.addEventListener("keydown", function (e) {
+        var nb = neighbors(handle);
+        if (!nb) return;
+        var dir = 0;
+        if (e.key === (horizontal ? "ArrowRight" : "ArrowDown")) dir = 1;
+        else if (e.key === (horizontal ? "ArrowLeft" : "ArrowUp")) dir = -1;
+        if (!dir) return;
+        e.preventDefault();
+        var sa = pct(nb.a);
+        var sb = pct(nb.b);
+        var delta = dir * 2;
+        delta = Math.max(delta, -(sa - minOf(nb.a)));
+        delta = Math.min(delta, sb - minOf(nb.b));
+        setPair(nb.a, nb.b, sa + delta, sb - delta);
+      });
+    });
+  }
+
+  register("resizable", function (root) {
+    root.querySelectorAll(".jl-resizable").forEach(initResizable);
+  });
+})();
+
+/* ---- scroll-area.js ---- */
+/* JLDS behavior — ScrollArea fade masks. For a .jl-scrollarea[data-fade] the
+ * viewport's scroll position toggles data-fade-top / data-fade-bottom on the
+ * root so the edge gradients reveal only where there is more to scroll.
+ * The thin scrollbar itself is pure CSS — this is only for the optional fade.
+ * Requires core.js (or the all.js bundle). */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  function initScrollArea(root) {
+    if (root.__jlSA) return;
+    root.__jlSA = true;
+    var vp = root.querySelector(".jl-scrollarea__viewport");
+    if (!vp) return;
+
+    function update() {
+      var top = vp.scrollTop > 1;
+      var bottom = vp.scrollTop + vp.clientHeight < vp.scrollHeight - 1;
+      if (top) root.setAttribute("data-fade-top", "true");
+      else root.removeAttribute("data-fade-top");
+      if (bottom) root.setAttribute("data-fade-bottom", "true");
+      else root.removeAttribute("data-fade-bottom");
+    }
+
+    vp.addEventListener("scroll", update, { passive: true });
+    if (typeof ResizeObserver !== "undefined") {
+      var ro = new ResizeObserver(update);
+      ro.observe(vp);
+      if (vp.firstElementChild) ro.observe(vp.firstElementChild);
+    }
+    update();
+  }
+
+  register("scroll-area", function (root) {
+    root.querySelectorAll(".jl-scrollarea[data-fade]").forEach(initScrollArea);
   });
 })();
 
@@ -1610,5 +2204,151 @@
 
   register("tooltip", function (root) {
     root.querySelectorAll(".jl-tooltip").forEach(initTooltip);
+  });
+})();
+
+/* ---- tree-view.js ---- */
+/* JLDS behavior — TreeView. A static nested .jl-tree (role="tree") of
+ * .jl-tree__row[role="treeitem"] items, each in an .jl-tree__li that may hold a
+ * child .jl-tree__group. Rows with children expand/collapse (toggles the group's
+ * [hidden] + the row's data-expanded/aria-expanded); any row selects
+ * (data-selected, single). Arrow keys move focus / open / close; Enter / Space
+ * toggle + select. Authors set data-expanded="true" on initially-open rows.
+ * Emits jl-tree:select and jl-tree:toggle. Requires core.js (or all.js). */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  function childGroup(row) {
+    var li = row.closest(".jl-tree__li");
+    if (!li) return null;
+    return li.querySelector(":scope > .jl-tree__group");
+  }
+
+  function setExpanded(row, open) {
+    var group = childGroup(row);
+    if (!group) return;
+    if (open) {
+      row.setAttribute("data-expanded", "true");
+      group.hidden = false;
+    } else {
+      row.removeAttribute("data-expanded");
+      group.hidden = true;
+    }
+    row.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+
+  function initTree(tree) {
+    if (tree.__jlTree) return;
+    tree.__jlTree = true;
+
+    var rows = function () {
+      return Array.prototype.slice.call(tree.querySelectorAll(".jl-tree__row"));
+    };
+
+    // Sync initial expand state from each row's data-expanded.
+    rows().forEach(function (row) {
+      if (childGroup(row)) setExpanded(row, row.getAttribute("data-expanded") === "true");
+    });
+
+    function visibleRows() {
+      return rows().filter(function (row) {
+        var g = row.closest(".jl-tree__group[hidden]");
+        return !g || !tree.contains(g);
+      });
+    }
+
+    function select(row) {
+      rows().forEach(function (r) {
+        r.removeAttribute("data-selected");
+        r.setAttribute("aria-selected", "false");
+      });
+      row.setAttribute("data-selected", "true");
+      row.setAttribute("aria-selected", "true");
+      tree.dispatchEvent(
+        new CustomEvent("jl-tree:select", { detail: { id: row.dataset.id || null }, bubbles: true })
+      );
+    }
+
+    function focusRow(row) {
+      rows().forEach(function (r) {
+        r.tabIndex = -1;
+      });
+      row.tabIndex = 0;
+      row.focus();
+    }
+
+    tree.addEventListener("click", function (e) {
+      var row = e.target.closest(".jl-tree__row");
+      if (!row || !tree.contains(row)) return;
+      if (row.getAttribute("aria-disabled") === "true") return;
+      if (childGroup(row)) {
+        var open = row.getAttribute("data-expanded") === "true";
+        setExpanded(row, !open);
+        tree.dispatchEvent(
+          new CustomEvent("jl-tree:toggle", {
+            detail: { id: row.dataset.id || null, open: !open },
+            bubbles: true,
+          })
+        );
+      }
+      select(row);
+      focusRow(row);
+    });
+
+    tree.addEventListener("keydown", function (e) {
+      var row = e.target.closest(".jl-tree__row");
+      if (!row || !tree.contains(row)) return;
+      var vis = visibleRows();
+      var idx = vis.indexOf(row);
+      var hasKids = !!childGroup(row);
+      var isOpen = row.getAttribute("data-expanded") === "true";
+      switch (e.key) {
+        case "ArrowDown":
+          e.preventDefault();
+          if (idx < vis.length - 1) focusRow(vis[idx + 1]);
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          if (idx > 0) focusRow(vis[idx - 1]);
+          break;
+        case "ArrowRight":
+          e.preventDefault();
+          if (hasKids && !isOpen) setExpanded(row, true);
+          else if (hasKids && isOpen) {
+            var g = childGroup(row);
+            var first = g && g.querySelector(".jl-tree__row");
+            if (first) focusRow(first);
+          }
+          break;
+        case "ArrowLeft":
+          e.preventDefault();
+          if (hasKids && isOpen) setExpanded(row, false);
+          else {
+            var parentLi = row.closest(".jl-tree__group");
+            parentLi = parentLi && parentLi.closest(".jl-tree__li");
+            var prow = parentLi && parentLi.querySelector(":scope > .jl-tree__row");
+            if (prow) focusRow(prow);
+          }
+          break;
+        case "Enter":
+        case " ":
+          e.preventDefault();
+          if (hasKids) {
+            setExpanded(row, !isOpen);
+          }
+          if (row.getAttribute("aria-disabled") !== "true") select(row);
+          break;
+        default:
+          break;
+      }
+    });
+  }
+
+  register("tree-view", function (root) {
+    root.querySelectorAll(".jl-tree").forEach(initTree);
   });
 })();

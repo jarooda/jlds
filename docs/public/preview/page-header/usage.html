@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/page-header.css">
+    <link rel="stylesheet" href="/css/button.css">
+    <link rel="stylesheet" href="/css/breadcrumb.css">
+    <style> body { margin: 0; background: var(--surface-muted); } </style>
+  </head>
+  <body>
+    <header class="jl-pageheader jl-pageheader--surface">
+      <nav class="jl-breadcrumb jl-pageheader__crumb" aria-label="Breadcrumb">
+        <ol class="jl-breadcrumb__list">
+          <li class="jl-breadcrumb__item"><a class="jl-breadcrumb__link" href="#">Projects</a></li>
+          <li class="jl-breadcrumb__sep" aria-hidden="true">/</li>
+          <li class="jl-breadcrumb__item"><span class="jl-breadcrumb__current" aria-current="page">Acme App</span></li>
+        </ol>
+      </nav>
+      <div class="jl-pageheader__bar">
+        <span class="jl-pageheader__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+        <div class="jl-pageheader__heading">
+          <div class="jl-pageheader__eyebrow">Workspace</div>
+          <div class="jl-pageheader__titlerow">
+            <h1 class="jl-pageheader__title">Acme App</h1>
+          </div>
+          <p class="jl-pageheader__desc">Manage your project settings, members, and deployment configuration.</p>
+        </div>
+        <div class="jl-pageheader__actions">
+          <button class="jl-btn jl-btn--ghost jl-btn--md">Share</button>
+          <button class="jl-btn jl-btn--primary jl-btn--md">New deploy</button>
+        </div>
+      </div>
+    </header>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/collapsible.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); max-width: 520px; }
+    </style>
+  </head>
+  <body>
+    <div class="jl-collapsible jl-collapsible--bordered">
+      <button type="button" class="jl-collapsible__trigger" data-chevron="start" aria-expanded="false" aria-controls="c2">
+        <span class="jl-collapsible__leadicon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+        <span class="jl-collapsible__label">Order details</span>
+      </button>
+      <div class="jl-collapsible__region" id="c2" role="region">
+        <div class="jl-collapsible__content"><div class="jl-collapsible__inner">Bordered variant with a leading icon and the chevron at the start. Wrapped in a surface card.</div></div>
+      </div>
+    </div>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

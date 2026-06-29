@@ -1,0 +1,14 @@
+{
+  "name": "timeline",
+  "description": "A vertical activity feed: a dot-and-rail list of events with title, time, description, and optional icon.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["timeline.tsx", "index.ts"],
+    "vue": ["Timeline.vue", "TimelineItem.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

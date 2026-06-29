@@ -1,0 +1,48 @@
+.jl-appshell {
+  display: flex; width: 100%; min-height: 0;
+  background: var(--bg-app); color: var(--text-primary);
+  overflow: hidden;
+}
+.jl-appshell__aside { flex: none; height: 100%; min-height: 0; display: flex; }
+.jl-appshell__aside > * { height: 100%; }
+
+.jl-appshell__main { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; height: 100%; min-height: 0; }
+.jl-appshell__header { flex: none; z-index: 5; }
+.jl-appshell__content { flex: 1 1 auto; min-height: 0; overflow: auto; scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
+.jl-appshell__content--padded { padding: var(--space-6) var(--space-8); }
+.jl-appshell__content::-webkit-scrollbar { width: 10px; height: 10px; }
+.jl-appshell__content::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: var(--radius-pill); border: 3px solid transparent; background-clip: content-box; }
+
+/* Mobile menu button — hidden unless the shell is in mobile mode */
+.jl-appshell__menubtn {
+  display: none; align-items: center; justify-content: center;
+  width: 38px; height: 38px; flex: none; cursor: pointer;
+  color: var(--text-secondary); background: transparent;
+  border: 1px solid var(--border-default); border-radius: var(--radius-lg);
+  transition: background var(--duration-fast) var(--ease-standard);
+}
+.jl-appshell__menubtn:hover { background: var(--surface-hover); }
+.jl-appshell__menubtn:focus-visible { outline: none; box-shadow: var(--ring-focus); }
+.jl-appshell__menubtn svg { width: 20px; height: 20px; }
+
+/* Mobile overlay mode */
+.jl-appshell[data-mobile="true"] .jl-appshell__menubtn { display: inline-flex; }
+.jl-appshell[data-mobile="true"] .jl-appshell__aside {
+  position: fixed; inset: 0 auto 0 0; z-index: 50; height: 100%;
+  transform: translateX(-100%);
+  transition: transform var(--duration-base) var(--ease-emphasized);
+  box-shadow: var(--shadow-2xl);
+}
+.jl-appshell[data-mobile="true"][data-open="true"] .jl-appshell__aside { transform: translateX(0); }
+.jl-appshell__backdrop {
+  position: fixed; inset: 0; z-index: 40;
+  background: color-mix(in srgb, var(--neutral-900) 45%, transparent);
+  backdrop-filter: blur(2px);
+  opacity: 0; pointer-events: none;
+  transition: opacity var(--duration-base) var(--ease-standard);
+}
+.jl-appshell[data-mobile="true"][data-open="true"] .jl-appshell__backdrop { opacity: 1; pointer-events: auto; }
+
+@media (prefers-reduced-motion: reduce) {
+  .jl-appshell__aside, .jl-appshell__backdrop { transition: none; }
+}

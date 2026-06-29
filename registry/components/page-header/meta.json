@@ -1,0 +1,14 @@
+{
+  "name": "page-header",
+  "description": "A page heading block: breadcrumb, title, eyebrow, icon, back button, description, actions, and tabs.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["page-header.tsx", "index.ts"],
+    "vue": ["PageHeader.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

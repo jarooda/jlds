@@ -1,0 +1,14 @@
+{
+  "name": "tree-view",
+  "description": "A nested, expandable tree of nodes (file explorers, nested nav) with keyboard navigation and selection.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["tree-view.tsx", "index.ts"],
+    "vue": ["TreeView.vue", "TreeViewNode.vue", "types.ts", "index.ts"]
+  },
+  "registryDependencies": []
+}

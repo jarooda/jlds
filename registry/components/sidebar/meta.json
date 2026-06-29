@@ -1,0 +1,22 @@
+{
+  "name": "sidebar",
+  "description": "App navigation rail with header, scrollable body of groups and items, and footer. Collapsible to an icon rail.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["sidebar.tsx", "index.ts"],
+    "vue": [
+      "Sidebar.vue",
+      "SidebarHeader.vue",
+      "SidebarBody.vue",
+      "SidebarFooter.vue",
+      "SidebarGroup.vue",
+      "SidebarItem.vue",
+      "index.ts"
+    ]
+  },
+  "registryDependencies": []
+}

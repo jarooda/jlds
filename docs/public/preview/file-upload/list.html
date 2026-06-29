@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/file-upload.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); max-width: 460px; }
+    </style>
+  </head>
+  <body>
+    <div class="jl-upload jl-upload--sm">
+      <div class="jl-upload__zone" role="button" tabindex="0">
+        <span class="jl-upload__mark">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 16V4m0 0L7 9m5-5 5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <div class="jl-upload__title"><b>Click to upload</b> or drag and drop</div>
+        <div class="jl-upload__hint">Any file type</div>
+        <input type="file" multiple style="display:none" />
+      </div>
+      <ul class="jl-upload__list">
+        <li class="jl-upload__item" data-status="done">
+          <span class="jl-upload__fileicon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M14 3v5h5" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/></svg></span>
+          <div class="jl-upload__meta">
+            <div class="jl-upload__name">brand-guidelines.pdf</div>
+            <div class="jl-upload__size">2.4 MB</div>
+          </div>
+          <span class="jl-upload__status" data-status="done"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <button type="button" class="jl-upload__remove" aria-label="Remove brand-guidelines.pdf"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></button>
+        </li>
+        <li class="jl-upload__item" data-status="uploading">
+          <span class="jl-upload__fileicon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M14 3v5h5" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/></svg></span>
+          <div class="jl-upload__meta">
+            <div class="jl-upload__name">hero-render.png</div>
+            <div class="jl-upload__size">8.1 MB</div>
+            <div class="jl-upload__bar"><i style="width:62%"></i></div>
+          </div>
+          <button type="button" class="jl-upload__remove" aria-label="Remove hero-render.png"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></button>
+        </li>
+        <li class="jl-upload__item" data-status="error">
+          <span class="jl-upload__fileicon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M14 3v5h5" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/></svg></span>
+          <div class="jl-upload__meta">
+            <div class="jl-upload__name">archive.zip</div>
+            <div class="jl-upload__size">120 MB · Exceeds 50 MB limit</div>
+          </div>
+          <span class="jl-upload__status" data-status="error"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 8v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16.5" r="0.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.75"/></svg></span>
+          <button type="button" class="jl-upload__remove" aria-label="Remove archive.zip"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></button>
+        </li>
+      </ul>
+    </div>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>
