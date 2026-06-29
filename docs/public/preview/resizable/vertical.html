@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/resizable.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); }
+      .frame { height: 300px; border: 1px solid var(--border-subtle); border-radius: var(--radius-xl); overflow: hidden; background: var(--surface-card); }
+      .pane { padding: var(--space-4); font-size: var(--text-sm); color: var(--text-secondary); font-family: var(--font-sans); }
+      .pane h4 { margin: 0 0 var(--space-2); font-size: var(--text-xs); text-transform: uppercase; letter-spacing: var(--tracking-wider); color: var(--text-tertiary); }
+    </style>
+  </head>
+  <body>
+    <div class="frame">
+      <div class="jl-resizable jl-resizable--vertical">
+        <div class="jl-resizable__panel" style="flex: 0 0 60%" data-min-size="20">
+          <div class="pane"><h4>Preview</h4>A vertical split stacks panels and drags up/down.</div>
+        </div>
+        <div class="jl-resizable__handle" role="separator" tabindex="0" aria-orientation="horizontal" aria-valuenow="60">
+          <span class="jl-resizable__grip"><span></span><span></span><span></span></span>
+        </div>
+        <div class="jl-resizable__panel" style="flex: 0 0 40%" data-min-size="20">
+          <div class="pane"><h4>Console</h4>Drag the handle or focus it and press the arrow keys.</div>
+        </div>
+      </div>
+    </div>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

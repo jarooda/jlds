@@ -1,0 +1,39 @@
+.jl-resizable { display: flex; width: 100%; height: 100%; min-width: 0; min-height: 0; }
+.jl-resizable--horizontal { flex-direction: row; }
+.jl-resizable--vertical { flex-direction: column; }
+
+.jl-resizable__panel { min-width: 0; min-height: 0; overflow: auto; position: relative; }
+.jl-resizable__panel { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
+
+.jl-resizable__handle {
+  flex: none; position: relative; box-sizing: border-box;
+  background: var(--border-subtle);
+  transition: background var(--duration-fast) var(--ease-standard);
+  touch-action: none; outline: none;
+}
+.jl-resizable--horizontal > .jl-resizable__handle { width: 1px; cursor: col-resize; }
+.jl-resizable--vertical > .jl-resizable__handle { height: 1px; cursor: row-resize; }
+.jl-resizable__handle::before {
+  content: ""; position: absolute; z-index: 1;
+}
+.jl-resizable--horizontal > .jl-resizable__handle::before { inset: 0 -4px; }
+.jl-resizable--vertical > .jl-resizable__handle::before { inset: -4px 0; }
+.jl-resizable__handle:hover, .jl-resizable__handle[data-dragging="true"] { background: var(--accent); }
+.jl-resizable__handle:focus-visible { background: var(--accent); box-shadow: var(--ring-focus); }
+
+/* Grip dots */
+.jl-resizable__grip {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2;
+  display: flex; gap: 3px; align-items: center; justify-content: center;
+  border-radius: var(--radius-pill); background: var(--surface-card);
+  border: 1px solid var(--border-default); color: var(--text-tertiary);
+  opacity: 0; transition: opacity var(--duration-fast) var(--ease-standard);
+}
+.jl-resizable__handle:hover .jl-resizable__grip,
+.jl-resizable__handle[data-dragging="true"] .jl-resizable__grip { opacity: 1; }
+.jl-resizable--horizontal .jl-resizable__grip { flex-direction: column; width: 14px; height: 26px; }
+.jl-resizable--vertical .jl-resizable__grip { flex-direction: row; width: 26px; height: 14px; }
+.jl-resizable__grip span { width: 3px; height: 3px; border-radius: 50%; background: currentColor; }
+
+body[data-jl-resizing="x"] { cursor: col-resize !important; user-select: none; }
+body[data-jl-resizing="y"] { cursor: row-resize !important; user-select: none; }

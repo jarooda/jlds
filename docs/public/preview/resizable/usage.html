@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/resizable.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); }
+      .frame { height: 240px; border: 1px solid var(--border-subtle); border-radius: var(--radius-xl); overflow: hidden; background: var(--surface-card); }
+      .pane { padding: var(--space-4); font-size: var(--text-sm); color: var(--text-secondary); font-family: var(--font-sans); }
+      .pane h4 { margin: 0 0 var(--space-2); font-size: var(--text-xs); text-transform: uppercase; letter-spacing: var(--tracking-wider); color: var(--text-tertiary); }
+    </style>
+  </head>
+  <body>
+    <div class="frame">
+      <div class="jl-resizable jl-resizable--horizontal">
+        <div class="jl-resizable__panel" style="flex: 0 0 30%" data-min-size="15">
+          <div class="pane"><h4>Files</h4>Drag the divider to resize. Use arrow keys when a handle is focused.</div>
+        </div>
+        <div class="jl-resizable__handle" role="separator" tabindex="0" aria-orientation="vertical" aria-valuenow="30">
+          <span class="jl-resizable__grip"><span></span><span></span><span></span></span>
+        </div>
+        <div class="jl-resizable__panel" style="flex: 0 0 70%" data-min-size="20">
+          <div class="pane"><h4>Editor</h4>The two panels share 100% — growing one shrinks its neighbor.</div>
+        </div>
+      </div>
+    </div>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

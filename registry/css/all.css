@@ -5,6 +5,7 @@
 
 @import "./accordion.css";
 @import "./alert.css";
+@import "./app-shell.css";
 @import "./avatar.css";
 @import "./badge.css";
 @import "./banner.css";
@@ -12,6 +13,7 @@
 @import "./button.css";
 @import "./card.css";
 @import "./checkbox.css";
+@import "./collapsible.css";
 @import "./combobox.css";
 @import "./command-palette.css";
 @import "./date-picker.css";
@@ -26,13 +28,17 @@
 @import "./input.css";
 @import "./kbd.css";
 @import "./number-input.css";
+@import "./page-header.css";
 @import "./pagination.css";
 @import "./popover.css";
 @import "./progress.css";
 @import "./radio-group.css";
 @import "./rating.css";
+@import "./resizable.css";
+@import "./scroll-area.css";
 @import "./segmented-control.css";
 @import "./select.css";
+@import "./sidebar.css";
 @import "./skeleton.css";
 @import "./slider.css";
 @import "./snippet.css";
@@ -48,3 +54,4 @@
 @import "./toast.css";
 @import "./toggle.css";
 @import "./tooltip.css";
+@import "./tree-view.css";

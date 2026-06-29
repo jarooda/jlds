@@ -60,6 +60,7 @@ export default defineConfig({
             { text: 'Overview', link: '/components/' },
             { text: 'Accordion', link: '/components/accordion' },
             { text: 'Alert', link: '/components/alert' },
+            { text: 'App Shell', link: '/components/app-shell' },
             { text: 'Avatar', link: '/components/avatar' },
             { text: 'Badge', link: '/components/badge' },
             { text: 'Banner', link: '/components/banner' },
@@ -67,6 +68,7 @@ export default defineConfig({
             { text: 'Button', link: '/components/button' },
             { text: 'Card', link: '/components/card' },
             { text: 'Checkbox', link: '/components/checkbox' },
+            { text: 'Collapsible', link: '/components/collapsible' },
             { text: 'Combobox', link: '/components/combobox' },
             { text: 'Command Palette', link: '/components/command-palette' },
             { text: 'Date Picker', link: '/components/date-picker' },
@@ -81,13 +83,17 @@ export default defineConfig({
             { text: 'Input', link: '/components/input' },
             { text: 'Kbd', link: '/components/kbd' },
             { text: 'Number Input', link: '/components/number-input' },
+            { text: 'Page Header', link: '/components/page-header' },
             { text: 'Pagination', link: '/components/pagination' },
             { text: 'Popover', link: '/components/popover' },
             { text: 'Progress', link: '/components/progress' },
             { text: 'Radio Group', link: '/components/radio-group' },
             { text: 'Rating', link: '/components/rating' },
+            { text: 'Resizable', link: '/components/resizable' },
+            { text: 'Scroll Area', link: '/components/scroll-area' },
             { text: 'Segmented Control', link: '/components/segmented-control' },
             { text: 'Select', link: '/components/select' },
+            { text: 'Sidebar', link: '/components/sidebar' },
             { text: 'Skeleton', link: '/components/skeleton' },
             { text: 'Slider', link: '/components/slider' },
             { text: 'Snippet', link: '/components/snippet' },
@@ -102,7 +108,8 @@ export default defineConfig({
             { text: 'Timeline', link: '/components/timeline' },
             { text: 'Toast', link: '/components/toast' },
             { text: 'Toggle', link: '/components/toggle' },
-            { text: 'Tooltip', link: '/components/tooltip' }
+            { text: 'Tooltip', link: '/components/tooltip' },
+            { text: 'Tree View', link: '/components/tree-view' }
           ]
         }
       ],

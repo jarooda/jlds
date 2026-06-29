@@ -315,6 +315,55 @@
       "frameworks": ["react", "vue"],
       "dependencies": [],
       "devDependencies": []
+    },
+    {
+      "name": "collapsible",
+      "description": "A single show/hide region with a trigger. Lighter than Accordion; ghost or bordered, animated grid-rows region.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "scroll-area",
+      "description": "A scroll container with a themed thin scrollbar and optional edge fade masks. CSS-first.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "page-header",
+      "description": "A page heading block: breadcrumb, title, description, actions, and optional tabs row.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "sidebar",
+      "description": "A vertical navigation rail with header, scrollable body of groups and items, and footer. Collapsible to icons.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "tree-view",
+      "description": "A nested, expandable tree of nodes with keyboard navigation and selection.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "resizable",
+      "description": "Draggable split panes (horizontal or vertical) with a handle between each panel.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "app-shell",
+      "description": "An application layout shell: fixed sidebar, top header, and scrollable content with a responsive mobile drawer.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
     }
   ]
 }

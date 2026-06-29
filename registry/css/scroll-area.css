@@ -1,0 +1,40 @@
+.jl-scrollarea { position: relative; min-height: 0; min-width: 0; }
+.jl-scrollarea__viewport {
+  height: 100%; width: 100%;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+.jl-scrollarea--y .jl-scrollarea__viewport { overflow-x: hidden; overflow-y: auto; }
+.jl-scrollarea--x .jl-scrollarea__viewport { overflow-x: auto; overflow-y: hidden; }
+.jl-scrollarea--both .jl-scrollarea__viewport { overflow: auto; }
+
+.jl-scrollarea__viewport::-webkit-scrollbar { width: 10px; height: 10px; }
+.jl-scrollarea__viewport::-webkit-scrollbar-track { background: transparent; }
+.jl-scrollarea__viewport::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: var(--radius-pill);
+  border: 3px solid transparent;
+  background-clip: content-box;
+  transition: background-color var(--duration-fast) var(--ease-standard);
+}
+.jl-scrollarea__viewport::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); background-clip: content-box; }
+.jl-scrollarea__viewport::-webkit-scrollbar-corner { background: transparent; }
+
+/* Fade masks at scrollable edges */
+.jl-scrollarea__fade {
+  position: absolute; left: 0; right: 0; height: 28px; pointer-events: none;
+  opacity: 0; transition: opacity var(--duration-base) var(--ease-standard);
+  z-index: 1;
+}
+.jl-scrollarea__fade--top {
+  top: 0;
+  background: linear-gradient(to bottom, var(--_fade-bg, var(--surface-card)), transparent);
+}
+.jl-scrollarea__fade--bottom {
+  bottom: 0;
+  background: linear-gradient(to top, var(--_fade-bg, var(--surface-card)), transparent);
+}
+.jl-scrollarea[data-fade-top="true"] .jl-scrollarea__fade--top { opacity: 1; }
+.jl-scrollarea[data-fade-bottom="true"] .jl-scrollarea__fade--bottom { opacity: 1; }

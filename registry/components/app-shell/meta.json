@@ -1,0 +1,14 @@
+{
+  "name": "app-shell",
+  "description": "Product layout shell: a fixed sidebar slot, sticky header slot, and scrolling content, with a responsive mobile drawer.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["app-shell.tsx", "index.ts"],
+    "vue": ["AppShell.vue", "AppShellMenuButton.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

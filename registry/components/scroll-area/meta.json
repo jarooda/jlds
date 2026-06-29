@@ -1,0 +1,14 @@
+{
+  "name": "scroll-area",
+  "description": "A scroll container with a themed thin scrollbar and optional edge fade masks.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["scroll-area.tsx", "index.ts"],
+    "vue": ["ScrollArea.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

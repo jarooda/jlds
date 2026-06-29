@@ -1,0 +1,72 @@
+.jl-sidebar {
+  --_w: 260px; --_cw: 68px;
+  display: flex; flex-direction: column; flex: none;
+  width: var(--_w); height: 100%; box-sizing: border-box;
+  background: var(--surface-card);
+  border-right: 1px solid var(--border-subtle);
+  transition: width var(--duration-base) var(--ease-emphasized);
+  overflow: hidden;
+}
+.jl-sidebar[data-collapsed="true"] { width: var(--_cw); }
+
+/* Header / footer */
+.jl-sidebar__header { flex: none; padding: var(--space-4) var(--space-3); display: flex; flex-direction: column; gap: var(--space-3); }
+.jl-sidebar__footer { flex: none; padding: var(--space-3); border-top: 1px solid var(--border-subtle); }
+
+/* Body — scrollable nav region */
+.jl-sidebar__body {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden;
+  padding: var(--space-2) var(--space-3) var(--space-4);
+  scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent;
+  display: flex; flex-direction: column; gap: var(--space-1);
+}
+.jl-sidebar__body::-webkit-scrollbar { width: 8px; }
+.jl-sidebar__body::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: var(--radius-pill); border: 2px solid transparent; background-clip: content-box; }
+
+/* Group */
+.jl-sidebar__group { display: flex; flex-direction: column; gap: 2px; }
+.jl-sidebar__group + .jl-sidebar__group { margin-top: var(--space-4); }
+.jl-sidebar__group-label {
+  font-size: var(--text-2xs); text-transform: uppercase; letter-spacing: var(--tracking-wider);
+  font-weight: var(--weight-semibold); color: var(--text-tertiary);
+  padding: var(--space-2) var(--space-2) var(--space-1); white-space: nowrap;
+}
+.jl-sidebar[data-collapsed="true"] .jl-sidebar__group-label { height: 1px; padding: 0; margin: var(--space-3) var(--space-2); background: var(--border-subtle); color: transparent; overflow: hidden; }
+
+/* Item */
+.jl-sidebar__item {
+  display: flex; align-items: center; gap: var(--space-3); width: 100%; box-sizing: border-box;
+  height: 38px; padding: 0 var(--space-3); cursor: pointer; text-align: left; text-decoration: none;
+  font-family: var(--font-sans); font-size: var(--text-base); font-weight: var(--weight-medium);
+  color: var(--text-secondary); background: transparent; border: none;
+  border-radius: var(--radius-lg);
+  transition: background var(--duration-fast) var(--ease-standard), color var(--duration-fast) var(--ease-standard);
+}
+.jl-sidebar__item:hover { background: var(--surface-hover); color: var(--text-primary); }
+.jl-sidebar__item:focus-visible { outline: none; box-shadow: var(--ring-focus); }
+.jl-sidebar__item[data-active="true"] { background: var(--accent-subtle); color: var(--text-brand); font-weight: var(--weight-semibold); }
+.jl-sidebar__item[aria-disabled="true"] { opacity: 0.5; pointer-events: none; }
+.jl-sidebar__item-icon { flex: none; display: inline-flex; }
+.jl-sidebar__item-icon svg { width: 18px; height: 18px; }
+.jl-sidebar__item-label { flex: 1 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.jl-sidebar__item-badge {
+  flex: none; min-width: 18px; height: 18px; padding: 0 6px; box-sizing: border-box;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: var(--text-2xs); font-weight: var(--weight-semibold); font-variant-numeric: tabular-nums;
+  color: var(--text-secondary); background: var(--surface-sunken);
+  border-radius: var(--radius-pill);
+}
+.jl-sidebar__item[data-active="true"] .jl-sidebar__item-badge { color: var(--text-on-brand); background: var(--accent); }
+.jl-sidebar__item-trail { flex: none; display: inline-flex; color: var(--text-tertiary); margin-left: auto; }
+
+/* Collapsed: icon-only, centered */
+.jl-sidebar[data-collapsed="true"] .jl-sidebar__item { justify-content: center; padding: 0; gap: 0; position: relative; }
+.jl-sidebar[data-collapsed="true"] .jl-sidebar__item-label,
+.jl-sidebar[data-collapsed="true"] .jl-sidebar__item-trail { display: none; }
+.jl-sidebar[data-collapsed="true"] .jl-sidebar__item-badge {
+  position: absolute; transform: translate(12px, -12px); min-width: 8px; height: 8px; padding: 0;
+  color: transparent; background: var(--accent); overflow: hidden;
+}
+.jl-sidebar[data-collapsed="true"] .jl-sidebar__header { align-items: center; }
+
+@media (prefers-reduced-motion: reduce) { .jl-sidebar { transition: none; } }

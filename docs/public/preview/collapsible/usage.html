@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/collapsible.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); max-width: 520px; }
+    </style>
+  </head>
+  <body>
+    <div class="jl-collapsible jl-collapsible--ghost" data-open="true">
+      <button type="button" class="jl-collapsible__trigger" data-chevron="end" aria-expanded="true" aria-controls="c1">
+        <span class="jl-collapsible__label">Show advanced options</span>
+        <span class="jl-collapsible__chevron"><svg viewBox="0 0 24 24" fill="none"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </button>
+      <div class="jl-collapsible__region" id="c1" role="region">
+        <div class="jl-collapsible__content"><div class="jl-collapsible__inner">These settings are hidden by default. Toggle the trigger to reveal a single region — no fixed heights, the panel animates with a grid-rows transition.</div></div>
+      </div>
+    </div>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

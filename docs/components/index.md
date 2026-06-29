@@ -7,6 +7,7 @@ All components are self-contained — each ships its own `.jl-*` CSS classes bui
 |---|---|---|
 | [Accordion](/components/accordion) | React, Vue | Available |
 | [Alert](/components/alert) | React, Vue | Available |
+| [App Shell](/components/app-shell) | React, Vue | Available |
 | [Avatar](/components/avatar) | React, Vue | Available |
 | [Badge](/components/badge) | React, Vue | Available |
 | [Banner](/components/banner) | React, Vue | Available |
@@ -14,6 +15,7 @@ All components are self-contained — each ships its own `.jl-*` CSS classes bui
 | [Button](/components/button) | React, Vue | Available |
 | [Card](/components/card) | React, Vue | Available |
 | [Checkbox](/components/checkbox) | React, Vue | Available |
+| [Collapsible](/components/collapsible) | React, Vue | Available |
 | [Combobox](/components/combobox) | React, Vue | Available |
 | [Command Palette](/components/command-palette) | React, Vue | Available |
 | [Date Picker](/components/date-picker) | React, Vue | Available |
@@ -28,13 +30,17 @@ All components are self-contained — each ships its own `.jl-*` CSS classes bui
 | [Input](/components/input) | React, Vue | Available |
 | [Kbd](/components/kbd) | React, Vue | Available |
 | [Number Input](/components/number-input) | React, Vue | Available |
+| [Page Header](/components/page-header) | React, Vue | Available |
 | [Pagination](/components/pagination) | React, Vue | Available |
 | [Popover](/components/popover) | React, Vue | Available |
 | [Progress](/components/progress) | React, Vue | Available |
 | [Radio Group](/components/radio-group) | React, Vue | Available |
 | [Rating](/components/rating) | React, Vue | Available |
+| [Resizable](/components/resizable) | React, Vue | Available |
+| [Scroll Area](/components/scroll-area) | React, Vue | Available |
 | [Segmented Control](/components/segmented-control) | React, Vue | Available |
 | [Select](/components/select) | React, Vue | Available |
+| [Sidebar](/components/sidebar) | React, Vue | Available |
 | [Skeleton](/components/skeleton) | React, Vue | Available |
 | [Slider](/components/slider) | React, Vue | Available |
 | [Snippet](/components/snippet) | React, Vue | Available |
@@ -50,6 +56,7 @@ All components are self-contained — each ships its own `.jl-*` CSS classes bui
 | [Toast](/components/toast) | React, Vue | Available |
 | [Toggle](/components/toggle) | React, Vue | Available |
 | [Tooltip](/components/tooltip) | React, Vue | Available |
+| [Tree View](/components/tree-view) | React, Vue | Available |
 
 Run `jlds list` from a project with `jlds.json` to see what's available for your detected
 framework — see [CLI: list](/cli/list).

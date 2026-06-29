@@ -1,0 +1,14 @@
+{
+  "name": "resizable",
+  "description": "Draggable split panes (horizontal or vertical) with a handle between each panel. Pointer drag + keyboard.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["resizable.tsx", "index.ts"],
+    "vue": ["Resizable.vue", "ResizablePanel.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}
