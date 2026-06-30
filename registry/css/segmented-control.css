@@ -54,3 +54,10 @@
 @media (prefers-reduced-motion: reduce) {
   .jl-segmented__thumb { transition: none; }
 }
+
+/* Responsive — Tier 1. Below mobile (--bp-mobile 600px) allow horizontal scroll
+   so many options never overflow the viewport. */
+@media (max-width: 600px) {
+  .jl-segmented { max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+  .jl-segmented::-webkit-scrollbar { display: none; }
+}

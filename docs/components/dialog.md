@@ -111,10 +111,14 @@ const [open, setOpen] = useState(false)
 | `onClose` | `() => void` | — | Overlay click / Esc / × (Vue: `@close`) |
 | `title` / `description` | `React.ReactNode` | — | Header content |
 | `size` | `"sm" \| "md" \| "lg"` | `"md"` | Max width |
+| `mobile` | `"sheet" \| "center"` | `"sheet"` | Below `--bp-mobile`: dock as a bottom sheet, or stay centered ([Responsive](/guide/responsive)) |
 | `footer` | `React.ReactNode` | — | Footer (Vue: `footer` slot) |
 | `showClose` | `boolean` | `true` | Show the × button |
 
 Body content is `children` (React) / default slot (Vue).
+
+Below `--bp-mobile` the dialog renders as a bottom sheet by default — same `open` / `onClose`.
+In HTML, set `data-mobile="center"` on `.jl-dialog__overlay` to keep it centered.
 
 ## CSS classes (HTML)
 

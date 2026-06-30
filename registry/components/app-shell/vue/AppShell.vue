@@ -17,7 +17,7 @@ const props = withDefaults(
   {
     padded: false,
     fullHeight: true,
-    mobileBreakpoint: 880,
+    mobileBreakpoint: 900,
     mobileOpen: undefined,
     defaultMobileOpen: false,
   }

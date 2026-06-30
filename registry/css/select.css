@@ -32,3 +32,8 @@
   color: var(--text-tertiary);
   display: inline-flex;
 }
+
+/* Responsive — Tier 1. On mobile: ≥44px height + 16px text (stops iOS auto-zoom). */
+@media (max-width: 600px) {
+  .jl-select { --_h: var(--target-min); --_fs: 16px; }
+}

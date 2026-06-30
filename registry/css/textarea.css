@@ -20,3 +20,8 @@
 .jl-textarea[aria-invalid="true"] { border-color: var(--danger); }
 .jl-textarea[aria-invalid="true"]:focus { box-shadow: var(--ring-danger); }
 .jl-textarea:disabled { opacity: 0.55; background: var(--bg-subtle); pointer-events: none; }
+
+/* Responsive — Tier 1. 16px text on mobile stops iOS focus auto-zoom. */
+@media (max-width: 600px) {
+  .jl-textarea { font-size: 16px; }
+}

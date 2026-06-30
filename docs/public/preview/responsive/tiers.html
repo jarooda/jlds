@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/css/index.css" />
+    <link rel="stylesheet" href="/css/card.css" />
+    <link rel="stylesheet" href="/css/stat.css" />
+    <link rel="stylesheet" href="/css/button.css" />
+    <link rel="stylesheet" href="/css/input.css" />
+    <link rel="stylesheet" href="/css/field.css" />
+    <style>
+      body { margin: 0; padding: var(--space-4); }
+      .demo-row { display: flex; gap: var(--space-3); margin-top: var(--space-4); }
+      /* Tier 1 — below --bp-mobile (600px) the action row stacks full-width. */
+      @media (max-width: 600px) {
+        .demo-row { flex-direction: column; }
+        .demo-row .jl-btn { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="jl-card jl-card--raised">
+      <div class="jl-card__header">
+        <div class="jl-card__header-text">
+          <div class="jl-card__title">Workspace overview</div>
+          <div class="jl-card__subtitle">Stat grid → single column · actions → full-width</div>
+        </div>
+      </div>
+      <div class="jl-card__body">
+        <div class="jl-stat-group">
+          <div class="jl-stat">
+            <div class="jl-stat__top"><span class="jl-stat__label">Revenue</span></div>
+            <div class="jl-stat__value">$48.2k</div>
+          </div>
+          <div class="jl-stat">
+            <div class="jl-stat__top"><span class="jl-stat__label">Active users</span></div>
+            <div class="jl-stat__value">2,310</div>
+          </div>
+          <div class="jl-stat">
+            <div class="jl-stat__top"><span class="jl-stat__label">Churn</span></div>
+            <div class="jl-stat__value">1.4%</div>
+          </div>
+        </div>
+
+        <div class="demo-row">
+          <span class="jl-input-wrap jl-input-wrap--md" style="flex:1">
+            <input class="jl-input" type="email" placeholder="Invite teammate by email" />
+          </span>
+          <button class="jl-btn jl-btn--md jl-btn--secondary" type="button">Cancel</button>
+          <button class="jl-btn jl-btn--md jl-btn--primary" type="button">Send invite</button>
+        </div>
+      </div>
+    </div>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

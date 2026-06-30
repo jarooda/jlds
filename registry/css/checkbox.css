@@ -31,3 +31,8 @@
 .jl-check__body { display: flex; flex-direction: column; gap: 2px; }
 .jl-check__label { font-size: var(--text-base); color: var(--text-primary); line-height: var(--leading-snug); }
 .jl-check__desc { font-size: var(--text-sm); color: var(--text-tertiary); line-height: var(--leading-snug); }
+
+/* Responsive — Tier 1. The label wrapper clears a 44px touch target on coarse pointers. */
+@media (pointer: coarse) {
+  .jl-check { min-height: var(--target-min); }
+}

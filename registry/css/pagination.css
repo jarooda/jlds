@@ -34,3 +34,9 @@
 .jl-page--arrow { color: var(--text-secondary); }
 .jl-page--arrow svg { width: 17px; height: 17px; }
 .jl-page--ellipsis { cursor: default; color: var(--text-tertiary); pointer-events: none; }
+
+/* Responsive — Tier 1. Below mobile (--bp-mobile 600px) collapse to prev / next
+   arrows + the summary count; hide the numbered pages and ellipsis. */
+@media (max-width: 600px) {
+  .jl-pagination__list .jl-page:not(.jl-page--arrow) { display: none; }
+}

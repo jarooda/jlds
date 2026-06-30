@@ -8,8 +8,10 @@ const props = withDefaults(
     description?: string;
     size?: "sm" | "md" | "lg";
     showClose?: boolean;
+    /** Below --bp-mobile, render as a bottom sheet ("sheet", default) or stay centered ("center"). */
+    mobile?: "sheet" | "center";
   }>(),
-  { title: "", description: "", size: "md", showClose: true }
+  { title: "", description: "", size: "md", showClose: true, mobile: "sheet" }
 );
 
 const emit = defineEmits<{ close: []; "update:open": [open: boolean] }>();
@@ -32,7 +34,7 @@ onBeforeUnmount(() => document.removeEventListener("keydown", onKey));
 </script>
 
 <template>
-  <div v-if="open" class="jl-dialog__overlay" @mousedown.self="close">
+  <div v-if="open" class="jl-dialog__overlay" :data-mobile="mobile" @mousedown.self="close">
     <div :class="['jl-dialog', `jl-dialog--${size}`]" role="dialog" aria-modal="true">
       <div v-if="title || showClose" class="jl-dialog__header">
         <div class="jl-dialog__header-text">

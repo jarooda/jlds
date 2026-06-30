@@ -49,6 +49,7 @@ export default defineConfig({
           text: 'Customization',
           items: [
             { text: 'Theming', link: '/guide/theming' },
+            { text: 'Responsive', link: '/guide/responsive' },
             { text: 'HTML', link: '/guide/vanilla-html' }
           ]
         }

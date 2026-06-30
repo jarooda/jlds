@@ -30,6 +30,19 @@
     return Promise.resolve();
   };
 
+  /* True below the --bp-mobile breakpoint. Reads the token from :root via
+   * getComputedStyle (CSS custom properties can't be used inside @media()), so
+   * JS behavior swaps stay in sync with the CSS. Falls back to 600px. The CSS
+   * tier-2 promotions (Dialog/menus → bottom sheet) are pure-CSS; use this only
+   * for true behavior swaps that JS must drive. */
+  util.isMobile = function () {
+    var raw = getComputedStyle(document.documentElement).getPropertyValue("--bp-mobile");
+    var bp = parseInt(raw, 10) || 600;
+    return window.matchMedia
+      ? window.matchMedia("(max-width: " + bp + "px)").matches
+      : window.innerWidth <= bp;
+  };
+
   /* Call handler when a pointerdown lands outside `el`. Returns a cleanup fn. */
   util.onClickOutside = function (el, handler) {
     function onDown(e) {

@@ -67,3 +67,9 @@
   box-shadow: var(--shadow-xs);
 }
 .jl-btn--danger:hover:not(:disabled) { background: var(--danger-hover); }
+
+/* Responsive — Tier 1. Coarse pointers clear the minimum 44px hit target
+   (--target-min). Use .jl-btn--block for the optional full-width affordance. */
+@media (pointer: coarse) {
+  .jl-btn { min-height: var(--target-min); }
+}

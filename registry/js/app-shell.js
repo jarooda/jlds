@@ -1,5 +1,5 @@
 /* JLDS behavior — AppShell responsive drawer. Below the breakpoint (the shell's
- * data-mobile-breakpoint, default 880px) the .jl-appshell gets data-mobile and
+ * data-mobile-breakpoint, default 900px = --bp-tablet) the .jl-appshell gets data-mobile and
  * its sidebar becomes an overlay drawer: the .jl-appshell__menubtn toggles
  * data-open, the .jl-appshell__backdrop and Escape close it. Leaving mobile
  * closes the drawer. Emits jl-appshell:toggle. Requires core.js (or all.js). */
@@ -13,7 +13,7 @@
   function initAppShell(shell) {
     if (shell.__jlShell) return;
     shell.__jlShell = true;
-    var bp = parseInt(shell.getAttribute("data-mobile-breakpoint"), 10) || 880;
+    var bp = parseInt(shell.getAttribute("data-mobile-breakpoint"), 10) || 900;
     var mql = window.matchMedia ? window.matchMedia("(max-width: " + bp + "px)") : null;
 
     function isOpen() {

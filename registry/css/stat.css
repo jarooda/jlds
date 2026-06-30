@@ -58,3 +58,8 @@
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: var(--space-4);
 }
+
+/* Responsive — Tier 1. Single column below mobile (--bp-mobile 600px). */
+@media (max-width: 600px) {
+  .jl-stat-group { grid-template-columns: 1fr; }
+}
