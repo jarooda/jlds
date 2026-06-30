@@ -9,3 +9,5 @@ dist-ssr/
 *.log
 docs/public/css/
 docs/public/js/
+docs/public/llms.txt
+docs/public/llms-full.txt
