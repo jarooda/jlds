@@ -3,63 +3,73 @@
 All components are self-contained — each ships its own `.jl-*` CSS classes built on the
 [design tokens](/guide/theming) and works with or without Tailwind.
 
-| Component | Frameworks | Status |
-|---|---|---|
-| [Accordion](/components/accordion) | React, Vue | Available |
-| [Alert](/components/alert) | React, Vue | Available |
-| [App Shell](/components/app-shell) | React, Vue | Available |
-| [Avatar](/components/avatar) | React, Vue | Available |
-| [Badge](/components/badge) | React, Vue | Available |
-| [Banner](/components/banner) | React, Vue | Available |
-| [Breadcrumb](/components/breadcrumb) | React, Vue | Available |
-| [Button](/components/button) | React, Vue | Available |
-| [Card](/components/card) | React, Vue | Available |
-| [Checkbox](/components/checkbox) | React, Vue | Available |
-| [Collapsible](/components/collapsible) | React, Vue | Available |
-| [Combobox](/components/combobox) | React, Vue | Available |
-| [Command Palette](/components/command-palette) | React, Vue | Available |
-| [Date Picker](/components/date-picker) | React, Vue | Available |
-| [Dialog](/components/dialog) | React, Vue | Available |
-| [Divider](/components/divider) | React, Vue | Available |
-| [Drawer](/components/drawer) | React, Vue | Available |
-| [File Upload](/components/file-upload) | React, Vue | Available |
-| [Dropdown Menu](/components/dropdown-menu) | React, Vue | Available |
-| [Empty State](/components/empty-state) | React, Vue | Available |
-| [Field](/components/field) | React, Vue | Available |
-| [Icon Button](/components/icon-button) | React, Vue | Available |
-| [Input](/components/input) | React, Vue | Available |
-| [Kbd](/components/kbd) | React, Vue | Available |
-| [Number Input](/components/number-input) | React, Vue | Available |
-| [Page Header](/components/page-header) | React, Vue | Available |
-| [Pagination](/components/pagination) | React, Vue | Available |
-| [Popover](/components/popover) | React, Vue | Available |
-| [Progress](/components/progress) | React, Vue | Available |
-| [Radio Group](/components/radio-group) | React, Vue | Available |
-| [Rating](/components/rating) | React, Vue | Available |
-| [Resizable](/components/resizable) | React, Vue | Available |
-| [Scroll Area](/components/scroll-area) | React, Vue | Available |
-| [Segmented Control](/components/segmented-control) | React, Vue | Available |
-| [Select](/components/select) | React, Vue | Available |
-| [Sidebar](/components/sidebar) | React, Vue | Available |
-| [Skeleton](/components/skeleton) | React, Vue | Available |
-| [Slider](/components/slider) | React, Vue | Available |
-| [Snippet](/components/snippet) | React, Vue | Available |
-| [Spinner](/components/spinner) | React, Vue | Available |
-| [Stat](/components/stat) | React, Vue | Available |
-| [Stepper](/components/stepper) | React, Vue | Available |
-| [Switch](/components/switch) | React, Vue | Available |
-| [Table](/components/table) | React, Vue | Available |
-| [Tabs](/components/tabs) | React, Vue | Available |
-| [Tag](/components/tag) | React, Vue | Available |
-| [Textarea](/components/textarea) | React, Vue | Available |
-| [Timeline](/components/timeline) | React, Vue | Available |
-| [Toast](/components/toast) | React, Vue | Available |
-| [Toggle](/components/toggle) | React, Vue | Available |
-| [Tooltip](/components/tooltip) | React, Vue | Available |
-| [Tree View](/components/tree-view) | React, Vue | Available |
+Every component ships in **HTML** (the `.jl-*` classes, plus a small vanilla JS controller for the
+interactive ones), **Vue**, and **React**. The last two columns tell you how a component behaves on
+small screens — for the details, see [Responsive & mobile](/guide/responsive):
+
+- **Responsive** — looks right at any width. It reflows, goes full-width, and grows its touch
+  targets, but keeps the same shape and behavior.
+- **Adaptive** — changes how it looks *and* works on a phone. Overlays dock to the bottom as sheets,
+  the navigation collapses into a slide-in drawer, and inputs hand off to the native mobile picker.
+  An adaptive component is responsive as well.
+
+| Component | HTML | Vue | React | Responsive | Adaptive |
+|---|:---:|:---:|:---:|:---:|:---:|
+| [Accordion](/components/accordion) | ✅ | ✅ | ✅ | — | — |
+| [Alert](/components/alert) | ✅ | ✅ | ✅ | — | — |
+| [App Shell](/components/app-shell) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [Avatar](/components/avatar) | ✅ | ✅ | ✅ | — | — |
+| [Badge](/components/badge) | ✅ | ✅ | ✅ | — | — |
+| [Banner](/components/banner) | ✅ | ✅ | ✅ | — | — |
+| [Breadcrumb](/components/breadcrumb) | ✅ | ✅ | ✅ | ✅ | — |
+| [Button](/components/button) | ✅ | ✅ | ✅ | ✅ | — |
+| [Card](/components/card) | ✅ | ✅ | ✅ | ✅ | — |
+| [Checkbox](/components/checkbox) | ✅ | ✅ | ✅ | ✅ | — |
+| [Collapsible](/components/collapsible) | ✅ | ✅ | ✅ | — | — |
+| [Combobox](/components/combobox) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [Command Palette](/components/command-palette) | ✅ | ✅ | ✅ | — | — |
+| [Date Picker](/components/date-picker) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [Dialog](/components/dialog) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [Divider](/components/divider) | ✅ | ✅ | ✅ | — | — |
+| [Drawer](/components/drawer) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [File Upload](/components/file-upload) | ✅ | ✅ | ✅ | — | — |
+| [Dropdown Menu](/components/dropdown-menu) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [Empty State](/components/empty-state) | ✅ | ✅ | ✅ | — | — |
+| [Field](/components/field) | ✅ | ✅ | ✅ | ✅ | — |
+| [Icon Button](/components/icon-button) | ✅ | ✅ | ✅ | ✅ | — |
+| [Input](/components/input) | ✅ | ✅ | ✅ | ✅ | — |
+| [Kbd](/components/kbd) | ✅ | ✅ | ✅ | — | — |
+| [Number Input](/components/number-input) | ✅ | ✅ | ✅ | ✅ | — |
+| [Page Header](/components/page-header) | ✅ | ✅ | ✅ | ✅ | — |
+| [Pagination](/components/pagination) | ✅ | ✅ | ✅ | ✅ | — |
+| [Popover](/components/popover) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [Progress](/components/progress) | ✅ | ✅ | ✅ | — | — |
+| [Radio Group](/components/radio-group) | ✅ | ✅ | ✅ | ✅ | — |
+| [Rating](/components/rating) | ✅ | ✅ | ✅ | — | — |
+| [Resizable](/components/resizable) | ✅ | ✅ | ✅ | ✅ | — |
+| [Scroll Area](/components/scroll-area) | ✅ | ✅ | ✅ | — | — |
+| [Segmented Control](/components/segmented-control) | ✅ | ✅ | ✅ | ✅ | — |
+| [Select](/components/select) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [Sidebar](/components/sidebar) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [Skeleton](/components/skeleton) | ✅ | ✅ | ✅ | — | — |
+| [Slider](/components/slider) | ✅ | ✅ | ✅ | — | — |
+| [Snippet](/components/snippet) | ✅ | ✅ | ✅ | — | — |
+| [Spinner](/components/spinner) | ✅ | ✅ | ✅ | — | — |
+| [Stat](/components/stat) | ✅ | ✅ | ✅ | ✅ | — |
+| [Stepper](/components/stepper) | ✅ | ✅ | ✅ | ✅ | — |
+| [Switch](/components/switch) | ✅ | ✅ | ✅ | ✅ | — |
+| [Table](/components/table) | ✅ | ✅ | ✅ | ✅ | — |
+| [Tabs](/components/tabs) | ✅ | ✅ | ✅ | ✅ | — |
+| [Tag](/components/tag) | ✅ | ✅ | ✅ | — | — |
+| [Textarea](/components/textarea) | ✅ | ✅ | ✅ | ✅ | — |
+| [Timeline](/components/timeline) | ✅ | ✅ | ✅ | — | — |
+| [Toast](/components/toast) | ✅ | ✅ | ✅ | — | — |
+| [Toggle](/components/toggle) | ✅ | ✅ | ✅ | — | — |
+| [Tooltip](/components/tooltip) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [Tree View](/components/tree-view) | ✅ | ✅ | ✅ | — | — |
 
 Run `jlds list` from a project with `jlds.json` to see what's available for your detected
 framework — see [CLI: list](/cli/list).
 
-Regardless of the "Frameworks" column, every component's `.jl-*` CSS classes also work
-directly in plain HTML — no CLI or framework required, see [HTML](/guide/vanilla-html).
+The **HTML** column means the component's `.jl-*` CSS classes (and JS controller, where needed)
+work directly in markup — no CLI or framework required, see [HTML](/guide/vanilla-html).
