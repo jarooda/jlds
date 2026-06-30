@@ -16,10 +16,33 @@ async function getNpmVersion(): Promise<string> {
 
 const npmVersion = await getNpmVersion()
 
+// Shared by the /cli/ and /registry/ prefixes so both sections appear under the
+// single "Reference" nav item.
+const referenceSidebar = [
+  {
+    text: 'CLI Reference',
+    items: [
+      { text: 'Overview & Config', link: '/cli/' },
+      { text: 'init', link: '/cli/init' },
+      { text: 'add', link: '/cli/add' },
+      { text: 'update', link: '/cli/update' },
+      { text: 'list', link: '/cli/list' }
+    ]
+  },
+  {
+    text: 'Registry',
+    items: [
+      { text: 'How it works', link: '/registry/' },
+      { text: 'Self-hosting', link: '/registry/self-hosting' }
+    ]
+  }
+]
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "jlds",
   description: "Design system for rapid prototyping. It exists to let a designer or agent stand up a polished, production-credible interface in minutes.",
+  sitemap: { hostname: 'https://jlds.jaluwibowo.id' },
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }]
   ],
@@ -32,8 +55,7 @@ export default defineConfig({
       { text: 'Home', link: '/' },
       { text: 'Guide', link: '/guide/what-is-jlds' },
       { text: 'Components', link: '/components/' },
-      { text: 'CLI', link: '/cli/' },
-      { text: 'Registry', link: '/registry/' }
+      { text: 'Reference', link: '/cli/' }
     ],
 
     sidebar: {
@@ -114,27 +136,11 @@ export default defineConfig({
           ]
         }
       ],
-      '/cli/': [
-        {
-          text: 'CLI Reference',
-          items: [
-            { text: 'Overview & Config', link: '/cli/' },
-            { text: 'init', link: '/cli/init' },
-            { text: 'add', link: '/cli/add' },
-            { text: 'update', link: '/cli/update' },
-            { text: 'list', link: '/cli/list' }
-          ]
-        }
-      ],
-      '/registry/': [
-        {
-          text: 'Registry',
-          items: [
-            { text: 'How it works', link: '/registry/' },
-            { text: 'Self-hosting', link: '/registry/self-hosting' }
-          ]
-        }
-      ]
+      // CLI and Registry share one sidebar so both live under the single
+      // "Reference" nav item. Bound to both prefixes so the full sidebar
+      // shows regardless of which section the visitor lands on.
+      '/cli/': referenceSidebar,
+      '/registry/': referenceSidebar
     },
 
     search: {
