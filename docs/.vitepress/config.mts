@@ -52,7 +52,6 @@ export default defineConfig({
     // Exposed to the custom Layout slot (see theme/index.ts → NpmVersion.vue).
     npmVersion,
     nav: [
-      { text: 'Home', link: '/' },
       { text: 'Guide', link: '/guide/what-is-jlds' },
       { text: 'Components', link: '/components/' },
       { text: 'Reference', link: '/cli/' }
