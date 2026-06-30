@@ -200,13 +200,22 @@ fn inject_css_tokens(config: &Config) -> Result<()> {
         return Ok(());
     }
 
+    // index.css @imports breakpoints.css (for the all.css bundle and the docs previews),
+    // but init inlines those tokens via JLDS_BREAKPOINTS — drop the import line so the
+    // injected stylesheet has no dangling `@import "./breakpoints.css"`.
+    let jlds_css: String = JLDS_CSS
+        .lines()
+        .filter(|l| !l.contains("breakpoints.css"))
+        .collect::<Vec<_>>()
+        .join("\n");
+
     let updated = if existing.trim().is_empty() {
-        // Fresh file — write the whole stylesheet as-is
-        JLDS_CSS.to_string()
+        // Fresh file — write the whole stylesheet as-is, then the responsive tokens.
+        format!("{jlds_css}\n{JLDS_BREAKPOINTS}")
     } else {
         // Existing file — hoist @import to top (CSS spec: must precede all rules),
-        // append the tokens + resets at the bottom
-        let (font_import, tokens) = JLDS_CSS
+        // append the tokens + resets + responsive tokens at the bottom
+        let (font_import, tokens) = jlds_css
             .split_once("\n\n")
             .expect("registry/css/index.css must start with the font @import followed by a blank line");
 
@@ -215,7 +224,7 @@ fn inject_css_tokens(config: &Config) -> Result<()> {
         } else {
             format!("{font_import}\n\n")
         };
-        format!("{import_prefix}{}\n\n{tokens}", existing.trim_end())
+        format!("{import_prefix}{}\n\n{tokens}\n\n{JLDS_BREAKPOINTS}", existing.trim_end())
     };
 
     fs::write(css_path, &updated)
@@ -226,3 +235,4 @@ fn inject_css_tokens(config: &Config) -> Result<()> {
 }
 
 const JLDS_CSS: &str = include_str!("../../../registry/css/index.css");
+const JLDS_BREAKPOINTS: &str = include_str!("../../../registry/css/breakpoints.css");

@@ -53,3 +53,10 @@
   box-shadow: var(--shadow-xs);
   font-weight: var(--weight-semibold);
 }
+
+/* Responsive — Tier 1. Below mobile (--bp-mobile 600px) the strip scrolls
+   horizontally instead of wrapping; tabs already use white-space: nowrap. */
+@media (max-width: 600px) {
+  .jl-tabs { overflow-x: auto; scrollbar-width: none; }
+  .jl-tabs::-webkit-scrollbar { display: none; }
+}

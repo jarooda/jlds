@@ -7,6 +7,8 @@ export interface DialogProps {
   title?: React.ReactNode;
   description?: React.ReactNode;
   size?: "sm" | "md" | "lg";
+  /** Below --bp-mobile, render as a bottom sheet ("sheet", default) or stay centered ("center"). */
+  mobile?: "sheet" | "center";
   footer?: React.ReactNode;
   showClose?: boolean;
   className?: string;
@@ -19,6 +21,7 @@ export function Dialog({
   title,
   description,
   size = "md",
+  mobile = "sheet",
   footer,
   showClose = true,
   className = "",
@@ -38,6 +41,7 @@ export function Dialog({
   return (
     <div
       className="jl-dialog__overlay"
+      data-mobile={mobile}
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose?.();
       }}

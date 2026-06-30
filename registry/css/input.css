@@ -34,3 +34,9 @@
 .jl-input::placeholder { color: var(--text-tertiary); }
 .jl-input-adorn { display: inline-flex; color: var(--text-tertiary); flex: none; }
 .jl-input-adorn svg { width: 1.15em; height: 1.15em; }
+
+/* Responsive — Tier 1. On mobile: ≥44px height + 16px text (stops iOS focus
+   auto-zoom). The wrap is already full-width (width:100%). */
+@media (max-width: 600px) {
+  .jl-input-wrap { --_h: var(--target-min); font-size: 16px; }
+}

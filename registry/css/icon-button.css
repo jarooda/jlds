@@ -37,3 +37,8 @@
 .jl-iconbtn--primary:hover:not(:disabled) { background: var(--accent-hover); }
 
 .jl-iconbtn--round { border-radius: var(--radius-full); }
+
+/* Responsive — Tier 1. Coarse pointers clear the minimum 44px hit target. */
+@media (pointer: coarse) {
+  .jl-iconbtn { min-width: var(--target-min); min-height: var(--target-min); }
+}

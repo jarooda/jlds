@@ -37,3 +37,12 @@
 
 body[data-jl-resizing="x"] { cursor: col-resize !important; user-select: none; }
 body[data-jl-resizing="y"] { cursor: row-resize !important; user-select: none; }
+
+/* Responsive — Tier 1. Below mobile (--bp-mobile 600px) a horizontal split stacks
+   vertically and drag is disabled (panels flow to content height; handles hide).
+   !important overrides the inline flex-basis the drag behavior writes. */
+@media (max-width: 600px) {
+  .jl-resizable--horizontal { flex-direction: column; height: auto; }
+  .jl-resizable--horizontal > .jl-resizable__panel { width: auto !important; flex: none !important; }
+  .jl-resizable--horizontal > .jl-resizable__handle { display: none; }
+}

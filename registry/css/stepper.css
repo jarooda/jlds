@@ -59,3 +59,17 @@ button.jl-step__marker:focus-visible { outline: none; box-shadow: var(--ring-foc
 .jl-step__desc { font-size: var(--text-sm); color: var(--text-tertiary); margin-top: 2px; }
 
 @media (prefers-reduced-motion: reduce) { .jl-step__marker { transition: none; } }
+
+/* Responsive — Tier 1. Below mobile (--bp-mobile 600px) a horizontal stepper
+   re-lays-out as vertical so labels never crush. Mirrors the --vertical rules. */
+@media (max-width: 600px) {
+  .jl-stepper--horizontal { flex-direction: column; }
+  .jl-stepper--horizontal .jl-step { flex: none; flex-direction: row; gap: var(--space-3); text-align: left; }
+  .jl-stepper--horizontal .jl-step__indicator { flex-direction: column; align-items: center; align-self: stretch; width: auto; }
+  .jl-stepper--horizontal .jl-step__line {
+    position: static; transform: none; width: 2px; height: auto;
+    flex: 1; min-height: var(--space-5); margin: var(--space-1) 0;
+  }
+  .jl-stepper--horizontal .jl-step__body { margin-top: 0; padding: 0 0 var(--space-6); }
+  .jl-stepper--horizontal .jl-step:last-child .jl-step__body { padding-bottom: 0; }
+}

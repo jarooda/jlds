@@ -57,3 +57,35 @@
 @media (prefers-reduced-motion: reduce) {
   .jl-dialog__overlay, .jl-dialog { animation: none; }
 }
+
+/* Responsive — Tier 2 "Promote". Below mobile (--bp-mobile 600px) the centered
+   dialog becomes a bottom sheet (full-width, grab handle, --sheet-radius corners).
+   Same open/onClose API. Opt out per-instance with data-mobile="center". */
+@media (max-width: 600px) {
+  .jl-dialog__overlay:not([data-mobile="center"]) {
+    align-items: flex-end;
+    padding: 0;
+  }
+  .jl-dialog__overlay:not([data-mobile="center"]) .jl-dialog {
+    width: 100%;
+    max-width: 100%;
+    max-height: var(--sheet-max-h);
+    padding-top: var(--space-3);
+    padding-bottom: var(--safe-bottom);
+    border-radius: var(--sheet-radius) var(--sheet-radius) 0 0;
+    animation: jl-dialog-sheet var(--duration-slow) var(--ease-emphasized);
+  }
+  .jl-dialog__overlay:not([data-mobile="center"]) .jl-dialog::before {
+    content: "";
+    display: block;
+    width: var(--sheet-handle-w);
+    height: var(--sheet-handle-h);
+    margin: 0 auto var(--space-1);
+    border-radius: var(--radius-pill);
+    background: var(--border-strong);
+  }
+}
+@keyframes jl-dialog-sheet { from { transform: translateY(100%); } to { transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .jl-dialog__overlay:not([data-mobile="center"]) .jl-dialog { animation: none; }
+}

@@ -26,3 +26,10 @@
 .jl-tooltip__pop[data-side="bottom"] .jl-tooltip__arrow { top: -3px; left: 50%; margin-left: -3.5px; }
 .jl-tooltip__pop[data-side="left"] .jl-tooltip__arrow   { right: -3px; top: 50%; margin-top: -3.5px; }
 .jl-tooltip__pop[data-side="right"] .jl-tooltip__arrow  { left: -3px; top: 50%; margin-top: -3.5px; }
+
+/* Responsive — Tier 2. Touch devices have no hover, so suppress the tooltip there
+   rather than letting it flash on tap. Essential info should never live only in a
+   tooltip. */
+@media (hover: none) {
+  .jl-tooltip__pop { display: none; }
+}

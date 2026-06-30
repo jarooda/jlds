@@ -33,3 +33,8 @@
 .jl-radio__body { display: flex; flex-direction: column; gap: 2px; }
 .jl-radio__label { font-size: var(--text-base); color: var(--text-primary); line-height: var(--leading-snug); }
 .jl-radio__desc { font-size: var(--text-sm); color: var(--text-tertiary); line-height: var(--leading-snug); }
+
+/* Responsive — Tier 1. Each option clears a 44px touch target on coarse pointers. */
+@media (pointer: coarse) {
+  .jl-radio { min-height: var(--target-min); }
+}

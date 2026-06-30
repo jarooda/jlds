@@ -51,7 +51,7 @@ function AppShellRoot({
   header,
   padded = false,
   fullHeight = true,
-  mobileBreakpoint = 880,
+  mobileBreakpoint = 900,
   mobileOpen: openProp,
   defaultMobileOpen = false,
   onMobileOpenChange,

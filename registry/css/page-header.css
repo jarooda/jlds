@@ -47,8 +47,12 @@
 .jl-pageheader__tabs { margin: 0 calc(var(--space-8) * -1) calc(var(--space-5) * -1); padding: 0 var(--space-8); }
 .jl-pageheader--plain .jl-pageheader__tabs { margin-bottom: calc(var(--space-4) * -1); }
 
-@media (max-width: 720px) {
+/* Responsive — Tier 1. Below mobile (--bp-mobile 600px) the title row and actions
+   stack; the tabs row scrolls horizontally rather than wrapping. */
+@media (max-width: 600px) {
   .jl-pageheader { padding-left: var(--space-5); padding-right: var(--space-5); }
   .jl-pageheader__bar { flex-wrap: wrap; }
   .jl-pageheader__actions { width: 100%; }
+  .jl-pageheader__tabs { overflow-x: auto; scrollbar-width: none; }
+  .jl-pageheader__tabs::-webkit-scrollbar { display: none; }
 }

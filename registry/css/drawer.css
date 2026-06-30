@@ -30,15 +30,30 @@
 .jl-drawer__overlay[data-side="left"]  .jl-drawer  { animation: jl-drawer-l var(--duration-slow) var(--ease-emphasized); border-top-right-radius: 0; }
 .jl-drawer__overlay[data-side="bottom"] .jl-drawer {
   width: 100%;
-  max-height: 85vh;
+  max-height: var(--sheet-max-h);
   height: var(--_size, auto);
-  border-top-left-radius: var(--radius-2xl);
-  border-top-right-radius: var(--radius-2xl);
+  padding-top: var(--space-3);
+  padding-bottom: var(--safe-bottom);
+  border-top-left-radius: var(--sheet-radius);
+  border-top-right-radius: var(--sheet-radius);
   animation: jl-drawer-b var(--duration-slow) var(--ease-emphasized);
 }
 @keyframes jl-drawer-r { from { transform: translateX(100%); } to { transform: none; } }
 @keyframes jl-drawer-l { from { transform: translateX(-100%); } to { transform: none; } }
 @keyframes jl-drawer-b { from { transform: translateY(100%); } to { transform: none; } }
+
+/* Bottom drawer = the bottom-sheet primitive: a centered grab handle at the top.
+   Rendered as a pseudo-element so no markup change is needed across frameworks. */
+.jl-drawer__overlay[data-side="bottom"] .jl-drawer::before {
+  content: "";
+  align-self: center;
+  flex: none;
+  width: var(--sheet-handle-w);
+  height: var(--sheet-handle-h);
+  margin-bottom: var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--border-strong);
+}
 
 .jl-drawer__header {
   display: flex;

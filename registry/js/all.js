@@ -92,6 +92,19 @@
     return Promise.resolve();
   };
 
+  /* True below the --bp-mobile breakpoint. Reads the token from :root via
+   * getComputedStyle (CSS custom properties can't be used inside @media()), so
+   * JS behavior swaps stay in sync with the CSS. Falls back to 600px. The CSS
+   * tier-2 promotions (Dialog/menus → bottom sheet) are pure-CSS; use this only
+   * for true behavior swaps that JS must drive. */
+  util.isMobile = function () {
+    var raw = getComputedStyle(document.documentElement).getPropertyValue("--bp-mobile");
+    var bp = parseInt(raw, 10) || 600;
+    return window.matchMedia
+      ? window.matchMedia("(max-width: " + bp + "px)").matches
+      : window.innerWidth <= bp;
+  };
+
   /* Call handler when a pointerdown lands outside `el`. Returns a cleanup fn. */
   util.onClickOutside = function (el, handler) {
     function onDown(e) {
@@ -255,7 +268,7 @@
 
 /* ---- app-shell.js ---- */
 /* JLDS behavior — AppShell responsive drawer. Below the breakpoint (the shell's
- * data-mobile-breakpoint, default 880px) the .jl-appshell gets data-mobile and
+ * data-mobile-breakpoint, default 900px = --bp-tablet) the .jl-appshell gets data-mobile and
  * its sidebar becomes an overlay drawer: the .jl-appshell__menubtn toggles
  * data-open, the .jl-appshell__backdrop and Escape close it. Leaving mobile
  * closes the drawer. Emits jl-appshell:toggle. Requires core.js (or all.js). */
@@ -269,7 +282,7 @@
   function initAppShell(shell) {
     if (shell.__jlShell) return;
     shell.__jlShell = true;
-    var bp = parseInt(shell.getAttribute("data-mobile-breakpoint"), 10) || 880;
+    var bp = parseInt(shell.getAttribute("data-mobile-breakpoint"), 10) || 900;
     var mql = window.matchMedia ? window.matchMedia("(max-width: " + bp + "px)") : null;
 
     function isOpen() {

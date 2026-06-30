@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "sync-css": "node scripts/sync-css.mjs",
-    "docs:dev": "pnpm run sync-css && vitepress dev",
-    "docs:build": "pnpm run sync-css && vitepress build",
+    "gen-llms": "node scripts/gen-llms.mjs",
+    "docs:dev": "pnpm run sync-css && pnpm run gen-llms && vitepress dev",
+    "docs:build": "pnpm run sync-css && pnpm run gen-llms && vitepress build",
     "docs:preview": "vitepress preview"
   },
   "keywords": [],

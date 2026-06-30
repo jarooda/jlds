@@ -66,3 +66,8 @@
   background: var(--surface-sunken);
   border-left: 1px solid var(--border-subtle);
 }
+
+/* Responsive — Tier 1. On mobile: ≥44px control height + 16px text (stops iOS auto-zoom). */
+@media (max-width: 600px) {
+  .jl-number { --_h: var(--target-min); font-size: 16px; }
+}

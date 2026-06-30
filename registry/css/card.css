@@ -33,3 +33,10 @@
   border-top: 1px solid var(--border-subtle);
   background: var(--surface-sunken);
 }
+
+/* Responsive — Tier 1. Tighter padding tokens below mobile (--bp-mobile 600px). */
+@media (max-width: 600px) {
+  .jl-card__header { padding: var(--space-4) var(--space-5); }
+  .jl-card__body { padding: var(--space-5); }
+  .jl-card__footer { padding: var(--space-4) var(--space-5); }
+}

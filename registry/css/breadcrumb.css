@@ -62,3 +62,11 @@
 }
 .jl-breadcrumb__ellipsis:hover { color: var(--text-primary); background: var(--surface-hover); }
 .jl-breadcrumb__ellipsis svg { width: 18px; height: 18px; }
+
+/* Responsive — Tier 1. Below mobile (--bp-mobile 600px) the trail scrolls on one
+   line instead of wrapping; the JS ellipsis-collapse still applies on top. */
+@media (max-width: 600px) {
+  .jl-breadcrumb { overflow-x: auto; scrollbar-width: none; }
+  .jl-breadcrumb::-webkit-scrollbar { display: none; }
+  .jl-breadcrumb__list { flex-wrap: nowrap; }
+}

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /preview/
+
+Sitemap: https://jlds.jaluwibowo.id/sitemap.xml

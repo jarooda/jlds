@@ -28,3 +28,8 @@
 .jl-switch--sm .jl-switch__input:checked + .jl-switch__track .jl-switch__thumb { transform: translateX(14px); }
 .jl-switch__input:focus-visible + .jl-switch__track { box-shadow: var(--ring-focus); }
 .jl-switch__label { font-size: var(--text-base); color: var(--text-primary); }
+
+/* Responsive — Tier 1. The label wrapper clears a 44px touch target on coarse pointers. */
+@media (pointer: coarse) {
+  .jl-switch { min-height: var(--target-min); }
+}
