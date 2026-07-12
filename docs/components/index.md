@@ -21,9 +21,12 @@ small screens — for the details, see [Responsive & mobile](/guide/responsive):
 | [Avatar](/components/avatar) | ✅ | ✅ | ✅ | — | — |
 | [Badge](/components/badge) | ✅ | ✅ | ✅ | — | — |
 | [Banner](/components/banner) | ✅ | ✅ | ✅ | — | — |
+| [Bottom Nav](/components/bottom-nav) | ✅ | ✅ | ✅ | ✅ | ✅ |
 | [Breadcrumb](/components/breadcrumb) | ✅ | ✅ | ✅ | ✅ | — |
 | [Button](/components/button) | ✅ | ✅ | ✅ | ✅ | — |
 | [Card](/components/card) | ✅ | ✅ | ✅ | ✅ | — |
+| [Carousel](/components/carousel) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [Chart](/components/chart) | ✅ | ✅ | ✅ | ✅ | — |
 | [Checkbox](/components/checkbox) | ✅ | ✅ | ✅ | ✅ | — |
 | [Collapsible](/components/collapsible) | ✅ | ✅ | ✅ | — | — |
 | [Combobox](/components/combobox) | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -47,6 +50,7 @@ small screens — for the details, see [Responsive & mobile](/guide/responsive):
 | [Radio Group](/components/radio-group) | ✅ | ✅ | ✅ | ✅ | — |
 | [Rating](/components/rating) | ✅ | ✅ | ✅ | — | — |
 | [Resizable](/components/resizable) | ✅ | ✅ | ✅ | ✅ | — |
+| [Responsive Table](/components/responsive-table) | ✅ | ✅ | ✅ | ✅ | ✅ |
 | [Scroll Area](/components/scroll-area) | ✅ | ✅ | ✅ | — | — |
 | [Segmented Control](/components/segmented-control) | ✅ | ✅ | ✅ | ✅ | — |
 | [Select](/components/select) | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -57,6 +61,7 @@ small screens — for the details, see [Responsive & mobile](/guide/responsive):
 | [Spinner](/components/spinner) | ✅ | ✅ | ✅ | — | — |
 | [Stat](/components/stat) | ✅ | ✅ | ✅ | ✅ | — |
 | [Stepper](/components/stepper) | ✅ | ✅ | ✅ | ✅ | — |
+| [Swipe Row](/components/swipe-row) | ✅ | ✅ | ✅ | ✅ | ✅ |
 | [Switch](/components/switch) | ✅ | ✅ | ✅ | ✅ | — |
 | [Table](/components/table) | ✅ | ✅ | ✅ | ✅ | — |
 | [Tabs](/components/tabs) | ✅ | ✅ | ✅ | ✅ | — |
@@ -65,6 +70,7 @@ small screens — for the details, see [Responsive & mobile](/guide/responsive):
 | [Timeline](/components/timeline) | ✅ | ✅ | ✅ | — | — |
 | [Toast](/components/toast) | ✅ | ✅ | ✅ | — | — |
 | [Toggle](/components/toggle) | ✅ | ✅ | ✅ | — | — |
+| [Toolbar](/components/toolbar) | ✅ | ✅ | ✅ | ✅ | ✅ |
 | [Tooltip](/components/tooltip) | ✅ | ✅ | ✅ | ✅ | ✅ |
 | [Tree View](/components/tree-view) | ✅ | ✅ | ✅ | — | — |
 

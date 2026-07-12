@@ -1,0 +1,14 @@
+{
+  "name": "chart",
+  "description": "Dependency-free responsive SVG chart (area, line, or bar) with hover tooltips, for dashboards and trends.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["chart.tsx", "index.ts"],
+    "vue": ["Chart.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

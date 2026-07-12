@@ -9,9 +9,12 @@
 @import "./avatar.css";
 @import "./badge.css";
 @import "./banner.css";
+@import "./bottom-nav.css";
 @import "./breadcrumb.css";
 @import "./button.css";
 @import "./card.css";
+@import "./carousel.css";
+@import "./chart.css";
 @import "./checkbox.css";
 @import "./collapsible.css";
 @import "./combobox.css";
@@ -35,6 +38,7 @@
 @import "./radio-group.css";
 @import "./rating.css";
 @import "./resizable.css";
+@import "./responsive-table.css";
 @import "./scroll-area.css";
 @import "./segmented-control.css";
 @import "./select.css";
@@ -45,6 +49,7 @@
 @import "./spinner.css";
 @import "./stat.css";
 @import "./stepper.css";
+@import "./swipe-row.css";
 @import "./switch.css";
 @import "./table.css";
 @import "./tabs.css";
@@ -53,5 +58,6 @@
 @import "./timeline.css";
 @import "./toast.css";
 @import "./toggle.css";
+@import "./toolbar.css";
 @import "./tooltip.css";
 @import "./tree-view.css";

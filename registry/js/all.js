@@ -353,6 +353,46 @@
   });
 })();
 
+/* ---- bottom-nav.js ---- */
+/* JLDS behavior — BottomNav. Click a tab to make it current: sets aria-current="page"
+ * on the tapped .jl-bottomnav__item and clears its siblings. Emits jl-bottomnav:change
+ * with the item's data-id. Requires core.js (or the all.js bundle).
+ * Contract: .jl-bottomnav holds .jl-bottomnav__item buttons, each with a data-id. */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  function initBottomNav(nav) {
+    if (nav.__jlBottomNav) return;
+    nav.__jlBottomNav = true;
+
+    var items = Array.prototype.slice.call(nav.querySelectorAll(".jl-bottomnav__item"));
+    if (!items.length) return;
+
+    items.forEach(function (item) {
+      item.addEventListener("click", function () {
+        items.forEach(function (t) {
+          t.removeAttribute("aria-current");
+        });
+        item.setAttribute("aria-current", "page");
+        nav.dispatchEvent(
+          new CustomEvent("jl-bottomnav:change", {
+            detail: { id: item.getAttribute("data-id") },
+            bubbles: true,
+          })
+        );
+      });
+    });
+  }
+
+  register("bottom-nav", function (root) {
+    root.querySelectorAll(".jl-bottomnav").forEach(initBottomNav);
+  });
+})();
+
 /* ---- breadcrumb.js ---- */
 /* JLDS behavior — Breadcrumb collapse. Clicking .jl-breadcrumb__ellipsis reveals
  * the collapsed middle items (.jl-breadcrumb__collapsed, initially `hidden`) and
@@ -378,6 +418,415 @@
         if (item) item.hidden = true;
       });
     });
+  });
+})();
+
+/* ---- carousel.js ---- */
+/* JLDS behavior — Carousel. Turns a .jl-carousel with a .jl-carousel__track of slide
+ * children into a scroll-snap carousel: adaptive slides-per-view, generated arrows +
+ * page dots, native touch swipe. Requires core.js.
+ * Contract: .jl-carousel > .jl-carousel__track > (slides). Data attributes on the root:
+ *   data-per-view / data-per-view-sm / -md / -lg (numbers), data-gap (px),
+ *   data-arrows="false", data-dots="false". */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  function num(el, attr, dflt) {
+    var v = parseFloat(el.getAttribute(attr));
+    return isNaN(v) ? dflt : v;
+  }
+
+  function svg(d) {
+    return (
+      '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" ' +
+      'stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="' + d + '"/></svg>'
+    );
+  }
+
+  function initCarousel(root) {
+    if (root.__jlCarousel) return;
+    root.__jlCarousel = true;
+
+    var track = root.querySelector(".jl-carousel__track");
+    if (!track) return;
+    var slides = Array.prototype.slice.call(track.children);
+    slides.forEach(function (s) {
+      s.classList.add("jl-carousel__slide");
+    });
+
+    var gap = num(root, "data-gap", 16);
+    track.style.setProperty("--_gap", gap + "px");
+    var wantArrows = root.getAttribute("data-arrows") !== "false";
+    var wantDots = root.getAttribute("data-dots") !== "false";
+
+    function columns() {
+      var w = track.clientWidth;
+      var c = num(root, "data-per-view", 1);
+      if (w >= 600) c = num(root, "data-per-view-sm", c);
+      if (w >= 900) c = num(root, "data-per-view-md", c);
+      if (w >= 1200) c = num(root, "data-per-view-lg", c);
+      return Math.max(1, c);
+    }
+    function pages(cols) {
+      return Math.max(1, Math.ceil(slides.length / cols));
+    }
+
+    // Arrows
+    var prev, next;
+    if (wantArrows) {
+      prev = document.createElement("button");
+      prev.type = "button";
+      prev.className = "jl-carousel__arrow jl-carousel__arrow--prev";
+      prev.setAttribute("aria-label", "Previous");
+      prev.innerHTML = svg("m15 6-6 6 6 6");
+      next = document.createElement("button");
+      next.type = "button";
+      next.className = "jl-carousel__arrow jl-carousel__arrow--next";
+      next.setAttribute("aria-label", "Next");
+      next.innerHTML = svg("m9 6 6 6-6 6");
+      root.insertBefore(prev, track);
+      root.appendChild(next);
+      prev.addEventListener("click", function () {
+        step(-1);
+      });
+      next.addEventListener("click", function () {
+        step(1);
+      });
+    }
+
+    // Dots
+    var dotsWrap;
+    if (wantDots) {
+      dotsWrap = document.createElement("div");
+      dotsWrap.className = "jl-carousel__dots";
+      dotsWrap.setAttribute("role", "tablist");
+      dotsWrap.setAttribute("aria-label", "Slide");
+      root.appendChild(dotsWrap);
+    }
+
+    function apply() {
+      var cols = columns();
+      var basis =
+        cols === 1 ? "100%" : "calc((100% - " + gap * (cols - 1) + "px) / " + cols + ")";
+      track.style.setProperty("--_basis", basis);
+
+      var p = pages(cols);
+      if (dotsWrap) {
+        dotsWrap.style.display = p > 1 ? "" : "none";
+        if (dotsWrap.children.length !== p) {
+          dotsWrap.textContent = "";
+          for (var i = 0; i < p; i++) {
+            (function (idx) {
+              var dot = document.createElement("button");
+              dot.type = "button";
+              dot.className = "jl-carousel__dot";
+              dot.setAttribute("role", "tab");
+              dot.setAttribute("aria-label", "Go to slide " + (idx + 1));
+              dot.addEventListener("click", function () {
+                track.scrollTo({ left: (track.scrollWidth / p) * idx, behavior: "smooth" });
+              });
+              dotsWrap.appendChild(dot);
+            })(i);
+          }
+        }
+      }
+      if (prev || next) {
+        var many = slides.length > cols;
+        if (prev) prev.style.display = many ? "" : "none";
+        if (next) next.style.display = many ? "" : "none";
+      }
+      onScroll();
+    }
+
+    function step(dir) {
+      var cols = columns();
+      var slideW = (track.clientWidth - gap * (cols - 1)) / cols + gap;
+      track.scrollBy({ left: dir * slideW * cols, behavior: "smooth" });
+    }
+
+    function onScroll() {
+      var cols = columns();
+      var p = pages(cols);
+      var slideW = (track.clientWidth - gap * (cols - 1)) / cols + gap;
+      var idx = Math.round(track.scrollLeft / slideW);
+      var active = Math.min(p - 1, Math.max(0, Math.round(idx / cols)));
+      if (dotsWrap) {
+        Array.prototype.forEach.call(dotsWrap.children, function (d, i) {
+          if (i === active) d.setAttribute("aria-current", "true");
+          else d.removeAttribute("aria-current");
+        });
+      }
+      var atStart = track.scrollLeft <= 2;
+      var atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
+      if (prev) prev.disabled = atStart;
+      if (next) next.disabled = atEnd;
+    }
+
+    track.addEventListener("scroll", onScroll);
+
+    // Drag-to-scroll for mouse (touch scrolls natively).
+    var drag = null;
+    var suppressClick = false;
+    track.addEventListener("pointerdown", function (e) {
+      if (e.pointerType !== "mouse") return;
+      suppressClick = false;
+      drag = { x: e.clientX, scroll: track.scrollLeft, moved: false };
+      track.classList.add("jl-carousel__track--dragging");
+      if (track.setPointerCapture) track.setPointerCapture(e.pointerId);
+    });
+    track.addEventListener("pointermove", function (e) {
+      if (!drag) return;
+      var dx = e.clientX - drag.x;
+      if (Math.abs(dx) > 3) drag.moved = true;
+      track.scrollLeft = drag.scroll - dx;
+    });
+    function endDrag() {
+      if (!drag) return;
+      if (drag.moved) suppressClick = true;
+      track.classList.remove("jl-carousel__track--dragging");
+      drag = null;
+    }
+    track.addEventListener("pointerup", endDrag);
+    track.addEventListener("pointercancel", endDrag);
+    track.addEventListener(
+      "click",
+      function (e) {
+        if (suppressClick) {
+          e.preventDefault();
+          e.stopPropagation();
+          suppressClick = false;
+        }
+      },
+      true
+    );
+
+    if (typeof ResizeObserver !== "undefined") {
+      new ResizeObserver(apply).observe(track);
+    } else {
+      window.addEventListener("resize", apply);
+    }
+    apply();
+  }
+
+  register("carousel", function (root) {
+    root.querySelectorAll(".jl-carousel").forEach(initCarousel);
+  });
+})();
+
+/* ---- chart.js ---- */
+/* JLDS behavior — Chart. Builds a responsive area/line/bar SVG from data attributes and
+ * re-measures on resize; hover shows a value tooltip. Requires core.js.
+ * Contract: <div class="jl-chart" data-values="28,41,35" data-labels="Mon,Tue,Wed"
+ *   data-type="area|line|bar" data-height="200" data-grid="false" data-axis="false"
+ *   data-dots="true" data-suffix="k"></div>. Labels are optional (default 1..n). */
+(function () {
+  var NS = "http://www.w3.org/2000/svg";
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+  function el(name, attrs) {
+    var e = document.createElementNS(NS, name);
+    for (var k in attrs) if (attrs[k] != null) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+
+  function initChart(root) {
+    if (root.__jlChart) return;
+    root.__jlChart = true;
+
+    var values = (root.getAttribute("data-values") || "")
+      .split(",")
+      .map(function (s) {
+        return parseFloat(s.trim());
+      })
+      .filter(function (v) {
+        return !isNaN(v);
+      });
+    var labels = (root.getAttribute("data-labels") || "")
+      .split(",")
+      .map(function (s) {
+        return s.trim();
+      })
+      .filter(Boolean);
+    var points = values.map(function (v, i) {
+      return { label: labels[i] != null ? labels[i] : String(i + 1), value: v };
+    });
+
+    var type = root.getAttribute("data-type") || "area";
+    var height = parseInt(root.getAttribute("data-height"), 10) || 200;
+    var showGrid = root.getAttribute("data-grid") !== "false";
+    var showAxis = root.getAttribute("data-axis") !== "false";
+    var showDots = root.getAttribute("data-dots") === "true";
+    var suffix = root.getAttribute("data-suffix") || "";
+    var fmt = function (v) {
+      return v + suffix;
+    };
+
+    var svg = el("svg", { role: "img", "aria-label": "Chart", height: height });
+    root.appendChild(svg);
+    var tip = document.createElement("div");
+    tip.className = "jl-chart__tip";
+    tip.style.display = "none";
+    root.appendChild(tip);
+
+    function draw() {
+      var w = root.clientWidth || 560;
+      svg.setAttribute("viewBox", "0 0 " + w + " " + height);
+      svg.textContent = "";
+
+      var padL = showAxis ? 34 : 6,
+        padR = 6,
+        padT = 10,
+        padB = showAxis ? 22 : 6;
+      var innerW = Math.max(10, w - padL - padR);
+      var innerH = Math.max(10, height - padT - padB);
+      var vals = points.map(function (p) {
+        return p.value;
+      });
+      var maxV = Math.max.apply(null, [1].concat(vals));
+      var minV = Math.min.apply(null, [0].concat(vals));
+      var span = maxV - minV || 1;
+      var x = function (i) {
+        return padL + (points.length <= 1 ? innerW / 2 : (innerW * i) / (points.length - 1));
+      };
+      var y = function (v) {
+        return padT + innerH - ((v - minV) / span) * innerH;
+      };
+      var ticks = 3;
+      var grid = [];
+      for (var i = 0; i <= ticks; i++) {
+        grid.push({ v: minV + (span * i) / ticks, yy: padT + innerH - (innerH * i) / ticks });
+      }
+
+      if (showGrid) {
+        grid.forEach(function (g, i) {
+          svg.appendChild(
+            el("line", {
+              class: "jl-chart__grid",
+              x1: padL,
+              y1: g.yy,
+              x2: w - padR,
+              y2: g.yy,
+              opacity: i === 0 ? 1 : 0.6,
+            })
+          );
+        });
+      }
+      if (showAxis) {
+        grid.forEach(function (g) {
+          var t = el("text", { class: "jl-chart__axis", x: padL - 8, y: g.yy + 3, "text-anchor": "end" });
+          t.textContent = fmt(Math.round(g.v));
+          svg.appendChild(t);
+        });
+        points.forEach(function (p, i) {
+          if (!(points.length <= 8 || i % Math.ceil(points.length / 8) === 0)) return;
+          var tx = type === "bar" ? padL + (innerW * (i + 0.5)) / points.length : x(i);
+          var t = el("text", { class: "jl-chart__axis", x: tx, y: height - 6, "text-anchor": "middle" });
+          t.textContent = p.label;
+          svg.appendChild(t);
+        });
+      }
+
+      var geo = { x: x, y: y, padL: padL, padT: padT, innerW: innerW, innerH: innerH };
+
+      if (type === "bar") {
+        var bw = points.length ? Math.min(46, (innerW / points.length) * 0.62) : 10;
+        points.forEach(function (p, i) {
+          var bx = padL + (innerW * (i + 0.5)) / points.length - bw / 2;
+          svg.appendChild(
+            el("rect", {
+              class: "jl-chart__bar",
+              x: bx,
+              y: y(Math.max(0, p.value)),
+              width: bw,
+              height: Math.max(1, Math.abs(y(p.value) - y(0))),
+              rx: 4,
+            })
+          );
+        });
+      } else {
+        var d = points
+          .map(function (p, i) {
+            return (i === 0 ? "M" : "L") + x(i) + "," + y(p.value);
+          })
+          .join(" ");
+        if (type === "area") {
+          svg.appendChild(
+            el("path", {
+              class: "jl-chart__area",
+              d: d + " L" + x(points.length - 1) + "," + (padT + innerH) + " L" + x(0) + "," + (padT + innerH) + " Z",
+            })
+          );
+        }
+        svg.appendChild(el("path", { class: "jl-chart__line", d: d }));
+        if (showDots) {
+          points.forEach(function (p, i) {
+            svg.appendChild(el("circle", { class: "jl-chart__dot", cx: x(i), cy: y(p.value), r: 3.5 }));
+          });
+        }
+      }
+      root.__jlChartGeo = geo;
+    }
+
+    var cursor, hoverDot;
+    function onMove(e) {
+      var geo = root.__jlChartGeo;
+      if (!geo || !points.length) return;
+      var rect = root.getBoundingClientRect();
+      var px = e.clientX - rect.left;
+      var i;
+      if (type === "bar") i = Math.floor(((px - geo.padL) / geo.innerW) * points.length);
+      else i = Math.round(((px - geo.padL) / geo.innerW) * (points.length - 1));
+      i = Math.max(0, Math.min(points.length - 1, i));
+      var p = points[i];
+      if (!p) return;
+      var hx = geo.x(i);
+      var hy = type === "bar" ? geo.y(Math.max(0, p.value)) : geo.y(p.value);
+      if (!cursor) {
+        cursor = el("line", { class: "jl-chart__cursor" });
+        svg.insertBefore(cursor, svg.firstChild);
+      }
+      cursor.setAttribute("x1", hx);
+      cursor.setAttribute("y1", geo.padT);
+      cursor.setAttribute("x2", hx);
+      cursor.setAttribute("y2", geo.padT + geo.innerH);
+      cursor.style.display = "";
+      if (type === "bar") {
+        Array.prototype.forEach.call(svg.querySelectorAll(".jl-chart__bar"), function (b, bi) {
+          b.setAttribute("opacity", bi === i ? 1 : 0.55);
+        });
+      }
+      tip.innerHTML = p.label + " · <b>" + fmt(p.value) + "</b>";
+      tip.style.left = hx + "px";
+      tip.style.top = hy - 8 + "px";
+      tip.style.display = "";
+    }
+    function onLeave() {
+      tip.style.display = "none";
+      if (cursor) cursor.style.display = "none";
+      Array.prototype.forEach.call(svg.querySelectorAll(".jl-chart__bar"), function (b) {
+        b.setAttribute("opacity", 1);
+      });
+    }
+    root.addEventListener("mousemove", onMove);
+    root.addEventListener("mouseleave", onLeave);
+
+    if (typeof ResizeObserver !== "undefined") {
+      new ResizeObserver(draw).observe(root);
+    } else {
+      window.addEventListener("resize", draw);
+    }
+    draw();
+  }
+
+  register("chart", function (root) {
+    root.querySelectorAll(".jl-chart").forEach(initChart);
   });
 })();
 
@@ -1451,6 +1900,111 @@
   });
 })();
 
+/* ---- responsive-table.js ---- */
+/* JLDS behavior — ResponsiveTable. Below the container breakpoint, hides the real
+ * .jl-rtable__table and renders a stacked key/value card list built from the table's
+ * own headers + cells; above it, shows the table. Requires core.js.
+ * Contract: .jl-rtable[data-breakpoint="560"] > table.jl-rtable__table with a thead of
+ * <th> (add class jl-rtable--num for numeric, data-primary for the card title, and
+ * data-hide-on-stack to omit a column from the cards). Optional data-clickable on the
+ * root makes rows/cards emit jl-rtable:rowclick with the row index. */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  function initRTable(root) {
+    if (root.__jlRTable) return;
+    root.__jlRTable = true;
+
+    var table = root.querySelector(".jl-rtable__table");
+    if (!table) return;
+    var bp = parseInt(root.getAttribute("data-breakpoint"), 10) || 560;
+    var clickable = root.getAttribute("data-clickable") != null;
+
+    var ths = Array.prototype.slice.call(table.querySelectorAll("thead th"));
+    var cols = ths.map(function (th) {
+      return {
+        header: th.textContent.trim(),
+        numeric: th.classList.contains("jl-rtable--num"),
+        primary: th.hasAttribute("data-primary"),
+        hideOnStack: th.hasAttribute("data-hide-on-stack"),
+      };
+    });
+    var primaryIdx = cols.findIndex(function (c) {
+      return c.primary;
+    });
+    if (primaryIdx < 0) primaryIdx = 0;
+
+    // Build the cards view once from the table body.
+    var cards = document.createElement("div");
+    cards.className = "jl-rtable__cards";
+    cards.hidden = true;
+    var bodyRows = Array.prototype.slice.call(table.querySelectorAll("tbody tr"));
+    bodyRows.forEach(function (tr, rowIdx) {
+      var tds = Array.prototype.slice.call(tr.children);
+      var card = document.createElement("div");
+      card.className = "jl-rtable__card" + (clickable ? " jl-rtable__card--clickable" : "");
+      var primary = document.createElement("div");
+      primary.className = "jl-rtable__card-primary";
+      primary.innerHTML = tds[primaryIdx] ? tds[primaryIdx].innerHTML : "";
+      card.appendChild(primary);
+      cols.forEach(function (c, i) {
+        if (i === primaryIdx || c.hideOnStack) return;
+        var pair = document.createElement("div");
+        pair.className = "jl-rtable__pair";
+        var k = document.createElement("span");
+        k.className = "jl-rtable__k";
+        k.textContent = c.header;
+        var v = document.createElement("span");
+        v.className = "jl-rtable__v" + (c.numeric ? " jl-rtable__v--num" : "");
+        v.innerHTML = tds[i] ? tds[i].innerHTML : "";
+        pair.appendChild(k);
+        pair.appendChild(v);
+        card.appendChild(pair);
+      });
+      if (clickable) {
+        card.addEventListener("click", function () {
+          root.dispatchEvent(
+            new CustomEvent("jl-rtable:rowclick", { detail: { index: rowIdx }, bubbles: true })
+          );
+        });
+      }
+      cards.appendChild(card);
+    });
+    root.appendChild(cards);
+
+    if (clickable) {
+      bodyRows.forEach(function (tr, rowIdx) {
+        tr.classList.add("jl-rtable__row--clickable");
+        tr.addEventListener("click", function () {
+          root.dispatchEvent(
+            new CustomEvent("jl-rtable:rowclick", { detail: { index: rowIdx }, bubbles: true })
+          );
+        });
+      });
+    }
+
+    function apply() {
+      var stacked = (root.clientWidth || 9999) < bp;
+      table.hidden = stacked;
+      cards.hidden = !stacked;
+    }
+    if (typeof ResizeObserver !== "undefined") {
+      new ResizeObserver(apply).observe(root);
+    } else {
+      window.addEventListener("resize", apply);
+    }
+    apply();
+  }
+
+  register("responsive-table", function (root) {
+    root.querySelectorAll(".jl-rtable").forEach(initRTable);
+  });
+})();
+
 /* ---- scroll-area.js ---- */
 /* JLDS behavior — ScrollArea fade masks. For a .jl-scrollarea[data-fade] the
  * viewport's scroll position toggles data-fade-top / data-fade-bottom on the
@@ -1738,6 +2292,105 @@
   register("snippet", function (root) {
     wire(root, ".jl-snippet__copy", ".jl-snippet", ".jl-snippet__code", "jl-snippet__copy--done");
     wire(root, ".jl-codeblock__copy", ".jl-codeblock", "code", "jl-codeblock__copy--done");
+  });
+})();
+
+/* ---- swipe-row.js ---- */
+/* JLDS behavior — SwipeRow. Reveals the trailing .jl-swiperow__actions by dragging the
+ * .jl-swiperow__panel left on touch, or by hovering on fine-pointer devices. Tapping an
+ * action (or releasing below the threshold) snaps the row closed. Requires core.js.
+ * Contract: .jl-swiperow > .jl-swiperow__actions (buttons) + .jl-swiperow__panel.
+ * Optional data-threshold (px) overrides the 40%-of-actions-width latch point. */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  function initSwipeRow(row) {
+    if (row.__jlSwipeRow) return;
+    row.__jlSwipeRow = true;
+
+    var actions = row.querySelector(".jl-swiperow__actions");
+    var panel = row.querySelector(".jl-swiperow__panel");
+    if (!actions || !panel) return;
+
+    var offset = 0;
+    var drag = null;
+    var fine = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+    function actWidth() {
+      return actions.offsetWidth;
+    }
+    function apply(animate) {
+      panel.classList.toggle("jl-swiperow__panel--animate", !!animate);
+      panel.style.transform = "translateX(" + offset + "px)";
+      row.classList.toggle("jl-swiperow--open", offset < -2);
+    }
+    function open() {
+      offset = -actWidth();
+      apply(true);
+    }
+    function close() {
+      offset = 0;
+      apply(true);
+    }
+
+    if (fine) {
+      row.addEventListener("mouseenter", function () {
+        if (!drag) open();
+      });
+      row.addEventListener("mouseleave", function () {
+        if (!drag) close();
+      });
+    }
+
+    panel.addEventListener("pointerdown", function (e) {
+      if (e.pointerType === "mouse") return;
+      drag = { x: e.clientX, base: offset, moved: false };
+      panel.classList.remove("jl-swiperow__panel--animate");
+    });
+    panel.addEventListener("pointermove", function (e) {
+      if (!drag) return;
+      var dx = e.clientX - drag.x;
+      if (Math.abs(dx) > 4) drag.moved = true;
+      var next = drag.base + dx;
+      next = Math.max(-actWidth() - 24, Math.min(0, next));
+      if (next > 0) next = 0;
+      offset = next;
+      apply(false);
+    });
+    function up() {
+      if (!drag) return;
+      var attr = parseInt(row.getAttribute("data-threshold"), 10);
+      var t = isNaN(attr) ? actWidth() * 0.4 : attr;
+      if (-offset > t) open();
+      else close();
+      drag = null;
+    }
+    panel.addEventListener("pointerup", up);
+    panel.addEventListener("pointercancel", up);
+    panel.addEventListener(
+      "click",
+      function (e) {
+        if (drag && drag.moved) {
+          e.stopPropagation();
+          e.preventDefault();
+        }
+      },
+      true
+    );
+
+    actions.querySelectorAll(".jl-swiperow__action").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        close();
+      });
+    });
+  }
+
+  register("swipe-row", function (root) {
+    root.querySelectorAll(".jl-swiperow").forEach(initSwipeRow);
   });
 })();
 
@@ -2176,6 +2829,146 @@
   register("toggle", function (root) {
     root.querySelectorAll(".jl-toggle-group").forEach(initGroup);
     root.querySelectorAll(".jl-toggle").forEach(initStandalone);
+  });
+})();
+
+/* ---- toolbar.js ---- */
+/* JLDS behavior — Toolbar. Measures the .jl-toolbar and folds trailing .jl-toolbar__btn
+ * items that don't fit into a generated "More" menu; re-runs on resize. Overflow menu
+ * items proxy their click to the original (hidden) button. Requires core.js.
+ * Contract: .jl-toolbar holds .jl-toolbar__btn buttons and .jl-toolbar__sep rules, in
+ * priority order (first survive longest). Optional data-more-label on the toolbar. */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  function initToolbar(bar) {
+    if (bar.__jlToolbar) return;
+    bar.__jlToolbar = true;
+
+    var moreLabel = bar.getAttribute("data-more-label") || "More";
+    var items = Array.prototype.slice
+      .call(bar.children)
+      .filter(function (el) {
+        return el.classList.contains("jl-toolbar__btn") || el.classList.contains("jl-toolbar__sep");
+      });
+    if (!items.length) return;
+
+    // Natural widths, measured once while everything is visible.
+    var widths = items.map(function (el) {
+      return el.getBoundingClientRect().width + 4;
+    });
+    var isSep = items.map(function (el) {
+      return el.classList.contains("jl-toolbar__sep");
+    });
+
+    // Build the More control.
+    var more = document.createElement("div");
+    more.className = "jl-toolbar__more";
+    more.style.marginLeft = "auto";
+    var moreBtn = document.createElement("button");
+    moreBtn.type = "button";
+    moreBtn.className = "jl-toolbar__btn jl-toolbar__btn--icon";
+    moreBtn.setAttribute("aria-label", moreLabel);
+    moreBtn.setAttribute("aria-haspopup", "menu");
+    moreBtn.setAttribute("aria-expanded", "false");
+    moreBtn.title = moreLabel;
+    moreBtn.innerHTML =
+      '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">' +
+      '<circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>';
+    var menu = document.createElement("div");
+    menu.className = "jl-toolbar__menu";
+    menu.setAttribute("role", "menu");
+    menu.hidden = true;
+    more.appendChild(moreBtn);
+    more.appendChild(menu);
+    bar.appendChild(more);
+
+    var open = false;
+    function setOpen(o) {
+      open = o;
+      menu.hidden = !o;
+      moreBtn.setAttribute("aria-expanded", o ? "true" : "false");
+    }
+    moreBtn.addEventListener("click", function () {
+      setOpen(!open);
+    });
+    document.addEventListener("mousedown", function (e) {
+      if (open && !bar.contains(e.target)) setOpen(false);
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && open) setOpen(false);
+    });
+
+    function measure() {
+      var avail = bar.clientWidth - 8;
+      var total = widths.reduce(function (a, b) {
+        return a + b;
+      }, 0);
+      var n;
+      if (total <= avail) {
+        n = items.length;
+      } else {
+        var moreW = 44;
+        var used = moreW;
+        n = 0;
+        for (var i = 0; i < widths.length; i++) {
+          used += widths[i];
+          if (used > avail) break;
+          n++;
+        }
+        while (n > 0 && isSep[n - 1]) n--;
+      }
+
+      // Show first n, hide the rest; rebuild the overflow menu.
+      menu.textContent = "";
+      var overflow = 0;
+      items.forEach(function (el, i) {
+        if (i < n) {
+          el.hidden = false;
+        } else {
+          el.hidden = true;
+          if (isSep[i]) return;
+          overflow++;
+          var mi = document.createElement("button");
+          mi.type = "button";
+          mi.className = "jl-toolbar__mitem";
+          mi.setAttribute("role", "menuitem");
+          if (el.disabled) mi.disabled = true;
+          if (el.getAttribute("aria-pressed") === "true") mi.setAttribute("aria-pressed", "true");
+          mi.innerHTML = el.innerHTML;
+          if (!el.querySelector("span")) {
+            // icon-only button: label from aria-label/title
+            var lbl = document.createElement("span");
+            lbl.textContent = el.getAttribute("aria-label") || el.title || "";
+            mi.appendChild(lbl);
+          }
+          mi.addEventListener("click", function () {
+            setOpen(false);
+            el.click();
+          });
+          menu.appendChild(mi);
+        }
+      });
+      more.hidden = overflow === 0;
+    }
+
+    if (typeof ResizeObserver !== "undefined") {
+      var ro = new ResizeObserver(function () {
+        measure();
+      });
+      ro.observe(bar);
+    } else {
+      window.addEventListener("resize", measure);
+    }
+    measure();
+  }
+
+  register("toolbar", function (root) {
+    root.querySelectorAll(".jl-toolbar").forEach(initToolbar);
   });
 })();
 

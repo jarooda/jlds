@@ -1,0 +1,14 @@
+{
+  "name": "carousel",
+  "description": "Scroll-snap track with adaptive slides-per-view, native swipe, page dots, and desktop arrows.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["carousel.tsx", "index.ts"],
+    "vue": ["Carousel.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}
