@@ -1,3 +1,7 @@
+![npm](https://img.shields.io/npm/v/@jarooda/jlds.svg)
+![npm](https://img.shields.io/npm/dt/@jarooda/jlds.svg)
+![License](https://img.shields.io/npm/l/@jarooda/jlds.svg)
+
 # JLDS
 
 JLDS is a design system and component CLI. Instead of installing components as a package dependency, `jlds` downloads component source code directly into your project — you own it, read it, and customize it freely.
