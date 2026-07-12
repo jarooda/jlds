@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>File explorer · JLDS</title>
+    <!--
+      A JLDS example composed entirely from .jl-* classes — no framework, no build.
+      Swap the local /css and /js links below for the jsDelivr CDN in your own page:
+        https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/css/index.css
+        https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/all.js
+    -->
+    <link rel="stylesheet" href="/css/index.css" />
+    <link rel="stylesheet" href="/css/breadcrumb.css" />
+    <link rel="stylesheet" href="/css/toolbar.css" />
+    <link rel="stylesheet" href="/css/toggle.css" />
+    <link rel="stylesheet" href="/css/resizable.css" />
+    <link rel="stylesheet" href="/css/tree-view.css" />
+    <link rel="stylesheet" href="/css/snippet.css" />
+    <style>
+      body { margin: 0; }
+      .fe { height: var(--fe-h, 640px); background: var(--surface-card); display: flex; flex-direction: column; }
+      .fe-bar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-2) var(--space-4); border-bottom: 1px solid var(--border-subtle); flex-wrap: wrap; }
+      .fe-bar__right { display: flex; align-items: center; gap: var(--space-3); }
+      .toggle-group { display: inline-flex; gap: 6px; }
+
+      .fe-frame { flex: 1; min-height: 0; }
+      .fe-frame .jl-resizable { height: 100%; }
+      .fe-pane { height: 100%; box-sizing: border-box; overflow: auto; }
+      .fe-pane--tree { padding: var(--space-3); background: var(--surface-muted); }
+      .fe-pane--editor { padding: var(--space-4); }
+      .fe-editor-title { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text-tertiary); margin: 0 0 var(--space-3); }
+    </style>
+  </head>
+  <body>
+    <div class="fe">
+      <div class="fe-bar">
+        <nav class="jl-breadcrumb" aria-label="Breadcrumb">
+          <ol class="jl-breadcrumb__list">
+            <li class="jl-breadcrumb__item"><a class="jl-breadcrumb__link" href="#">jlds</a><span class="jl-breadcrumb__sep" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg></span></li>
+            <li class="jl-breadcrumb__item"><a class="jl-breadcrumb__link" href="#">src</a><span class="jl-breadcrumb__sep" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg></span></li>
+            <li class="jl-breadcrumb__item"><span class="jl-breadcrumb__current" aria-current="page">index.ts</span></li>
+          </ol>
+        </nav>
+        <div class="fe-bar__right">
+          <div class="toggle-group" role="group" aria-label="Editor options">
+            <button type="button" class="jl-toggle jl-toggle--sm" aria-pressed="true">Wrap</button>
+            <button type="button" class="jl-toggle jl-toggle--sm" aria-pressed="false">Minimap</button>
+          </div>
+          <div class="jl-toolbar" role="toolbar" data-more-label="More">
+            <button type="button" class="jl-toolbar__btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg><span>New file</span></button>
+            <button type="button" class="jl-toolbar__btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></svg><span>Search</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="fe-frame">
+        <div class="jl-resizable jl-resizable--horizontal">
+          <!-- Tree -->
+          <div class="jl-resizable__panel fe-pane fe-pane--tree" style="flex: 0 0 34%" data-min-size="18">
+            <ul class="jl-tree jl-tree--guides" role="tree">
+              <li class="jl-tree__li" role="none">
+                <div class="jl-tree__row" role="treeitem" data-id="src" data-expanded="true" aria-expanded="true" aria-selected="false" tabindex="0">
+                  <span class="jl-tree__twist"><svg viewBox="0 0 24 24" fill="none"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  <span class="jl-tree__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="1.7"/></svg></span>
+                  <span class="jl-tree__label">src</span>
+                </div>
+                <ul class="jl-tree__group" role="group">
+                  <li class="jl-tree__li" role="none">
+                    <div class="jl-tree__row" role="treeitem" data-id="components" data-expanded="true" aria-expanded="true" aria-selected="false" tabindex="-1">
+                      <span class="jl-tree__twist"><svg viewBox="0 0 24 24" fill="none"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                      <span class="jl-tree__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="1.7"/></svg></span>
+                      <span class="jl-tree__label">components</span>
+                    </div>
+                    <ul class="jl-tree__group" role="group">
+                      <li class="jl-tree__li" role="none">
+                        <div class="jl-tree__row" role="treeitem" data-id="button" aria-selected="false" tabindex="-1">
+                          <span class="jl-tree__twist jl-tree__twist--leaf"><svg viewBox="0 0 24 24" fill="none"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></span>
+                          <span class="jl-tree__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3h8l4 4v14H6z" stroke="currentColor" stroke-width="1.7"/></svg></span>
+                          <span class="jl-tree__label">Button.tsx</span>
+                        </div>
+                      </li>
+                      <li class="jl-tree__li" role="none">
+                        <div class="jl-tree__row" role="treeitem" data-id="card" aria-selected="false" tabindex="-1">
+                          <span class="jl-tree__twist jl-tree__twist--leaf"><svg viewBox="0 0 24 24" fill="none"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></span>
+                          <span class="jl-tree__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3h8l4 4v14H6z" stroke="currentColor" stroke-width="1.7"/></svg></span>
+                          <span class="jl-tree__label">Card.tsx</span>
+                        </div>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="jl-tree__li" role="none">
+                    <div class="jl-tree__row" role="treeitem" data-id="index" data-selected="true" aria-selected="true" tabindex="-1">
+                      <span class="jl-tree__twist jl-tree__twist--leaf"><svg viewBox="0 0 24 24" fill="none"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></span>
+                      <span class="jl-tree__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3h8l4 4v14H6z" stroke="currentColor" stroke-width="1.7"/></svg></span>
+                      <span class="jl-tree__label">index.ts</span>
+                      <span class="jl-tree__trail">2 kB</span>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+              <li class="jl-tree__li" role="none">
+                <div class="jl-tree__row" role="treeitem" data-id="readme" aria-selected="false" tabindex="-1">
+                  <span class="jl-tree__twist jl-tree__twist--leaf"><svg viewBox="0 0 24 24" fill="none"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2"/></svg></span>
+                  <span class="jl-tree__icon"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3h8l4 4v14H6z" stroke="currentColor" stroke-width="1.7"/></svg></span>
+                  <span class="jl-tree__label">README.md</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="jl-resizable__handle" role="separator" tabindex="0" aria-orientation="vertical" aria-valuenow="34">
+            <span class="jl-resizable__grip"><span></span><span></span><span></span></span>
+          </div>
+
+          <!-- Editor -->
+          <div class="jl-resizable__panel fe-pane fe-pane--editor" style="flex: 0 0 66%" data-min-size="30">
+            <p class="fe-editor-title">src / index.ts</p>
+            <div class="jl-codeblock">
+              <div class="jl-codeblock__bar">
+                <span class="jl-codeblock__title">index.ts</span>
+                <span class="jl-codeblock__lang">ts</span>
+                <button type="button" class="jl-codeblock__copy"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.4" /><path d="M3.5 10.5A1.5 1.5 0 0 1 2.5 9V3.5A1.5 1.5 0 0 1 4 2h5a1.5 1.5 0 0 1 1.5 1.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" /></svg>Copy</button>
+              </div>
+              <div class="jl-codeblock__scroll"><pre><code><span class="jl-codeblock__row">export { Button } from "./components/button"
+</span><span class="jl-codeblock__row">export { Card } from "./components/card"
+</span><span class="jl-codeblock__row">export type { ButtonProps } from "./components/button"
+</span><span class="jl-codeblock__row">
+</span><span class="jl-codeblock__row">export const version = "3.0.0"</span></code></pre></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+    <script>
+      // Runs after resize.js. Full-screen (top-level tab): fill the viewport like
+      // a real editor. In the docs preview iframe, keep the fixed height so the
+      // resizable panes have a defined height to divide.
+      if (window.self === window.top) {
+        document.documentElement.style.setProperty("--fe-h", "100dvh");
+        document.documentElement.style.overflow = "hidden";
+        document.body.style.overflow = "hidden";
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Data table · JLDS</title>
+    <!--
+      A JLDS template composed entirely from .jl-* classes — no framework, no build.
+      Swap the local /css and /js links below for the jsDelivr CDN in your own page:
+        https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/css/index.css
+        https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/all.js
+    -->
+    <link rel="stylesheet" href="/css/index.css" />
+    <link rel="stylesheet" href="/css/button.css" />
+    <link rel="stylesheet" href="/css/input.css" />
+    <link rel="stylesheet" href="/css/segmented-control.css" />
+    <link rel="stylesheet" href="/css/toolbar.css" />
+    <link rel="stylesheet" href="/css/card.css" />
+    <link rel="stylesheet" href="/css/responsive-table.css" />
+    <link rel="stylesheet" href="/css/badge.css" />
+    <link rel="stylesheet" href="/css/tag.css" />
+    <link rel="stylesheet" href="/css/pagination.css" />
+    <style>
+      body { margin: 0; }
+      .dt { min-height: var(--dt-h, 660px); background: var(--surface-sunken); padding: var(--space-6); }
+      .dt-wrap { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: var(--space-5); }
+
+      .dt-title-row { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
+      .dt-title { margin: 0; font-family: var(--font-display); font-size: var(--text-2xl); font-weight: var(--weight-semibold); color: var(--text-primary); letter-spacing: -0.01em; }
+      .dt-subtitle { margin: 4px 0 0; font-size: var(--text-sm); color: var(--text-secondary); }
+
+      .dt-controls { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+      .dt-search { flex: 1; min-width: 200px; }
+      .dt-controls-spacer { flex: 1; }
+
+      .dt-card { padding: 0; overflow: hidden; }
+      .dt-card .jl-rtable { --_pad: var(--space-4); }
+      .cell-name { font-weight: var(--weight-medium); color: var(--text-primary); }
+
+      .dt-foot { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-top: 1px solid var(--border-subtle); flex-wrap: wrap; }
+      .dt-foot__count { font-size: var(--text-xs); color: var(--text-tertiary); }
+      .dt-foot .jl-pagination { margin-left: auto; }
+
+      @media (max-width: 560px) {
+        .dt-search { min-width: 0; width: 100%; }
+        .dt-title-actions { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dt">
+      <div class="dt-wrap">
+        <!-- Title -->
+        <div class="dt-title-row">
+          <div>
+            <h1 class="dt-title">Projects</h1>
+            <p class="dt-subtitle">Every deployment across your team, in one place.</p>
+          </div>
+          <div class="dt-title-actions">
+            <button class="jl-btn jl-btn--primary jl-btn--md">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+              New project
+            </button>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="dt-controls">
+          <div class="dt-search jl-input-wrap jl-input-wrap--md">
+            <span class="jl-input-adorn" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></svg></span>
+            <input class="jl-input" type="search" placeholder="Search projects…" aria-label="Search projects" />
+          </div>
+          <div class="jl-segmented" role="radiogroup" aria-label="Filter by status">
+            <span class="jl-segmented__thumb" aria-hidden="true"></span>
+            <button type="button" role="radio" class="jl-segmented__option" data-value="all" aria-checked="true">All</button>
+            <button type="button" role="radio" class="jl-segmented__option" data-value="active" aria-checked="false">Active</button>
+            <button type="button" role="radio" class="jl-segmented__option" data-value="archived" aria-checked="false">Archived</button>
+          </div>
+          <div class="jl-toolbar" role="toolbar" data-more-label="More">
+            <button type="button" class="jl-toolbar__btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-7 8v6l-4-2v-4Z"/></svg><span>Filter</span></button>
+            <button type="button" class="jl-toolbar__btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg><span>Sort</span></button>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="jl-card jl-card--flat dt-card">
+          <div class="jl-rtable" data-breakpoint="620">
+            <table class="jl-rtable__table">
+              <thead>
+                <tr>
+                  <th data-primary>Project</th>
+                  <th>Environment</th>
+                  <th>Labels</th>
+                  <th>Status</th>
+                  <th class="jl-rtable--num">Build</th>
+                  <th style="text-align:right">Updated</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="cell-name">acme-web</span></td>
+                  <td>Production</td>
+                  <td><span class="jl-tag">web</span></td>
+                  <td><span class="jl-badge jl-badge--success"><span class="jl-badge__dot"></span>Live</span></td>
+                  <td class="jl-rtable--num">#1843</td>
+                  <td style="text-align:right">4m ago</td>
+                </tr>
+                <tr>
+                  <td><span class="cell-name">docs-site</span></td>
+                  <td>Preview</td>
+                  <td><span class="jl-tag">docs</span></td>
+                  <td><span class="jl-badge jl-badge--info"><span class="jl-badge__dot"></span>Building</span></td>
+                  <td class="jl-rtable--num">#221</td>
+                  <td style="text-align:right">1h ago</td>
+                </tr>
+                <tr>
+                  <td><span class="cell-name">edge-api</span></td>
+                  <td>Production</td>
+                  <td><span class="jl-tag">api</span></td>
+                  <td><span class="jl-badge jl-badge--success"><span class="jl-badge__dot"></span>Live</span></td>
+                  <td class="jl-rtable--num">#905</td>
+                  <td style="text-align:right">3h ago</td>
+                </tr>
+                <tr>
+                  <td><span class="cell-name">design-tokens</span></td>
+                  <td>Library</td>
+                  <td><span class="jl-tag">shared</span></td>
+                  <td><span class="jl-badge jl-badge--neutral"><span class="jl-badge__dot"></span>Paused</span></td>
+                  <td class="jl-rtable--num">v2.4.0</td>
+                  <td style="text-align:right">1d ago</td>
+                </tr>
+                <tr>
+                  <td><span class="cell-name">billing-worker</span></td>
+                  <td>Production</td>
+                  <td><span class="jl-tag">jobs</span></td>
+                  <td><span class="jl-badge jl-badge--warning"><span class="jl-badge__dot"></span>Degraded</span></td>
+                  <td class="jl-rtable--num">#77</td>
+                  <td style="text-align:right">2d ago</td>
+                </tr>
+                <tr>
+                  <td><span class="cell-name">legacy-import</span></td>
+                  <td>Archived</td>
+                  <td><span class="jl-tag">etl</span></td>
+                  <td><span class="jl-badge jl-badge--danger"><span class="jl-badge__dot"></span>Failed</span></td>
+                  <td class="jl-rtable--num">#12</td>
+                  <td style="text-align:right">6d ago</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="dt-foot">
+            <span class="dt-foot__count">Showing 6 of 48 projects</span>
+            <nav class="jl-pagination" aria-label="Pagination">
+              <div class="jl-pagination__list">
+                <button class="jl-page jl-page--arrow" aria-label="Previous page"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 6-6 6 6 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg></button>
+                <button class="jl-page" aria-current="page" aria-label="Page 1">1</button>
+                <button class="jl-page" aria-label="Page 2">2</button>
+                <button class="jl-page" aria-label="Page 3">3</button>
+                <button class="jl-page" aria-label="Page 4">4</button>
+                <button class="jl-page jl-page--arrow" aria-label="Next page"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg></button>
+              </div>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+    <script>
+      // Runs after resize.js. Inside the docs preview iframe, resize.js sizes the
+      // frame to content and hides overflow — leave that. Opened directly
+      // (top-level tab): fill the viewport and restore normal page scrolling,
+      // which resize.js would otherwise have locked.
+      if (window.self === window.top) {
+        document.documentElement.style.setProperty("--dt-h", "100dvh");
+        document.documentElement.style.overflow = "auto";
+        document.body.style.overflow = "auto";
+      }
+    </script>
+  </body>
+</html>
