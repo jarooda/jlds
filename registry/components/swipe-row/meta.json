@@ -1,0 +1,14 @@
+{
+  "name": "swipe-row",
+  "description": "List row with trailing actions — swipe left on touch, or hover on desktop to reveal.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["swipe-row.tsx", "index.ts"],
+    "vue": ["SwipeRow.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

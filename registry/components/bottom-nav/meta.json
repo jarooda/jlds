@@ -1,0 +1,14 @@
+{
+  "name": "bottom-nav",
+  "description": "Fixed mobile tab bar — the phone counterpart to Sidebar. Safe-area aware, 3–5 destinations, count badges.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["bottom-nav.tsx", "index.ts"],
+    "vue": ["BottomNav.vue", "index.ts"]
+  },
+  "registryDependencies": []
+}

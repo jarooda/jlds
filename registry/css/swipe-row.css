@@ -1,0 +1,61 @@
+.jl-swiperow {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface-card);
+  border-radius: var(--radius-lg, 12px);
+  touch-action: pan-y;
+}
+.jl-swiperow__actions {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: stretch;
+}
+.jl-swiperow__action {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border: none;
+  cursor: pointer;
+  padding: 0 18px;
+  min-width: 76px;
+  color: #fff;
+  font: inherit;
+  font-size: var(--text-2xs, 11px);
+  font-weight: var(--weight-semibold, 600);
+}
+.jl-swiperow__action[data-tone="neutral"] {
+  background: var(--surface-active);
+  color: var(--text-primary);
+}
+.jl-swiperow__action[data-tone="accent"] {
+  background: var(--accent);
+}
+.jl-swiperow__action[data-tone="danger"] {
+  background: var(--danger, #dc2626);
+}
+.jl-swiperow__action[data-tone="warning"] {
+  background: var(--warning, #d97706);
+}
+.jl-swiperow__action:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -4px;
+}
+.jl-swiperow__panel {
+  position: relative;
+  z-index: 1;
+  background: var(--surface-card);
+  will-change: transform;
+}
+.jl-swiperow__panel--animate {
+  transition: transform var(--duration-base, 200ms) var(--ease-emphasized, cubic-bezier(0.2, 0, 0, 1));
+}
+@media (prefers-reduced-motion: reduce) {
+  .jl-swiperow__panel--animate {
+    transition: none;
+  }
+}

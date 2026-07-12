@@ -1,0 +1,64 @@
+.jl-chart {
+  position: relative;
+  width: 100%;
+  font-family: var(--font-sans);
+}
+.jl-chart svg {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+.jl-chart__grid {
+  stroke: var(--border-subtle);
+  stroke-width: 1;
+}
+.jl-chart__axis {
+  fill: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+.jl-chart__line {
+  fill: none;
+  stroke: var(--_c, var(--accent));
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.jl-chart__area {
+  fill: var(--_c, var(--accent));
+  opacity: 0.12;
+}
+.jl-chart__bar {
+  fill: var(--_c, var(--accent));
+}
+.jl-chart__bar--muted {
+  fill: var(--surface-active);
+}
+.jl-chart__dot {
+  fill: var(--surface-card);
+  stroke: var(--_c, var(--accent));
+  stroke-width: 2;
+}
+.jl-chart__cursor {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+.jl-chart__tip {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  pointer-events: none;
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+  padding: 5px 9px;
+  border-radius: var(--radius-md, 8px);
+  white-space: nowrap;
+  font-size: var(--text-2xs, 11px);
+  font-weight: var(--weight-medium, 500);
+  box-shadow: var(--shadow-md, 0 6px 16px rgba(0, 0, 0, 0.18));
+  z-index: 3;
+}
+.jl-chart__tip b {
+  font-family: var(--font-mono);
+  font-weight: var(--weight-semibold, 600);
+}

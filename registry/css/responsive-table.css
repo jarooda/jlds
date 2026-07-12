@@ -1,0 +1,100 @@
+.jl-rtable {
+  width: 100%;
+}
+
+/* ---- table mode ---- */
+.jl-rtable__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm, 13px);
+}
+.jl-rtable__table th,
+.jl-rtable__table td {
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+  vertical-align: middle;
+}
+.jl-rtable__table th {
+  font-size: var(--text-xs, 12px);
+  font-weight: var(--weight-semibold, 600);
+  color: var(--text-tertiary);
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid var(--border-default);
+  position: sticky;
+  top: 0;
+  background: var(--surface-card);
+  z-index: 1;
+}
+.jl-rtable__table tbody tr:last-child td {
+  border-bottom: none;
+}
+.jl-rtable__table td {
+  color: var(--text-primary);
+}
+.jl-rtable--num {
+  text-align: right;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.jl-rtable__row--clickable {
+  cursor: pointer;
+}
+.jl-rtable__row--clickable:hover td {
+  background: var(--surface-hover);
+}
+
+/* ---- card mode ---- */
+.jl-rtable__cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+/* [hidden] must win over the flex/table display, or both views show at once */
+.jl-rtable__cards[hidden],
+.jl-rtable__table[hidden] {
+  display: none;
+}
+.jl-rtable__card {
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg, 12px);
+  padding: 14px 16px;
+}
+.jl-rtable__card--clickable {
+  cursor: pointer;
+}
+.jl-rtable__card--clickable:active {
+  background: var(--surface-hover);
+}
+.jl-rtable__card-primary {
+  font-size: var(--text-base, 14px);
+  font-weight: var(--weight-semibold, 600);
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+.jl-rtable__pair {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 5px 0;
+}
+.jl-rtable__pair + .jl-rtable__pair {
+  border-top: 1px solid var(--border-subtle);
+}
+.jl-rtable__k {
+  font-size: var(--text-xs, 12px);
+  color: var(--text-tertiary);
+  flex: none;
+}
+.jl-rtable__v {
+  font-size: var(--text-sm, 13px);
+  color: var(--text-primary);
+  text-align: right;
+  min-width: 0;
+}
+.jl-rtable__v--num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}

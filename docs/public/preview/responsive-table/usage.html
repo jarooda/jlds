@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/responsive-table.css">
+    <link rel="stylesheet" href="/css/badge.css">
+    <style>
+      body { margin: 0; padding: var(--space-5); font-family: var(--font-sans); }
+      .hint { font-family: var(--font-mono); font-size: var(--text-2xs); color: var(--text-tertiary); margin-top: 12px; }
+    </style>
+  </head>
+  <body>
+    <div class="jl-rtable" data-breakpoint="560">
+      <table class="jl-rtable__table">
+        <thead>
+          <tr>
+            <th data-primary>Project</th>
+            <th>Environment</th>
+            <th>Status</th>
+            <th class="jl-rtable--num">Build</th>
+            <th style="text-align:right">Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>acme-web</td><td>Production</td><td><span class="jl-badge jl-badge--success"><span class="jl-badge__dot"></span>Live</span></td><td class="jl-rtable--num">#1843</td><td style="text-align:right">4m ago</td></tr>
+          <tr><td>docs-site</td><td>Preview</td><td><span class="jl-badge jl-badge--info"><span class="jl-badge__dot"></span>Building</span></td><td class="jl-rtable--num">#221</td><td style="text-align:right">1h ago</td></tr>
+          <tr><td>edge-api</td><td>Production</td><td><span class="jl-badge jl-badge--success"><span class="jl-badge__dot"></span>Live</span></td><td class="jl-rtable--num">#905</td><td style="text-align:right">3h ago</td></tr>
+          <tr><td>design-tokens</td><td>Library</td><td><span class="jl-badge jl-badge--neutral"><span class="jl-badge__dot"></span>Paused</span></td><td class="jl-rtable--num">v2.4.0</td><td style="text-align:right">1d ago</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="hint">Narrow the pane below 560px — the table stacks into key/value cards.</p>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

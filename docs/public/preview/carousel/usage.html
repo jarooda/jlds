@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/carousel.css">
+    <style>
+      body { margin: 0; padding: var(--space-6) var(--space-8); font-family: var(--font-sans); }
+      .slide { background: var(--surface-sunken); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 18px; height: 120px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; }
+      .slide .k { font-family: var(--font-mono); font-size: var(--text-2xs); color: var(--text-tertiary); }
+      .slide .big { font-size: var(--text-2xl); font-weight: 700; letter-spacing: -.02em; color: var(--text-primary); }
+      .slide .lb { font-size: var(--text-sm); color: var(--text-secondary); }
+    </style>
+  </head>
+  <body>
+    <div class="jl-carousel" data-per-view="1" data-per-view-sm="2" data-per-view-md="3" data-gap="14">
+      <div class="jl-carousel__track">
+        <div class="slide"><div class="k">DEPLOYS</div><div><div class="big">38</div><div class="lb">today · +12%</div></div></div>
+        <div class="slide"><div class="k">AVG BUILD</div><div><div class="big">41s</div><div class="lb">−3s this week</div></div></div>
+        <div class="slide"><div class="k">UPTIME</div><div><div class="big">99.98%</div><div class="lb">30-day</div></div></div>
+        <div class="slide"><div class="k">MINUTES</div><div><div class="big">3.2k</div><div class="lb">of 5,000</div></div></div>
+        <div class="slide"><div class="k">TEAM</div><div><div class="big">9</div><div class="lb">members</div></div></div>
+        <div class="slide"><div class="k">PROJECTS</div><div><div class="big">6</div><div class="lb">across 3 envs</div></div></div>
+      </div>
+    </div>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

@@ -1,0 +1,92 @@
+.jl-bottomnav {
+  display: flex;
+  align-items: stretch;
+  background: var(--surface-overlay);
+  border-top: 1px solid var(--border-subtle);
+  padding-bottom: var(--safe-bottom, 0px);
+  padding-left: var(--safe-left, 0px);
+  padding-right: var(--safe-right, 0px);
+}
+.jl-bottomnav--fixed {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 60;
+}
+.jl-bottomnav__item {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 8px 4px;
+  min-height: var(--target-min, 44px);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--text-tertiary);
+  font: inherit;
+  -webkit-tap-highlight-color: transparent;
+  transition: color var(--duration-fast, 140ms) var(--ease-standard, ease);
+}
+.jl-bottomnav__item:hover {
+  color: var(--text-secondary);
+}
+.jl-bottomnav__item[aria-current="page"] {
+  color: var(--accent);
+}
+.jl-bottomnav__item:focus-visible {
+  outline: none;
+  border-radius: var(--radius-md);
+  box-shadow: 0 0 0 3px var(--accent-ring);
+}
+.jl-bottomnav__icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  line-height: 0;
+}
+.jl-bottomnav__label {
+  font-size: var(--text-2xs, 11px);
+  font-weight: var(--weight-medium, 500);
+  letter-spacing: 0.01em;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.jl-bottomnav__item[aria-current="page"] .jl-bottomnav__label {
+  font-weight: var(--weight-semibold, 600);
+}
+.jl-bottomnav__badge {
+  position: absolute;
+  top: -5px;
+  left: calc(50% + 6px);
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--danger, #dc2626);
+  color: #fff;
+  font-size: 10px;
+  font-weight: var(--weight-semibold, 600);
+  line-height: 1;
+  border-radius: var(--radius-pill, 999px);
+  border: 2px solid var(--surface-overlay);
+}
+.jl-bottomnav__dot {
+  position: absolute;
+  top: -2px;
+  left: calc(50% + 7px);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--danger, #dc2626);
+  border: 2px solid var(--surface-overlay);
+}

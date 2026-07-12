@@ -364,6 +364,48 @@
       "frameworks": ["react", "vue"],
       "dependencies": [],
       "devDependencies": []
+    },
+    {
+      "name": "bottom-nav",
+      "description": "Fixed mobile tab bar — the phone counterpart to Sidebar. Safe-area aware, 3–5 destinations, count badges.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "swipe-row",
+      "description": "List row with trailing actions — swipe left on touch, or hover on desktop to reveal.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "toolbar",
+      "description": "Overflow-aware action bar that folds its lowest-priority items into a \"More\" menu by measuring its own width.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "carousel",
+      "description": "Scroll-snap track with adaptive slides-per-view, native swipe, page dots, and desktop arrows.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "responsive-table",
+      "description": "Data table that renders as a real table on wide containers and stacks into key/value cards when it narrows.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
+    },
+    {
+      "name": "chart",
+      "description": "Dependency-free responsive SVG chart (area, line, or bar) with hover tooltips, for dashboards and trends.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
     }
   ]
 }
