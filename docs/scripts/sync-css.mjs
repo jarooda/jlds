@@ -15,3 +15,17 @@ for (const kind of ["css", "js"]) {
   mkdirSync(dest, { recursive: true });
   cpSync(src, dest, { recursive: true });
 }
+
+// Mirror registry/examples -> public/examples/preview. The example HTML is the
+// jsDelivr-served source of truth (registry/); this copy lets the docs embed it
+// (Preview iframe) and serve it full-screen at /examples/preview/<name>.html.
+// The nested /preview/ path keeps it clear of the /examples/<name> doc pages so
+// the two never collide.
+{
+  const src = join(registry, "examples");
+  if (existsSync(src)) {
+    const dest = join(publicDir, "examples", "preview");
+    mkdirSync(dest, { recursive: true });
+    cpSync(src, dest, { recursive: true });
+  }
+}

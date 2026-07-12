@@ -54,6 +54,7 @@ export default defineConfig({
     nav: [
       { text: 'Guide', link: '/guide/what-is-jlds' },
       { text: 'Components', link: '/components/' },
+      { text: 'Examples', link: '/examples/' },
       { text: 'Reference', link: '/cli/' }
     ],
 
@@ -138,6 +139,25 @@ export default defineConfig({
             { text: 'Toolbar', link: '/components/toolbar' },
             { text: 'Tooltip', link: '/components/tooltip' },
             { text: 'Tree View', link: '/components/tree-view' }
+          ]
+        }
+      ],
+      '/examples/': [
+        {
+          text: 'Examples',
+          items: [
+            { text: 'Overview', link: '/examples/' },
+            { text: 'Dashboard', link: '/examples/dashboard' },
+            { text: 'Sign in', link: '/examples/sign-in' },
+            { text: 'Data table', link: '/examples/data-table' },
+            { text: 'Settings', link: '/examples/settings' },
+            { text: 'Detail page', link: '/examples/detail' },
+            { text: 'Empty & loading', link: '/examples/empty-states' },
+            { text: 'Checkout', link: '/examples/checkout' },
+            { text: 'Command & search', link: '/examples/command' },
+            { text: 'Kanban board', link: '/examples/kanban' },
+            { text: 'File explorer', link: '/examples/file-explorer' },
+            { text: 'Landing page', link: '/examples/marketing' }
           ]
         }
       ],

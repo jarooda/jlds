@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Landing · JLDS</title>
+    <!--
+      A JLDS example composed entirely from .jl-* classes — no framework, no build.
+      Swap the local /css and /js links below for the jsDelivr CDN in your own page:
+        https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/css/index.css
+        https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/all.js
+    -->
+    <link rel="stylesheet" href="/css/index.css" />
+    <link rel="stylesheet" href="/css/banner.css" />
+    <link rel="stylesheet" href="/css/badge.css" />
+    <link rel="stylesheet" href="/css/button.css" />
+    <link rel="stylesheet" href="/css/rating.css" />
+    <link rel="stylesheet" href="/css/carousel.css" />
+    <link rel="stylesheet" href="/css/stat.css" />
+    <link rel="stylesheet" href="/css/accordion.css" />
+    <link rel="stylesheet" href="/css/bottom-nav.css" />
+    <style>
+      body { margin: 0; }
+      .mk { min-height: var(--mk-h, 700px); background: var(--surface-sunken); }
+      .mk-wrap { max-width: 940px; margin: 0 auto; padding: 0 var(--space-6) var(--space-8); display: flex; flex-direction: column; gap: var(--space-8); }
+      .section-head { text-align: center; max-width: 46ch; margin: 0 auto; }
+      .section-title { margin: 0; font-family: var(--font-display); font-size: var(--text-xl); font-weight: var(--weight-semibold); color: var(--text-primary); }
+      .section-sub { margin: 6px 0 0; font-size: var(--text-sm); color: var(--text-secondary); }
+
+      /* Hero */
+      .hero { text-align: center; padding: var(--space-8) 0 var(--space-4); display: flex; flex-direction: column; align-items: center; gap: var(--space-4); }
+      .hero h1 { margin: 0; font-family: var(--font-display); font-size: clamp(30px, 6vw, 52px); line-height: 1.05; font-weight: var(--weight-bold); letter-spacing: -0.03em; color: var(--text-primary); max-width: 16ch; }
+      .hero p { margin: 0; font-size: var(--text-md); color: var(--text-secondary); max-width: 52ch; }
+      .hero__cta { display: inline-flex; gap: var(--space-3); flex-wrap: wrap; justify-content: center; }
+      .proof { display: inline-flex; align-items: center; gap: var(--space-3); color: var(--text-secondary); font-size: var(--text-sm); }
+
+      .feat { background: var(--surface-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: var(--space-5); height: 100%; box-sizing: border-box; display: flex; flex-direction: column; gap: var(--space-2); }
+      .feat__icon { width: 34px; height: 34px; border-radius: var(--radius-md); background: var(--accent-subtle); color: var(--text-brand); display: grid; place-items: center; }
+      .feat__title { font-family: var(--font-display); font-weight: var(--weight-semibold); color: var(--text-primary); }
+      .feat__text { font-size: var(--text-sm); color: var(--text-secondary); line-height: var(--leading-normal); }
+
+      .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4); }
+      .stats .jl-stat { background: var(--surface-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-xl); padding: var(--space-4) var(--space-5); text-align: center; }
+      .stats .jl-stat__value { font-size: var(--text-2xl); }
+
+      .faq { max-width: 620px; margin: 0 auto; width: 100%; }
+
+      /* Phone teaser with bottom nav */
+      .phone { max-width: 320px; margin: 0 auto; background: var(--surface-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-2xl); overflow: hidden; box-shadow: var(--shadow-md); }
+      .phone__screen { height: 200px; display: grid; place-items: center; color: var(--text-tertiary); font-size: var(--text-sm); background: var(--surface-muted); }
+
+      @media (max-width: 720px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+  </head>
+  <body>
+    <div class="mk">
+      <div class="jl-banner jl-banner--subtle jl-banner--accent jl-banner--center" role="status">
+        <span class="jl-banner__content"><span class="jl-banner__text">✨ JLDS v3 is here — 60+ components, now with templates. <a href="#" style="color:var(--text-brand);font-weight:var(--weight-medium)">See what's new →</a></span></span>
+      </div>
+
+      <div class="mk-wrap">
+        <!-- Hero -->
+        <section class="hero">
+          <span class="jl-badge jl-badge--brand jl-badge--pill">New · v3.0</span>
+          <h1>Ship a polished UI before your coffee gets cold</h1>
+          <p>A light-first design system and CLI. Own the code, skip the boilerplate, and build production-credible interfaces in minutes — no framework lock-in.</p>
+          <div class="hero__cta">
+            <button class="jl-btn jl-btn--primary jl-btn--lg">Get started</button>
+            <button class="jl-btn jl-btn--secondary jl-btn--lg">View docs</button>
+          </div>
+          <div class="proof">
+            <span class="jl-rating" data-tone="warning" data-readonly="true" role="img" aria-label="Rating: 4.9 of 5">
+              <span class="jl-rating__stars">
+                <span class="jl-rating__btn" data-fill="full"><span class="jl-rating__star" style="position:relative;width:18px;height:18px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="position:absolute;inset:0"><path d="m12 3.2 2.7 5.5 6 .9-4.35 4.24 1.03 6L12 17.1 6.62 19.84l1.03-6L3.3 9.6l6-.9Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><svg class="jl-rating__fg jl-rating__fill" width="18" height="18" viewBox="0 0 24 24" style="position:absolute;inset:0"><path d="m12 3.2 2.7 5.5 6 .9-4.35 4.24 1.03 6L12 17.1 6.62 19.84l1.03-6L3.3 9.6l6-.9Z" fill="currentColor"/></svg></span></span>
+                <span class="jl-rating__btn" data-fill="full"><span class="jl-rating__star" style="position:relative;width:18px;height:18px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="position:absolute;inset:0"><path d="m12 3.2 2.7 5.5 6 .9-4.35 4.24 1.03 6L12 17.1 6.62 19.84l1.03-6L3.3 9.6l6-.9Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><svg class="jl-rating__fg jl-rating__fill" width="18" height="18" viewBox="0 0 24 24" style="position:absolute;inset:0"><path d="m12 3.2 2.7 5.5 6 .9-4.35 4.24 1.03 6L12 17.1 6.62 19.84l1.03-6L3.3 9.6l6-.9Z" fill="currentColor"/></svg></span></span>
+                <span class="jl-rating__btn" data-fill="full"><span class="jl-rating__star" style="position:relative;width:18px;height:18px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="position:absolute;inset:0"><path d="m12 3.2 2.7 5.5 6 .9-4.35 4.24 1.03 6L12 17.1 6.62 19.84l1.03-6L3.3 9.6l6-.9Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><svg class="jl-rating__fg jl-rating__fill" width="18" height="18" viewBox="0 0 24 24" style="position:absolute;inset:0"><path d="m12 3.2 2.7 5.5 6 .9-4.35 4.24 1.03 6L12 17.1 6.62 19.84l1.03-6L3.3 9.6l6-.9Z" fill="currentColor"/></svg></span></span>
+                <span class="jl-rating__btn" data-fill="full"><span class="jl-rating__star" style="position:relative;width:18px;height:18px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="position:absolute;inset:0"><path d="m12 3.2 2.7 5.5 6 .9-4.35 4.24 1.03 6L12 17.1 6.62 19.84l1.03-6L3.3 9.6l6-.9Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><svg class="jl-rating__fg jl-rating__fill" width="18" height="18" viewBox="0 0 24 24" style="position:absolute;inset:0"><path d="m12 3.2 2.7 5.5 6 .9-4.35 4.24 1.03 6L12 17.1 6.62 19.84l1.03-6L3.3 9.6l6-.9Z" fill="currentColor"/></svg></span></span>
+                <span class="jl-rating__btn" data-fill="full"><span class="jl-rating__star" style="position:relative;width:18px;height:18px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="position:absolute;inset:0"><path d="m12 3.2 2.7 5.5 6 .9-4.35 4.24 1.03 6L12 17.1 6.62 19.84l1.03-6L3.3 9.6l6-.9Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><svg class="jl-rating__fg jl-rating__fill" width="18" height="18" viewBox="0 0 24 24" style="position:absolute;inset:0"><path d="m12 3.2 2.7 5.5 6 .9-4.35 4.24 1.03 6L12 17.1 6.62 19.84l1.03-6L3.3 9.6l6-.9Z" fill="currentColor"/></svg></span></span>
+              </span>
+              <span class="jl-rating__value">4.9<span class="jl-rating__count"> (1,284)</span></span>
+            </span>
+            <span>loved by developers</span>
+          </div>
+        </section>
+
+        <!-- Feature carousel -->
+        <section>
+          <div class="section-head">
+            <h2 class="section-title">Everything you need, nothing you don't</h2>
+            <p class="section-sub">Drag, scroll, or use the dots — the carousel adapts from 1 to 3 cards across breakpoints.</p>
+          </div>
+          <div class="jl-carousel" data-per-view="1" data-per-view-sm="2" data-per-view-md="3" data-gap="16" style="margin-top:var(--space-5)">
+            <div class="jl-carousel__track">
+              <div class="feat"><span class="feat__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-3 7h5l-3 7"/><path d="M5 12h.01M19 12h.01"/></svg></span><span class="feat__title">Own your code</span><span class="feat__text">Components are copied into your repo — read them, edit them, no black-box dependency.</span></div>
+              <div class="feat"><span class="feat__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="feat__title">Light-first, dark-ready</span><span class="feat__text">A calm off-white canvas with a deep-emerald accent, plus a full dark theme via one attribute.</span></div>
+              <div class="feat"><span class="feat__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></span><span class="feat__title">No Tailwind required</span><span class="feat__text">Self-contained <code>.jl-*</code> classes on CSS variable tokens. Bring a framework or none at all.</span></div>
+              <div class="feat"><span class="feat__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg></span><span class="feat__title">React, Vue & HTML</span><span class="feat__text">Every component ships in three flavors — pick your stack, the design stays identical.</span></div>
+              <div class="feat"><span class="feat__icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span class="feat__title">Accessible by default</span><span class="feat__text">Focus rings, ARIA roles, and keyboard support are built in, not bolted on.</span></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Stats -->
+        <section class="stats">
+          <div class="jl-stat"><div class="jl-stat__value">60+</div><div class="jl-stat__top"><span class="jl-stat__label">Components</span></div></div>
+          <div class="jl-stat"><div class="jl-stat__value">3</div><div class="jl-stat__top"><span class="jl-stat__label">Frameworks</span></div></div>
+          <div class="jl-stat"><div class="jl-stat__value">0</div><div class="jl-stat__top"><span class="jl-stat__label">Runtime deps</span></div></div>
+          <div class="jl-stat"><div class="jl-stat__value">11</div><div class="jl-stat__top"><span class="jl-stat__label">Templates</span></div></div>
+        </section>
+
+        <!-- FAQ -->
+        <section>
+          <div class="section-head"><h2 class="section-title">Questions, answered</h2></div>
+          <div class="faq" style="margin-top:var(--space-5)">
+            <div class="jl-accordion jl-accordion--bordered">
+              <div class="jl-acc-item" data-open="true">
+                <h3 style="margin:0"><button type="button" class="jl-acc-trigger" aria-expanded="true" aria-controls="q1"><span class="jl-acc-trigger__label">Is it really free?</span><span class="jl-acc-trigger__chevron"><svg viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button></h3>
+                <div class="jl-acc-region" id="q1" role="region"><div class="jl-acc-content"><div class="jl-acc-content__inner">Yes — open source under the MIT license. The CLI copies component source into your project.</div></div></div>
+              </div>
+              <div class="jl-acc-item">
+                <h3 style="margin:0"><button type="button" class="jl-acc-trigger" aria-expanded="false" aria-controls="q2"><span class="jl-acc-trigger__label">Do I need a build step?</span><span class="jl-acc-trigger__chevron"><svg viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button></h3>
+                <div class="jl-acc-region" id="q2" role="region"><div class="jl-acc-content"><div class="jl-acc-content__inner">No. You can link the CSS straight from the CDN and use the classes in plain HTML.</div></div></div>
+              </div>
+              <div class="jl-acc-item">
+                <h3 style="margin:0"><button type="button" class="jl-acc-trigger" aria-expanded="false" aria-controls="q3"><span class="jl-acc-trigger__label">Can I re-theme it?</span><span class="jl-acc-trigger__chevron"><svg viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button></h3>
+                <div class="jl-acc-region" id="q3" role="region"><div class="jl-acc-content"><div class="jl-acc-content__inner">Override the CSS variable tokens — repoint the accent and every component follows.</div></div></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Mobile teaser -->
+        <section>
+          <div class="section-head"><h2 class="section-title">Great on every screen</h2><p class="section-sub">Adaptive components dock to the bottom, collapse into drawers, and hand off to native pickers.</p></div>
+          <div class="phone" style="margin-top:var(--space-5)">
+            <div class="phone__screen">Your app, on mobile</div>
+            <nav class="jl-bottomnav" aria-label="Primary">
+              <button type="button" class="jl-bottomnav__item" data-id="home" aria-current="page"><span class="jl-bottomnav__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></span><span class="jl-bottomnav__label">Home</span></button>
+              <button type="button" class="jl-bottomnav__item" data-id="search"><span class="jl-bottomnav__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span><span class="jl-bottomnav__label">Search</span></button>
+              <button type="button" class="jl-bottomnav__item" data-id="inbox"><span class="jl-bottomnav__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h5l2 3h4l2-3h5"/><path d="M4 12V6h16v6"/></svg><span class="jl-bottomnav__badge">3</span></span><span class="jl-bottomnav__label">Inbox</span></button>
+              <button type="button" class="jl-bottomnav__item" data-id="me"><span class="jl-bottomnav__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg></span><span class="jl-bottomnav__label">Account</span></button>
+            </nav>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+    <script>
+      // Runs after resize.js. Full-screen (top-level tab): fill the viewport and
+      // restore normal page scrolling, which resize.js would otherwise have locked.
+      if (window.self === window.top) {
+        document.documentElement.style.setProperty("--mk-h", "100dvh");
+        document.documentElement.style.overflow = "auto";
+        document.body.style.overflow = "auto";
+      }
+    </script>
+  </body>
+</html>

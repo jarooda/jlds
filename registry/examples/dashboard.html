@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard · JLDS</title>
+    <!--
+      A JLDS template composed entirely from .jl-* classes — no framework, no build.
+      Swap the local /css links below for the jsDelivr CDN to use it in your own page:
+        https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/css/index.css
+        https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/css/<name>.css
+        https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/all.js
+    -->
+    <link rel="stylesheet" href="/css/index.css" />
+    <link rel="stylesheet" href="/css/app-shell.css" />
+    <link rel="stylesheet" href="/css/sidebar.css" />
+    <link rel="stylesheet" href="/css/button.css" />
+    <link rel="stylesheet" href="/css/icon-button.css" />
+    <link rel="stylesheet" href="/css/input.css" />
+    <link rel="stylesheet" href="/css/stat.css" />
+    <link rel="stylesheet" href="/css/chart.css" />
+    <link rel="stylesheet" href="/css/card.css" />
+    <link rel="stylesheet" href="/css/table.css" />
+    <link rel="stylesheet" href="/css/badge.css" />
+    <link rel="stylesheet" href="/css/avatar.css" />
+    <link rel="stylesheet" href="/css/dropdown-menu.css" />
+    <style>
+      /* Layout-only styles — the components bring their own CSS. Everything here
+         is built on JLDS design tokens so it re-themes with the rest. */
+      body { margin: 0; }
+
+      /* The shell fills the viewport when opened directly, but inside the docs
+         preview iframe (which sizes to content) it needs an explicit height.
+         The inline script at the bottom picks the right one. */
+      .jl-appshell { height: var(--shell-h, 780px); }
+
+      .app-hdr { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-5); background: var(--surface-card); border-bottom: 1px solid var(--border-subtle); }
+      .app-hdr__search { flex: 1; max-width: 380px; }
+      .app-hdr__spacer { flex: 1; }
+      .app-hdr__user { display: inline-flex; align-items: center; gap: var(--space-2); padding: 4px 6px; border-radius: var(--radius-lg); border: 1px solid transparent; background: none; cursor: pointer; color: var(--text-primary); font: inherit; }
+      .app-hdr__user:hover { background: var(--surface-hover); }
+      .app-hdr__user-name { font-size: var(--text-sm); font-weight: var(--weight-medium); }
+
+      .page { display: flex; flex-direction: column; gap: var(--space-6); }
+      .page-title-row { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
+      .page-title { margin: 0; font-family: var(--font-display); font-size: var(--text-2xl); font-weight: var(--weight-semibold); color: var(--text-primary); letter-spacing: -0.01em; }
+      .page-subtitle { margin: 4px 0 0; font-size: var(--text-sm); color: var(--text-secondary); }
+      .page-title-actions { display: inline-flex; gap: var(--space-2); }
+
+      .kpi-grid { display: grid; gap: var(--space-4); grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .kpi-grid .jl-stat { background: var(--surface-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-xl); padding: var(--space-4) var(--space-5); }
+
+      .charts-grid { display: grid; gap: var(--space-4); grid-template-columns: 2fr 1fr; align-items: start; }
+      .card-title { font-family: var(--font-display); font-weight: var(--weight-semibold); }
+      .chart-tint { color: var(--accent); }
+
+      .name-cell { display: inline-flex; align-items: center; gap: var(--space-3); }
+      .name-cell__name { font-weight: var(--weight-medium); color: var(--text-primary); }
+      .name-cell__mail { font-size: var(--text-xs); color: var(--text-tertiary); }
+      .jl-table__check { width: 15px; height: 15px; accent-color: var(--accent); }
+
+      /* Responsive: collapse the KPI + chart grids as the frame narrows. */
+      @media (max-width: 900px) {
+        .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .charts-grid { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 560px) {
+        .app-hdr__user-name { display: none; }
+        .page-title-actions { width: 100%; }
+        .col-hide-sm { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="jl-appshell" data-mobile-breakpoint="820">
+      <!-- Sidebar -->
+      <div class="jl-appshell__aside">
+        <aside class="jl-sidebar">
+          <div class="jl-sidebar__header">
+            <div style="display:flex;align-items:center;gap:var(--space-2);font-weight:var(--weight-semibold);color:var(--text-primary);padding:0 var(--space-2)">
+              <span style="width:26px;height:26px;border-radius:var(--radius-md);background:var(--accent);display:inline-flex;align-items:center;justify-content:center;color:var(--text-on-brand);font-size:var(--text-sm)">A</span>
+              Acme Inc
+            </div>
+          </div>
+          <nav class="jl-sidebar__body">
+            <div class="jl-sidebar__group">
+              <button type="button" class="jl-sidebar__item" data-active="true">
+                <span class="jl-sidebar__item-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12 12 3l9 9M5 10v10h14V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="jl-sidebar__item-label">Overview</span>
+              </button>
+              <button type="button" class="jl-sidebar__item">
+                <span class="jl-sidebar__item-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 19V5M4 19h16M8 15l3-4 3 3 4-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="jl-sidebar__item-label">Analytics</span>
+              </button>
+              <button type="button" class="jl-sidebar__item">
+                <span class="jl-sidebar__item-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+                <span class="jl-sidebar__item-label">Projects</span>
+                <span class="jl-sidebar__item-badge">12</span>
+              </button>
+              <button type="button" class="jl-sidebar__item">
+                <span class="jl-sidebar__item-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+                <span class="jl-sidebar__item-label">Customers</span>
+              </button>
+            </div>
+            <div class="jl-sidebar__group">
+              <div class="jl-sidebar__group-label">Account</div>
+              <button type="button" class="jl-sidebar__item">
+                <span class="jl-sidebar__item-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+                <span class="jl-sidebar__item-label">Settings</span>
+              </button>
+            </div>
+          </nav>
+          <div class="jl-sidebar__footer">
+            <button type="button" class="jl-sidebar__item">
+              <span class="jl-sidebar__item-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="jl-sidebar__item-label">Log out</span>
+            </button>
+          </div>
+        </aside>
+      </div>
+
+      <div class="jl-appshell__backdrop" aria-hidden="true"></div>
+
+      <!-- Main -->
+      <div class="jl-appshell__main">
+        <div class="jl-appshell__header">
+          <div class="app-hdr">
+            <button type="button" class="jl-appshell__menubtn" aria-label="Open navigation"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.85" stroke-linecap="round"/></svg></button>
+            <div class="app-hdr__search jl-input-wrap jl-input-wrap--md">
+              <span class="jl-input-adorn" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></svg></span>
+              <input class="jl-input" type="search" placeholder="Search…" aria-label="Search" />
+            </div>
+            <div class="app-hdr__spacer"></div>
+            <button type="button" class="jl-iconbtn jl-iconbtn--ghost jl-iconbtn--md" aria-label="Notifications">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <span class="jl-menu">
+              <button type="button" class="app-hdr__user">
+                <span class="jl-avatar" style="width:30px;height:30px;font-size:13px;background:#0ea5e9">JW
+                  <span class="jl-avatar__status jl-avatar__status--online"></span>
+                </span>
+                <span class="app-hdr__user-name">Jane W.</span>
+              </button>
+              <div class="jl-menu__pop" role="menu" data-side="bottom" data-align="end" hidden>
+                <div class="jl-menu__label">Signed in as Jane</div>
+                <button type="button" role="menuitem" class="jl-menu__item"><span class="jl-menu__item-label">Profile</span></button>
+                <button type="button" role="menuitem" class="jl-menu__item"><span class="jl-menu__item-label">Billing</span></button>
+                <div class="jl-menu__sep" role="separator"></div>
+                <button type="button" role="menuitem" class="jl-menu__item jl-menu__item--danger"><span class="jl-menu__item-label">Log out</span></button>
+              </div>
+            </span>
+          </div>
+        </div>
+
+        <div class="jl-appshell__content jl-appshell__content--padded">
+          <div class="page">
+            <!-- Title row -->
+            <div class="page-title-row">
+              <div>
+                <h1 class="page-title">Overview</h1>
+                <p class="page-subtitle">Here's what's happening across your workspace this month.</p>
+              </div>
+              <div class="page-title-actions">
+                <button class="jl-btn jl-btn--secondary jl-btn--md">Export</button>
+                <button class="jl-btn jl-btn--primary jl-btn--md">New report</button>
+              </div>
+            </div>
+
+            <!-- KPI row -->
+            <div class="kpi-grid">
+              <div class="jl-stat">
+                <div class="jl-stat__top"><span class="jl-stat__label">Revenue</span></div>
+                <div class="jl-stat__value">$48,210</div>
+                <div class="jl-stat__foot">
+                  <span class="jl-stat__delta jl-stat__delta--positive"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>+12%</span>
+                  <span class="jl-stat__caption">vs last month</span>
+                </div>
+              </div>
+              <div class="jl-stat">
+                <div class="jl-stat__top"><span class="jl-stat__label">Active users</span></div>
+                <div class="jl-stat__value">8,942</div>
+                <div class="jl-stat__foot">
+                  <span class="jl-stat__delta jl-stat__delta--positive"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>+5.4%</span>
+                  <span class="jl-stat__caption">vs last month</span>
+                </div>
+              </div>
+              <div class="jl-stat">
+                <div class="jl-stat__top"><span class="jl-stat__label">Churn</span></div>
+                <div class="jl-stat__value">2.4%</div>
+                <div class="jl-stat__foot">
+                  <span class="jl-stat__delta jl-stat__delta--negative"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>-0.4%</span>
+                  <span class="jl-stat__caption">vs last month</span>
+                </div>
+              </div>
+              <div class="jl-stat">
+                <div class="jl-stat__top"><span class="jl-stat__label">Open tickets</span></div>
+                <div class="jl-stat__value">37</div>
+                <div class="jl-stat__foot">
+                  <span class="jl-stat__delta jl-stat__delta--neutral">0%</span>
+                  <span class="jl-stat__caption">vs last week</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="charts-grid">
+              <div class="jl-card jl-card--flat">
+                <div class="jl-card__header">
+                  <div class="jl-card__header-text">
+                    <div class="jl-card__title card-title">Revenue</div>
+                    <div class="jl-card__subtitle">Last 8 months, in thousands</div>
+                  </div>
+                </div>
+                <div class="jl-card__body">
+                  <div class="jl-chart chart-tint" data-type="line" data-height="230" data-dots="true" data-values="28,31,29,35,41,38,46,48" data-labels="Nov,Dec,Jan,Feb,Mar,Apr,May,Jun"></div>
+                </div>
+              </div>
+              <div class="jl-card jl-card--flat">
+                <div class="jl-card__header">
+                  <div class="jl-card__header-text">
+                    <div class="jl-card__title card-title">Signups</div>
+                    <div class="jl-card__subtitle">This week</div>
+                  </div>
+                </div>
+                <div class="jl-card__body">
+                  <div class="jl-chart chart-tint" data-type="bar" data-height="230" data-values="18,24,31,22,28,19,12" data-labels="Mon,Tue,Wed,Thu,Fri,Sat,Sun"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent activity -->
+            <div class="jl-card jl-card--flat">
+              <div class="jl-card__header">
+                <div class="jl-card__header-text">
+                  <div class="jl-card__title card-title">Recent transactions</div>
+                  <div class="jl-card__subtitle">The latest activity across your account</div>
+                </div>
+                <span class="jl-menu">
+                  <button type="button" class="jl-btn jl-btn--ghost jl-btn--sm">This month ▾</button>
+                  <div class="jl-menu__pop" role="menu" data-side="bottom" data-align="end" hidden>
+                    <button type="button" role="menuitem" class="jl-menu__item"><span class="jl-menu__item-label">Today</span></button>
+                    <button type="button" role="menuitem" class="jl-menu__item"><span class="jl-menu__item-label">This week</span></button>
+                    <button type="button" role="menuitem" class="jl-menu__item"><span class="jl-menu__item-label">This month</span></button>
+                  </div>
+                </span>
+              </div>
+              <div class="jl-table-wrap">
+                <table class="jl-table">
+                  <thead class="jl-table__head">
+                    <tr>
+                      <th style="width:20px"><input type="checkbox" class="jl-table__check" data-select-all aria-label="Select all" /></th>
+                      <th>Customer</th>
+                      <th class="col-hide-sm">Plan</th>
+                      <th>Status</th>
+                      <th class="col-hide-sm">Date</th>
+                      <th class="jl-th--num jl-th--right">Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody class="jl-table__body">
+                    <tr>
+                      <td><input type="checkbox" class="jl-table__check" aria-label="Select row" /></td>
+                      <td>
+                        <span class="name-cell">
+                          <span class="jl-avatar" style="width:32px;height:32px;font-size:13px;background:#7c5cff">AL</span>
+                          <span><span class="name-cell__name">Ada Lovelace</span><br /><span class="name-cell__mail">ada@analytical.co</span></span>
+                        </span>
+                      </td>
+                      <td class="col-hide-sm"><span class="jl-badge jl-badge--brand">Pro</span></td>
+                      <td><span class="jl-badge jl-badge--success jl-badge--pill"><span class="jl-badge__dot"></span>Paid</span></td>
+                      <td class="col-hide-sm">Jun 24</td>
+                      <td class="jl-td--num jl-td--right">$1,200</td>
+                    </tr>
+                    <tr>
+                      <td><input type="checkbox" class="jl-table__check" aria-label="Select row" /></td>
+                      <td>
+                        <span class="name-cell">
+                          <span class="jl-avatar" style="width:32px;height:32px;font-size:13px;background:#0ea5e9">AT</span>
+                          <span><span class="name-cell__name">Alan Turing</span><br /><span class="name-cell__mail">alan@enigma.io</span></span>
+                        </span>
+                      </td>
+                      <td class="col-hide-sm"><span class="jl-badge jl-badge--neutral">Starter</span></td>
+                      <td><span class="jl-badge jl-badge--warning jl-badge--pill"><span class="jl-badge__dot"></span>Pending</span></td>
+                      <td class="col-hide-sm">Jun 23</td>
+                      <td class="jl-td--num jl-td--right">$980</td>
+                    </tr>
+                    <tr>
+                      <td><input type="checkbox" class="jl-table__check" aria-label="Select row" /></td>
+                      <td>
+                        <span class="name-cell">
+                          <span class="jl-avatar" style="width:32px;height:32px;font-size:13px;background:#f59e0b">GH</span>
+                          <span><span class="name-cell__name">Grace Hopper</span><br /><span class="name-cell__mail">grace@navy.mil</span></span>
+                        </span>
+                      </td>
+                      <td class="col-hide-sm"><span class="jl-badge jl-badge--brand">Pro</span></td>
+                      <td><span class="jl-badge jl-badge--success jl-badge--pill"><span class="jl-badge__dot"></span>Paid</span></td>
+                      <td class="col-hide-sm">Jun 22</td>
+                      <td class="jl-td--num jl-td--right">$1,530</td>
+                    </tr>
+                    <tr>
+                      <td><input type="checkbox" class="jl-table__check" aria-label="Select row" /></td>
+                      <td>
+                        <span class="name-cell">
+                          <span class="jl-avatar" style="width:32px;height:32px;font-size:13px;background:#10b981">KJ</span>
+                          <span><span class="name-cell__name">Katherine Johnson</span><br /><span class="name-cell__mail">kj@nasa.gov</span></span>
+                        </span>
+                      </td>
+                      <td class="col-hide-sm"><span class="jl-badge jl-badge--brand">Enterprise</span></td>
+                      <td><span class="jl-badge jl-badge--danger jl-badge--pill"><span class="jl-badge__dot"></span>Failed</span></td>
+                      <td class="col-hide-sm">Jun 21</td>
+                      <td class="jl-td--num jl-td--right">$2,100</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+    <script>
+      // Runs after resize.js. Inside the docs preview iframe, resize.js sizes the
+      // frame to content and hides overflow — leave that. Opened directly
+      // (top-level tab): fill the viewport like a real app and restore normal
+      // page scrolling, which resize.js would otherwise have locked.
+      if (window.self === window.top) {
+        document.documentElement.style.setProperty("--shell-h", "100dvh");
+        document.documentElement.style.overflow = "auto";
+        document.body.style.overflow = "auto";
+      }
+    </script>
+  </body>
+</html>

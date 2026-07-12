@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Settings · JLDS</title>
+    <!--
+      A JLDS template composed entirely from .jl-* classes — no framework, no build.
+      Swap the local /css and /js links below for the jsDelivr CDN in your own page:
+        https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/css/index.css
+        https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry/js/all.js
+    -->
+    <link rel="stylesheet" href="/css/index.css" />
+    <link rel="stylesheet" href="/css/page-header.css" />
+    <link rel="stylesheet" href="/css/tabs.css" />
+    <link rel="stylesheet" href="/css/card.css" />
+    <link rel="stylesheet" href="/css/field.css" />
+    <link rel="stylesheet" href="/css/input.css" />
+    <link rel="stylesheet" href="/css/textarea.css" />
+    <link rel="stylesheet" href="/css/select.css" />
+    <link rel="stylesheet" href="/css/switch.css" />
+    <link rel="stylesheet" href="/css/radio-group.css" />
+    <link rel="stylesheet" href="/css/number-input.css" />
+    <link rel="stylesheet" href="/css/slider.css" />
+    <link rel="stylesheet" href="/css/file-upload.css" />
+    <link rel="stylesheet" href="/css/avatar.css" />
+    <link rel="stylesheet" href="/css/button.css" />
+    <link rel="stylesheet" href="/css/divider.css" />
+    <style>
+      body { margin: 0; }
+      .set { min-height: var(--set-h, 720px); background: var(--surface-sunken); }
+      .set-wrap { max-width: 780px; margin: 0 auto; padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-5); }
+
+      .set-tabs { margin-top: calc(var(--space-2) * -1); }
+      .set-card .jl-card__body { display: flex; flex-direction: column; }
+
+      /* A settings row: label + description on the left, control on the right. */
+      .set-row { display: grid; grid-template-columns: 1fr minmax(200px, 300px); gap: var(--space-4); align-items: center; padding: var(--space-4) 0; }
+      .set-row:first-child { padding-top: 0; }
+      .set-row:last-child { padding-bottom: 0; }
+      .set-row + .set-row { border-top: 1px solid var(--border-subtle); }
+      .set-row__title { font-size: var(--text-sm); font-weight: var(--weight-medium); color: var(--text-primary); }
+      .set-row__desc { margin-top: 2px; font-size: var(--text-xs); color: var(--text-tertiary); max-width: 46ch; }
+      .set-row__control { justify-self: end; width: 100%; }
+      .set-row--top { align-items: start; }
+
+      .avatar-row { display: flex; align-items: center; gap: var(--space-4); }
+
+      .set-foot { display: flex; justify-content: flex-end; gap: var(--space-2); }
+
+      @media (max-width: 620px) {
+        .set-row { grid-template-columns: 1fr; }
+        .set-row__control { justify-self: stretch; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="set">
+      <header class="jl-pageheader jl-pageheader--surface">
+        <div class="jl-pageheader__bar">
+          <span class="jl-pageheader__icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+          <div class="jl-pageheader__heading">
+            <div class="jl-pageheader__eyebrow">Account</div>
+            <div class="jl-pageheader__titlerow"><h1 class="jl-pageheader__title">Settings</h1></div>
+            <p class="jl-pageheader__desc">Manage your profile, preferences, and notifications.</p>
+          </div>
+        </div>
+      </header>
+
+      <div class="set-wrap">
+        <div class="jl-tabs jl-tabs--line set-tabs" role="tablist">
+          <button type="button" role="tab" class="jl-tab" aria-selected="true" aria-controls="p-general">General</button>
+          <button type="button" role="tab" class="jl-tab" aria-selected="false" aria-controls="p-notifications">Notifications</button>
+          <button type="button" role="tab" class="jl-tab" aria-selected="false" aria-controls="p-billing">Billing</button>
+        </div>
+
+        <div id="p-general" role="tabpanel" style="display:flex;flex-direction:column;gap:var(--space-5)">
+          <!-- Profile -->
+          <div class="jl-card jl-card--flat set-card">
+            <div class="jl-card__header">
+              <div class="jl-card__header-text">
+                <div class="jl-card__title" style="font-family:var(--font-display);font-weight:var(--weight-semibold)">Profile</div>
+                <div class="jl-card__subtitle">This information is shown on your public profile.</div>
+              </div>
+            </div>
+            <div class="jl-card__body">
+              <div class="set-row set-row--top">
+                <div>
+                  <div class="set-row__title">Photo</div>
+                  <div class="set-row__desc">PNG or JPG, up to 5 MB.</div>
+                </div>
+                <div class="set-row__control avatar-row">
+                  <span class="jl-avatar" style="width:52px;height:52px;font-size:19px;background:#0ea5e9">JW</span>
+                  <div class="jl-upload" style="flex:1">
+                    <div class="jl-upload__zone" role="button" tabindex="0" style="padding:var(--space-3)">
+                      <div class="jl-upload__title"><b>Upload</b> or drop</div>
+                      <input type="file" accept=".png,.jpg" style="display:none" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="set-row">
+                <div>
+                  <div class="set-row__title">Full name</div>
+                  <div class="set-row__desc">Your name as it appears across the app.</div>
+                </div>
+                <div class="set-row__control jl-input-wrap jl-input-wrap--md">
+                  <input class="jl-input" type="text" value="Jane Wibowo" aria-label="Full name" />
+                </div>
+              </div>
+              <div class="set-row">
+                <div>
+                  <div class="set-row__title">Email</div>
+                  <div class="set-row__desc">Used for sign-in and account notices.</div>
+                </div>
+                <div class="set-row__control jl-input-wrap jl-input-wrap--md">
+                  <input class="jl-input" type="email" value="jane@acme.com" aria-label="Email" />
+                </div>
+              </div>
+              <div class="set-row set-row--top">
+                <div>
+                  <div class="set-row__title">Bio</div>
+                  <div class="set-row__desc">A short description for your profile.</div>
+                </div>
+                <div class="set-row__control">
+                  <textarea class="jl-textarea" aria-label="Bio" rows="3">Product designer at Acme. I like clean systems and strong defaults.</textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preferences -->
+          <div class="jl-card jl-card--flat set-card">
+            <div class="jl-card__header">
+              <div class="jl-card__header-text">
+                <div class="jl-card__title" style="font-family:var(--font-display);font-weight:var(--weight-semibold)">Preferences</div>
+                <div class="jl-card__subtitle">Tailor the app to how you work.</div>
+              </div>
+            </div>
+            <div class="jl-card__body">
+              <div class="set-row">
+                <div>
+                  <div class="set-row__title">Language</div>
+                  <div class="set-row__desc">The language used across the interface.</div>
+                </div>
+                <span class="set-row__control jl-select-wrap">
+                  <select class="jl-select jl-select--md" aria-label="Language">
+                    <option>English (US)</option>
+                    <option>English (UK)</option>
+                    <option>Bahasa Indonesia</option>
+                  </select>
+                  <span class="jl-select-chevron"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                </span>
+              </div>
+              <div class="set-row set-row--top">
+                <div>
+                  <div class="set-row__title">Density</div>
+                  <div class="set-row__desc">How much breathing room tables and lists get.</div>
+                </div>
+                <div class="set-row__control jl-radiogroup" role="radiogroup" aria-label="Density">
+                  <label class="jl-radio"><input type="radio" class="jl-radio__input" name="density" value="comfortable" checked /><span class="jl-radio__dot"></span><span class="jl-radio__body"><span class="jl-radio__label">Comfortable</span></span></label>
+                  <label class="jl-radio"><input type="radio" class="jl-radio__input" name="density" value="compact" /><span class="jl-radio__dot"></span><span class="jl-radio__body"><span class="jl-radio__label">Compact</span></span></label>
+                </div>
+              </div>
+              <div class="set-row">
+                <div>
+                  <div class="set-row__title">Seats</div>
+                  <div class="set-row__desc">Number of team members on your plan.</div>
+                </div>
+                <div class="set-row__control jl-number jl-number--md" data-min="1" data-max="50" data-step="1" style="max-width:150px;margin-left:auto">
+                  <button type="button" class="jl-number__btn jl-number__btn--dec" aria-label="Decrease" tabindex="-1"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg></button>
+                  <input class="jl-number__input" type="text" inputmode="decimal" role="spinbutton" value="8" aria-label="Seats" />
+                  <button type="button" class="jl-number__btn jl-number__btn--inc" aria-label="Increase" tabindex="-1"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg></button>
+                </div>
+              </div>
+              <div class="set-row set-row--top">
+                <div>
+                  <div class="set-row__title">Sidebar width</div>
+                  <div class="set-row__desc">Fine-tune how wide the navigation sits.</div>
+                </div>
+                <div class="set-row__control jl-slider jl-slider--md" data-min="0" data-max="100" data-step="1">
+                  <div class="jl-slider__track"><span class="jl-slider__fill"></span><button type="button" class="jl-slider__thumb" data-value="60" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="60" tabindex="0" aria-label="Sidebar width"></button></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="p-notifications" role="tabpanel" hidden>
+          <div class="jl-card jl-card--flat set-card">
+            <div class="jl-card__body">
+              <label class="jl-switch jl-switch--md" style="justify-content:space-between;width:100%;padding:var(--space-3) 0"><span class="jl-switch__label">Product updates</span><input type="checkbox" role="switch" class="jl-switch__input" checked /><span class="jl-switch__track"><span class="jl-switch__thumb"></span></span></label>
+            </div>
+          </div>
+        </div>
+        <div id="p-billing" role="tabpanel" hidden>
+          <div class="jl-card jl-card--flat set-card"><div class="jl-card__body" style="color:var(--text-secondary);font-size:var(--text-sm)">Billing details would go here.</div></div>
+        </div>
+
+        <div class="set-foot">
+          <button class="jl-btn jl-btn--secondary jl-btn--md">Cancel</button>
+          <button class="jl-btn jl-btn--primary jl-btn--md">Save changes</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+    <script>
+      // Runs after resize.js. Inside the docs preview iframe, resize.js sizes the
+      // frame to content and hides overflow — leave that. Opened directly
+      // (top-level tab): fill the viewport and restore normal page scrolling,
+      // which resize.js would otherwise have locked.
+      if (window.self === window.top) {
+        document.documentElement.style.setProperty("--set-h", "100dvh");
+        document.documentElement.style.overflow = "auto";
+        document.body.style.overflow = "auto";
+      }
+    </script>
+  </body>
+</html>
