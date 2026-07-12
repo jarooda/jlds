@@ -8,6 +8,14 @@ In React/Vue, sorting and selection are **controlled** — you keep the state an
 `sortDirection`/`selected`, handling `onSort`/clicks. In plain HTML, the behavior layer adds
 **client-side sorting and checkbox selection** for free.
 
+::: tip On small screens
+`Table` scrolls horizontally inside its `.jl-table-wrap`. If you'd rather the rows **reflow into
+stacked key/value cards** below a container width, reach for
+[Responsive Table](/components/responsive-table) instead — a column/row-driven table built for that
+adaptive swap. Use `Table` for rich, sortable, selectable data grids; `Responsive Table` when the
+priority is reading cleanly on a phone.
+:::
+
 ```bash
 jlds add table
 ```
