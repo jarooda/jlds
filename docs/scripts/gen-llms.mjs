@@ -79,19 +79,29 @@ const components = readdirSync(join(docsDir, "components"))
   .sort((a, b) => (a === "index.md" ? -1 : b === "index.md" ? 1 : a.localeCompare(b)))
   .map((f) => `components/${f}`);
 
-const sections = [
+// Registry docs are self-hosting internals (folder layout, raw jsDelivr URLs,
+// meta.json schema). Left out of the curated index on purpose: they read as a
+// "fetch the source files yourself" guide and lead agents to copy raw registry
+// files — bypassing `jlds add`, which inlines shared files, strips Vue exports,
+// and installs deps. Still included in llms-full.txt below for completeness.
+const curatedSections = [
   { title: "Guide", files: guide },
   { title: "Components", files: components },
   { title: "CLI", files: cli },
-  { title: "Registry", files: registry },
 ];
+
+const sections = [...curatedSections, { title: "Registry", files: registry }];
 
 // ---- llms.txt (curated index) ----
 let index = `# JLDS\n\n> ${SUMMARY}\n\n`;
 index += `Install: \`npx @jarooda/jlds init\` then \`npx @jarooda/jlds add <component>\`. ` +
-  `Or skip the CLI and link the CSS from jsDelivr — see the HTML examples on any component page.\n`;
+  `Use the CLI to add components — do not copy source files from the registry directly. ` +
+  `\`jlds add\` inlines shared files, strips Vue \`<script setup>\` exports, and installs npm ` +
+  `dependencies; raw registry files skip those steps and won't compile as-is. ` +
+  `The only supported no-CLI path is plain HTML: link the CSS from jsDelivr — see the HTML ` +
+  `examples on any component page.\n`;
 
-for (const { title, files } of sections) {
+for (const { title, files } of curatedSections) {
   index += `\n## ${title}\n\n`;
   for (const relPath of files) {
     const { url, body } = read(relPath);
