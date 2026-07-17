@@ -5,7 +5,7 @@ layout: home
 hero:
   name: "JLDS"
   text: "Own your components."
-  tagline: A light-first, deep-emerald design system for rapid prototyping (dark theme opt-in). It exists to let a designer or agent stand up a polished, production-credible interface in minutes
+  tagline: A light-first, deep-emerald design system (dark theme opt-in). Copy the components you need into your project and build a clean, coherent interface without starting from scratch.
   actions:
     - theme: brand
       text: Get Started

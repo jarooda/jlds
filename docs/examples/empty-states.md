@@ -9,7 +9,7 @@ one).
 
 <Preview src="/examples/preview/empty-states.html" />
 
-[Open full screen ↗](/examples/preview/empty-states.html){target="_blank" rel="noopener"}
+[Preview full screen](/examples/preview/empty-states.html){target="_blank" rel="noopener"}
 
 ## Use it
 

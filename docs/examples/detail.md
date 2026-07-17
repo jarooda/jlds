@@ -10,7 +10,7 @@ The read view that pairs with the [data table](/examples/data-table) — click a
 
 <Preview src="/examples/preview/detail.html" />
 
-[Open full screen ↗](/examples/preview/detail.html){target="_blank" rel="noopener"}
+[Preview full screen](/examples/preview/detail.html){target="_blank" rel="noopener"}
 
 ## Use it
 

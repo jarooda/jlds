@@ -8,7 +8,7 @@ watch the layout reflow and the sidebar collapse into a drawer.
 
 <Preview src="/examples/preview/dashboard.html" />
 
-[Open full screen ↗](/examples/preview/dashboard.html){target="_blank" rel="noopener"}
+[Preview full screen](/examples/preview/dashboard.html){target="_blank" rel="noopener"}
 
 ## Use it
 

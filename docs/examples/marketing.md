@@ -8,7 +8,7 @@ strip, an [accordion](/components/accordion) FAQ, and a mobile teaser with a
 
 <Preview src="/examples/preview/marketing.html" />
 
-[Open full screen ↗](/examples/preview/marketing.html){target="_blank" rel="noopener"}
+[Preview full screen](/examples/preview/marketing.html){target="_blank" rel="noopener"}
 
 ## Use it
 

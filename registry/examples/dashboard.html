@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="/css/chart.css" />
     <link rel="stylesheet" href="/css/card.css" />
     <link rel="stylesheet" href="/css/table.css" />
+    <link rel="stylesheet" href="/css/checkbox.css" />
     <link rel="stylesheet" href="/css/badge.css" />
     <link rel="stylesheet" href="/css/avatar.css" />
     <link rel="stylesheet" href="/css/dropdown-menu.css" />
@@ -57,7 +58,6 @@
       .name-cell { display: inline-flex; align-items: center; gap: var(--space-3); }
       .name-cell__name { font-weight: var(--weight-medium); color: var(--text-primary); }
       .name-cell__mail { font-size: var(--text-xs); color: var(--text-tertiary); }
-      .jl-table__check { width: 15px; height: 15px; accent-color: var(--accent); }
 
       /* Responsive: collapse the KPI + chart grids as the frame narrows. */
       @media (max-width: 900px) {
@@ -248,7 +248,7 @@
                 <table class="jl-table">
                   <thead class="jl-table__head">
                     <tr>
-                      <th style="width:20px"><input type="checkbox" class="jl-table__check" data-select-all aria-label="Select all" /></th>
+                      <th class="jl-th--select" scope="col"><label class="jl-check"><input type="checkbox" class="jl-check__input" data-select-all aria-label="Select all" /><span class="jl-check__box"><svg class="jl-check__mark" viewBox="0 0 12 12" fill="none"><path d="M2.5 6.2l2.2 2.3 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="jl-check__dash"></span></span></label></th>
                       <th>Customer</th>
                       <th class="col-hide-sm">Plan</th>
                       <th>Status</th>
@@ -258,7 +258,7 @@
                   </thead>
                   <tbody class="jl-table__body">
                     <tr>
-                      <td><input type="checkbox" class="jl-table__check" aria-label="Select row" /></td>
+                      <td class="jl-td--select"><label class="jl-check"><input type="checkbox" class="jl-check__input" aria-label="Select row" /><span class="jl-check__box"><svg class="jl-check__mark" viewBox="0 0 12 12" fill="none"><path d="M2.5 6.2l2.2 2.3 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="jl-check__dash"></span></span></label></td>
                       <td>
                         <span class="name-cell">
                           <span class="jl-avatar" style="width:32px;height:32px;font-size:13px;background:#7c5cff">AL</span>
@@ -271,7 +271,7 @@
                       <td class="jl-td--num jl-td--right">$1,200</td>
                     </tr>
                     <tr>
-                      <td><input type="checkbox" class="jl-table__check" aria-label="Select row" /></td>
+                      <td class="jl-td--select"><label class="jl-check"><input type="checkbox" class="jl-check__input" aria-label="Select row" /><span class="jl-check__box"><svg class="jl-check__mark" viewBox="0 0 12 12" fill="none"><path d="M2.5 6.2l2.2 2.3 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="jl-check__dash"></span></span></label></td>
                       <td>
                         <span class="name-cell">
                           <span class="jl-avatar" style="width:32px;height:32px;font-size:13px;background:#0ea5e9">AT</span>
@@ -284,7 +284,7 @@
                       <td class="jl-td--num jl-td--right">$980</td>
                     </tr>
                     <tr>
-                      <td><input type="checkbox" class="jl-table__check" aria-label="Select row" /></td>
+                      <td class="jl-td--select"><label class="jl-check"><input type="checkbox" class="jl-check__input" aria-label="Select row" /><span class="jl-check__box"><svg class="jl-check__mark" viewBox="0 0 12 12" fill="none"><path d="M2.5 6.2l2.2 2.3 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="jl-check__dash"></span></span></label></td>
                       <td>
                         <span class="name-cell">
                           <span class="jl-avatar" style="width:32px;height:32px;font-size:13px;background:#f59e0b">GH</span>
@@ -297,7 +297,7 @@
                       <td class="jl-td--num jl-td--right">$1,530</td>
                     </tr>
                     <tr>
-                      <td><input type="checkbox" class="jl-table__check" aria-label="Select row" /></td>
+                      <td class="jl-td--select"><label class="jl-check"><input type="checkbox" class="jl-check__input" aria-label="Select row" /><span class="jl-check__box"><svg class="jl-check__mark" viewBox="0 0 12 12" fill="none"><path d="M2.5 6.2l2.2 2.3 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="jl-check__dash"></span></span></label></td>
                       <td>
                         <span class="name-cell">
                           <span class="jl-avatar" style="width:32px;height:32px;font-size:13px;background:#10b981">KJ</span>

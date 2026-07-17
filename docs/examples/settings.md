@@ -9,7 +9,7 @@ It showcases nearly every form control in one believable layout.
 
 <Preview src="/examples/preview/settings.html" />
 
-[Open full screen ↗](/examples/preview/settings.html){target="_blank" rel="noopener"}
+[Preview full screen](/examples/preview/settings.html){target="_blank" rel="noopener"}
 
 ## Use it
 

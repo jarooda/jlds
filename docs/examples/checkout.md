@@ -9,7 +9,7 @@ itself uses [fields](/components/field), a [select](/components/select), a
 
 <Preview src="/examples/preview/checkout.html" />
 
-[Open full screen ↗](/examples/preview/checkout.html){target="_blank" rel="noopener"}
+[Preview full screen](/examples/preview/checkout.html){target="_blank" rel="noopener"}
 
 ## Use it
 
