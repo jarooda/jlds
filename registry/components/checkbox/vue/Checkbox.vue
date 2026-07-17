@@ -7,9 +7,11 @@ const props = withDefaults(
     description?: string;
     indeterminate?: boolean;
     disabled?: boolean;
+    /** Error styling on the box. @default false */
+    invalid?: boolean;
     modelValue?: boolean;
   }>(),
-  { label: "", description: "", indeterminate: false, disabled: false, modelValue: false }
+  { label: "", description: "", indeterminate: false, disabled: false, invalid: false, modelValue: false }
 );
 
 const emit = defineEmits<{
@@ -30,13 +32,18 @@ function onChange(event: Event) {
 </script>
 
 <template>
-  <label class="jl-check" :data-disabled="props.disabled || undefined">
+  <label
+    class="jl-check"
+    :data-disabled="props.disabled || undefined"
+    :data-invalid="props.invalid || undefined"
+  >
     <input
       ref="input"
       type="checkbox"
       class="jl-check__input"
       :checked="props.modelValue"
       :disabled="props.disabled"
+      :aria-invalid="props.invalid || undefined"
       v-bind="$attrs"
       @change="onChange"
     />

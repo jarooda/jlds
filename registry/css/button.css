@@ -63,7 +63,7 @@
 
 .jl-btn--danger {
   background: var(--danger);
-  color: #fff;
+  color: var(--text-on-brand);
   box-shadow: var(--shadow-xs);
 }
 .jl-btn--danger:hover:not(:disabled) { background: var(--danger-hover); }

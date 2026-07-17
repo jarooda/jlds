@@ -68,6 +68,35 @@ Add `invalid` for error styling, or the native `disabled` attribute.
 
 :::
 
+## Auto-resize & counter
+
+`autoResize` grows the field to fit its content; `showCount` (with `maxLength`) renders a character
+counter that turns red past the limit.
+
+<Preview src="/preview/textarea/count.html" />
+
+::: code-group
+
+```html [HTML]
+<!-- needs the behavior layer (js/all.js) -->
+<span class="jl-textarea-wrap">
+  <textarea class="jl-textarea jl-textarea--auto" data-auto-resize maxlength="140">Deploys in ~40s.</textarea>
+  <span class="jl-textarea__count">15/140</span>
+</span>
+```
+
+```vue [Vue]
+<template>
+  <Textarea v-model="msg" auto-resize show-count :max-length="140" />
+</template>
+```
+
+```tsx [React]
+<Textarea autoResize showCount maxLength={140} value={msg} onChange={(e) => setMsg(e.target.value)} />
+```
+
+:::
+
 ## Props
 
 ### React
@@ -78,6 +107,8 @@ Add `invalid` for error styling, or the native `disabled` attribute.
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `invalid` | `boolean` | `false` | Show error styling |
+| `autoResize` | `boolean` | `false` | Grow to fit content |
+| `showCount` | `boolean` | `false` | Character counter (with `maxLength`) |
 
 ### Vue
 
@@ -87,6 +118,9 @@ through to the inner `<textarea>`.
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `invalid` | `boolean` | `false` | Show error styling |
+| `autoResize` | `boolean` | `false` | Grow to fit content |
+| `showCount` | `boolean` | `false` | Character counter (with `maxLength`) |
+| `maxLength` | `number` | — | Max characters (drives the counter) |
 | `modelValue` | `string` | — | Bound value (`v-model`) |
 
 ## CSS classes (HTML)

@@ -4,7 +4,7 @@ import "./number-input.css";
 export interface NumberInputProps
   extends Omit<
     React.InputHTMLAttributes<HTMLInputElement>,
-    "value" | "defaultValue" | "onChange" | "size"
+    "value" | "defaultValue" | "onChange" | "size" | "prefix"
   > {
   value?: number | "";
   defaultValue?: number | "";
@@ -15,6 +15,8 @@ export interface NumberInputProps
   precision?: number;
   size?: "sm" | "md" | "lg";
   align?: "left" | "center";
+  /** Leading affix (e.g. a currency symbol). */
+  prefix?: React.ReactNode;
   suffix?: React.ReactNode;
   disabled?: boolean;
   invalid?: boolean;
@@ -35,6 +37,7 @@ export function NumberInput({
   precision,
   size = "md",
   align = "center",
+  prefix,
   suffix,
   disabled = false,
   invalid = false,
@@ -116,6 +119,7 @@ export function NumberInput({
           <path d="M3 8h10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
         </svg>
       </button>
+      {prefix && <span className="jl-number__affix jl-number__affix--prefix">{prefix}</span>}
       <input
         className="jl-number__input"
         type="text"

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/accordion.css">
+    <link rel="stylesheet" href="/css/badge.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); max-width: 520px; }
+    </style>
+  </head>
+  <body>
+    <div class="jl-accordion jl-accordion--bordered">
+      <div class="jl-acc-item" data-open="true">
+        <h3 style="margin:0">
+          <button type="button" class="jl-acc-trigger" aria-expanded="true" aria-controls="m1">
+            <span class="jl-acc-trigger__label">Environments</span>
+            <span class="jl-acc-trigger__meta"><span class="jl-badge jl-badge--brand jl-badge--pill">3</span></span>
+            <span class="jl-acc-trigger__chevron"><svg viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+        </h3>
+        <div class="jl-acc-region" id="m1" role="region">
+          <div class="jl-acc-content"><div class="jl-acc-content__inner">Production, Preview, and Development.</div></div>
+        </div>
+      </div>
+      <div class="jl-acc-item">
+        <h3 style="margin:0">
+          <button type="button" class="jl-acc-trigger" aria-expanded="false" aria-controls="m2">
+            <span class="jl-acc-trigger__label">Members</span>
+            <span class="jl-acc-trigger__meta"><span class="jl-badge jl-badge--pill">8</span></span>
+            <span class="jl-acc-trigger__chevron"><svg viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </button>
+        </h3>
+        <div class="jl-acc-region" id="m2" role="region">
+          <div class="jl-acc-content"><div class="jl-acc-content__inner">Everyone with access to this project.</div></div>
+        </div>
+      </div>
+    </div>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

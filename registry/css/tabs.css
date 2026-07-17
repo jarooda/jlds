@@ -18,6 +18,7 @@
   white-space: nowrap;
 }
 .jl-tab:focus-visible { outline: none; box-shadow: var(--ring-focus); border-radius: var(--radius-sm); }
+.jl-tab:disabled, .jl-tab[aria-disabled="true"] { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
 .jl-tab svg { width: 1.1em; height: 1.1em; }
 .jl-tab__count {
   font-size: var(--text-xs);
@@ -54,9 +55,22 @@
   font-weight: var(--weight-semibold);
 }
 
+/* Vertical orientation — column layout with a side indicator. */
+.jl-tabs--vertical { flex-direction: column; align-items: stretch; width: fit-content; }
+.jl-tabs--vertical.jl-tabs--line { gap: var(--space-1); border-bottom: none; border-left: 1px solid var(--border-subtle); }
+.jl-tabs--vertical.jl-tabs--line .jl-tab { justify-content: flex-start; padding: var(--space-2) var(--space-4); margin-bottom: 0; margin-left: -1px; }
+.jl-tabs--vertical.jl-tabs--line .jl-tab::after { left: 0; right: auto; top: 0; bottom: 0; width: 2px; height: auto; border-radius: 0 2px 2px 0; transform: scaleY(0); transform-origin: center; }
+.jl-tabs--vertical.jl-tabs--line .jl-tab[aria-selected="true"]::after { transform: scaleY(1); }
+.jl-tabs--vertical.jl-tabs--pill { flex-direction: column; }
+
 /* Responsive — Tier 1. Below mobile (--bp-mobile 600px) the strip scrolls
    horizontally instead of wrapping; tabs already use white-space: nowrap. */
 @media (max-width: 600px) {
-  .jl-tabs { overflow-x: auto; scrollbar-width: none; }
-  .jl-tabs::-webkit-scrollbar { display: none; }
+  .jl-tabs:not(.jl-tabs--vertical) { overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .jl-tabs:not(.jl-tabs--vertical)::-webkit-scrollbar { display: none; }
+  .jl-tabs:not(.jl-tabs--vertical) .jl-tab { flex: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jl-tabs, .jl-tabs * { transition: none !important; animation: none !important; }
 }

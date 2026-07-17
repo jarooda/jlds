@@ -52,7 +52,12 @@
     el.className = "jl-toast" + (opts.tone ? " jl-toast--" + opts.tone : "");
     el.setAttribute("role", "status");
 
-    if (opts.tone && ICONS[opts.tone]) {
+    if (opts.tone === "loading") {
+      var spin = document.createElement("span");
+      spin.className = "jl-toast__icon";
+      spin.innerHTML = '<span class="jl-toast__spin" aria-hidden="true"></span>';
+      el.appendChild(spin);
+    } else if (opts.tone && ICONS[opts.tone]) {
       var icon = document.createElement("span");
       icon.className = "jl-toast__icon";
       icon.innerHTML =
@@ -129,6 +134,28 @@
   J.toast.warning = toned("warning");
   J.toast.danger = toned("danger");
   J.toast.info = toned("info");
+  J.toast.loading = function (description, opts) {
+    var o = { tone: "loading", description: description, duration: Infinity };
+    if (opts) for (var k in opts) o[k] = opts[k];
+    return show(o);
+  };
+  J.toast.promise = function (promise, msgs) {
+    msgs = msgs || {};
+    var el = show({ tone: "loading", description: msgs.loading || "Loading…", duration: Infinity });
+    var p = typeof promise === "function" ? promise() : promise;
+    Promise.resolve(p)
+      .then(function (data) {
+        var m = typeof msgs.success === "function" ? msgs.success(data) : msgs.success;
+        dismiss(el);
+        show({ tone: "success", description: m || "Done", duration: 4500 });
+      })
+      .catch(function (err) {
+        var m = typeof msgs.error === "function" ? msgs.error(err) : msgs.error;
+        dismiss(el);
+        show({ tone: "danger", description: m || "Something went wrong", duration: 4500 });
+      });
+    return el;
+  };
   J.toast.dismiss = function (el) {
     dismiss(el);
   };

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/input.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); max-width: 360px; display: flex; flex-direction: column; gap: var(--space-3); }
+    </style>
+  </head>
+  <body>
+    <div class="jl-input-wrap jl-input-wrap--md">
+      <span class="jl-input-adorn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+        </svg>
+      </span>
+      <input class="jl-input" value="acme-web" />
+      <button type="button" class="jl-input-clear" aria-label="Clear" tabindex="-1">
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="jl-input-wrap jl-input-wrap--md">
+      <span class="jl-input-affix">jlds.dev/</span>
+      <input class="jl-input" value="acme" />
+    </div>
+    <div class="jl-input-wrap jl-input-wrap--md">
+      <input class="jl-input" value="40" />
+      <span class="jl-input-affix">ms</span>
+    </div>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

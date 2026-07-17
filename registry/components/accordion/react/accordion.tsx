@@ -13,6 +13,8 @@ export interface AccordionItemProps
   value?: string;
   title: React.ReactNode;
   icon?: React.ReactNode;
+  /** Right-aligned trailing content in the header (badge, count, hint) before the chevron. */
+  meta?: React.ReactNode;
   disabled?: boolean;
 }
 
@@ -72,6 +74,7 @@ function AccordionItem({
   value,
   title,
   icon = null,
+  meta = null,
   disabled = false,
   className = "",
   children,
@@ -100,6 +103,7 @@ function AccordionItem({
         >
           {icon && <span className="jl-acc-trigger__icon">{icon}</span>}
           <span className="jl-acc-trigger__label">{title}</span>
+          {meta && <span className="jl-acc-trigger__meta">{meta}</span>}
           <span className="jl-acc-trigger__chevron">
             <Chevron />
           </span>

@@ -66,6 +66,7 @@
   background: var(--surface-sunken);
   border-left: 1px solid var(--border-subtle);
 }
+.jl-number__affix--prefix { border-left: none; border-right: 1px solid var(--border-subtle); }
 
 /* Responsive — Tier 1. On mobile: ≥44px control height + 16px text (stops iOS auto-zoom). */
 @media (max-width: 600px) {

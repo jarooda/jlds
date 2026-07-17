@@ -24,6 +24,7 @@ const id = `jlacc-${Math.random().toString(36).slice(2, 8)}`;
       >
         <span v-if="$slots.icon" class="jl-acc-trigger__icon"><slot name="icon" /></span>
         <span class="jl-acc-trigger__label">{{ title }}</span>
+        <span v-if="$slots.meta" class="jl-acc-trigger__meta"><slot name="meta" /></span>
         <span class="jl-acc-trigger__chevron">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" /></svg>
         </span>

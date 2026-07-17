@@ -6,10 +6,15 @@ export interface CheckboxProps
   label?: React.ReactNode;
   description?: React.ReactNode;
   indeterminate?: boolean;
+  /** Error styling on the box. @default false */
+  invalid?: boolean;
 }
 
 const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
-  ({ label, description, indeterminate = false, disabled = false, className = "", ...props }, ref) => {
+  (
+    { label, description, indeterminate = false, disabled = false, invalid = false, className = "", ...props },
+    ref
+  ) => {
     const innerRef = React.useRef<HTMLInputElement>(null);
     React.useImperativeHandle(ref, () => innerRef.current as HTMLInputElement);
     React.useEffect(() => {
@@ -20,12 +25,14 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
       <label
         className={["jl-check", className].filter(Boolean).join(" ")}
         data-disabled={disabled || undefined}
+        data-invalid={invalid || undefined}
       >
         <input
           ref={innerRef}
           type="checkbox"
           className="jl-check__input"
           disabled={disabled}
+          aria-invalid={invalid || undefined}
           {...props}
         />
         <span className="jl-check__box">

@@ -4,11 +4,10 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" href="/css/index.css">
     <link rel="stylesheet" href="/css/table.css">
+    <link rel="stylesheet" href="/css/checkbox.css">
     <link rel="stylesheet" href="/css/badge.css">
     <style>
       body { margin: 0; padding: var(--space-4); }
-      .jl-table__check { width: 15px; height: 15px; accent-color: var(--accent); }
-      th:first-child, td:first-child { width: 20px; }
     </style>
   </head>
   <body>
@@ -16,7 +15,15 @@
       <table class="jl-table">
         <thead class="jl-table__head">
           <tr>
-            <th><input type="checkbox" class="jl-table__check" data-select-all aria-label="Select all" /></th>
+            <th class="jl-th--select" scope="col">
+              <label class="jl-check">
+                <input type="checkbox" class="jl-check__input" aria-label="Select all" />
+                <span class="jl-check__box">
+                  <svg class="jl-check__mark" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 6.2l2.2 2.3 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                  <span class="jl-check__dash" aria-hidden="true"></span>
+                </span>
+              </label>
+            </th>
             <th><button type="button" class="jl-th__btn"><span>Name</span><span class="jl-th__sort"><svg viewBox="0 0 24 24" fill="none"><path d="M8 9l4-4 4 4M8 15l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button></th>
             <th>Status</th>
             <th class="jl-th--num jl-th--right"><button type="button" class="jl-th__btn"><span>Amount</span><span class="jl-th__sort"><svg viewBox="0 0 24 24" fill="none"><path d="M8 9l4-4 4 4M8 15l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button></th>
@@ -24,25 +31,25 @@
         </thead>
         <tbody class="jl-table__body">
           <tr>
-            <td><input type="checkbox" class="jl-table__check" aria-label="Select row" /></td>
+            <td class="jl-td--select"><label class="jl-check"><input type="checkbox" class="jl-check__input" aria-label="Select row" /><span class="jl-check__box"><svg class="jl-check__mark" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 6.2l2.2 2.3 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg><span class="jl-check__dash" aria-hidden="true"></span></span></label></td>
             <td>Ada Lovelace</td>
             <td><span class="jl-badge jl-badge--success jl-badge--pill"><span class="jl-badge__dot"></span>Active</span></td>
             <td class="jl-td--num jl-td--right">$1,200</td>
           </tr>
           <tr>
-            <td><input type="checkbox" class="jl-table__check" aria-label="Select row" /></td>
+            <td class="jl-td--select"><label class="jl-check"><input type="checkbox" class="jl-check__input" aria-label="Select row" /><span class="jl-check__box"><svg class="jl-check__mark" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 6.2l2.2 2.3 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg><span class="jl-check__dash" aria-hidden="true"></span></span></label></td>
             <td>Alan Turing</td>
             <td><span class="jl-badge jl-badge--neutral jl-badge--pill"><span class="jl-badge__dot"></span>Invited</span></td>
             <td class="jl-td--num jl-td--right">$980</td>
           </tr>
           <tr>
-            <td><input type="checkbox" class="jl-table__check" aria-label="Select row" /></td>
+            <td class="jl-td--select"><label class="jl-check"><input type="checkbox" class="jl-check__input" aria-label="Select row" /><span class="jl-check__box"><svg class="jl-check__mark" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 6.2l2.2 2.3 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg><span class="jl-check__dash" aria-hidden="true"></span></span></label></td>
             <td>Grace Hopper</td>
             <td><span class="jl-badge jl-badge--success jl-badge--pill"><span class="jl-badge__dot"></span>Active</span></td>
             <td class="jl-td--num jl-td--right">$1,530</td>
           </tr>
           <tr>
-            <td><input type="checkbox" class="jl-table__check" aria-label="Select row" /></td>
+            <td class="jl-td--select"><label class="jl-check"><input type="checkbox" class="jl-check__input" aria-label="Select row" /><span class="jl-check__box"><svg class="jl-check__mark" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 6.2l2.2 2.3 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg><span class="jl-check__dash" aria-hidden="true"></span></span></label></td>
             <td>Katherine Johnson</td>
             <td><span class="jl-badge jl-badge--warning jl-badge--pill"><span class="jl-badge__dot"></span>Pending</span></td>
             <td class="jl-td--num jl-td--right">$2,100</td>

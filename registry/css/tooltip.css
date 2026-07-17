@@ -33,3 +33,7 @@
 @media (hover: none) {
   .jl-tooltip__pop { display: none; }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .jl-tooltip, .jl-tooltip * { transition: none !important; animation: none !important; }
+}

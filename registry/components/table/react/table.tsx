@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import * as React from "react";
+import { Checkbox } from "../checkbox";
 import "./table.css";
 
 export type CellAlign = "left" | "center" | "right";
@@ -24,6 +25,17 @@ export interface TableHeaderCellProps
 export interface TableCellProps extends React.TdHTMLAttributes<HTMLTableCellElement> {
   align?: CellAlign;
   numeric?: boolean;
+}
+export interface TableSelectCellProps {
+  /** Render as a <th> header checkbox (select-all) instead of a row <td>. @default false */
+  header?: boolean;
+  /** Checked state. @default false */
+  checked?: boolean;
+  /** Mixed state for a select-all header (shown when not fully checked). @default false */
+  indeterminate?: boolean;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  "aria-label"?: string;
+  className?: string;
 }
 
 function TableRoot({
@@ -146,10 +158,36 @@ function TableCell({ align = "left", numeric = false, className = "", children, 
   );
 }
 
+function TableSelectCell({
+  header = false,
+  checked = false,
+  indeterminate = false,
+  onChange,
+  className = "",
+  ...rest
+}: TableSelectCellProps) {
+  const Tag = header ? "th" : "td";
+  const label = rest["aria-label"] || (header ? "Select all rows" : "Select row");
+  return (
+    <Tag
+      className={[header ? "jl-th--select" : "jl-td--select", className].filter(Boolean).join(" ")}
+      scope={header ? "col" : undefined}
+    >
+      <Checkbox
+        checked={checked}
+        indeterminate={indeterminate && !checked}
+        onChange={onChange}
+        aria-label={label}
+      />
+    </Tag>
+  );
+}
+
 export const Table = Object.assign(TableRoot, {
   Head: TableHead,
   Body: TableBody,
   Row: TableRow,
   HeaderCell: TableHeaderCell,
   Cell: TableCell,
+  SelectCell: TableSelectCell,
 });

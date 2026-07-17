@@ -56,31 +56,33 @@ const [qty, setQty] = useState<number | null>(3)
 
 :::
 
-## Step, precision & suffix
+## Step, precision & affixes
 
-`step` sets the increment (and default decimal `precision`); add a `suffix` for a trailing unit.
+`step` sets the increment (and default decimal `precision`); add a `prefix` (leading) and/or
+`suffix` (trailing) affix for a currency symbol or unit.
 
 <Preview src="/preview/number-input/units.html" />
 
 ::: code-group
 
 ```html [HTML]
-<div class="jl-number jl-number--md" data-min="0" data-max="100" data-step="0.5" data-precision="1" style="max-width: 200px">
+<div class="jl-number jl-number--md" data-min="0" data-step="5" style="max-width: 220px">
   <button class="jl-number__btn jl-number__btn--dec" aria-label="Decrease" tabindex="-1">…</button>
-  <input class="jl-number__input" type="text" inputmode="decimal" value="12.5" />
-  <span class="jl-number__affix">GB</span>
+  <span class="jl-number__affix jl-number__affix--prefix">$</span>
+  <input class="jl-number__input" type="text" inputmode="decimal" value="20" />
+  <span class="jl-number__affix">/mo</span>
   <button class="jl-number__btn jl-number__btn--inc" aria-label="Increase" tabindex="-1">…</button>
 </div>
 ```
 
 ```vue [Vue]
 <template>
-  <NumberInput v-model="size" :min="0" :max="100" :step="0.5" suffix="GB" />
+  <NumberInput v-model="price" prefix="$" suffix="/mo" :min="0" :step="5" />
 </template>
 ```
 
 ```tsx [React]
-<NumberInput value={size} onChange={setSize} min={0} max={100} step={0.5} suffix="GB" />
+<NumberInput prefix="$" suffix="/mo" defaultValue={20} min={0} step={5} />
 ```
 
 :::
@@ -131,6 +133,7 @@ const [qty, setQty] = useState<number | null>(3)
 | `precision` | `number` | from `step` | Decimal places to round to |
 | `size` | `"sm" \| "md" \| "lg"` | `"md"` | Control height |
 | `align` | `"left" \| "center"` | `"center"` | Value text alignment |
+| `prefix` | `React.ReactNode` | — | Leading affix (e.g. `$`) |
 | `suffix` | `React.ReactNode` | — | Trailing unit affix |
 | `invalid` / `disabled` | `boolean` | `false` | States |
 
@@ -145,6 +148,7 @@ Same options. Use `v-model` (`number \| null`).
 | `.jl-number` | Wrapper — set `data-min/max/step/precision` here |
 | `.jl-number--sm` / `--md` / `--lg` | Size |
 | `.jl-number--left` | Left-align the value |
+| `.jl-number__affix` + `--prefix` | Trailing / leading unit affix |
 | `.jl-number--invalid` / `--disabled` | States |
 | `.jl-number__input` | The text input (`value` sets the initial number) |
 | `.jl-number__btn--dec` / `--inc` | Stepper buttons |

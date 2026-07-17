@@ -114,6 +114,91 @@ const series = [
 
 :::
 
+## Multi-series & reference line
+
+Pass `series` (an array of `{ name, data, color? }`) for multiple lines/areas/bars — a legend and
+per-series tooltip appear automatically. Add `referenceLine` (a number, or `{ value, label, color }`)
+to draw a dashed threshold. The single-series `data` prop still works unchanged.
+
+<Preview src="/preview/chart/multi.html" />
+
+::: code-group
+
+```html [HTML]
+<div
+  class="jl-chart"
+  data-type="line"
+  data-ref="95" data-ref-label="SLA 95%" data-ref-color="var(--danger)"
+  data-series='[{"name":"us-east","data":[92,97,99,96,98]},{"name":"eu-west","color":"var(--info)","data":[88,91,94,90,93]}]'
+></div>
+```
+
+```vue [Vue]
+<template>
+  <Chart
+    type="line"
+    :reference-line="{ value: 95, label: 'SLA 95%', color: 'var(--danger)' }"
+    :series="[
+      { name: 'us-east', data: [92, 97, 99, 96, 98] },
+      { name: 'eu-west', color: 'var(--info)', data: [88, 91, 94, 90, 93] },
+    ]"
+  />
+</template>
+```
+
+```tsx [React]
+<Chart
+  type="line"
+  referenceLine={{ value: 95, label: "SLA 95%", color: "var(--danger)" }}
+  series={[
+    { name: "us-east", data: [92, 97, 99, 96, 98] },
+    { name: "eu-west", color: "var(--info)", data: [88, 91, 94, 90, 93] },
+  ]}
+/>
+```
+
+:::
+
+## Stacked bars
+
+`type="bar"` with `stacked` stacks multiple series for part-to-whole comparisons.
+
+<Preview src="/preview/chart/stacked.html" />
+
+::: code-group
+
+```html [HTML]
+<div class="jl-chart" data-type="bar" data-stacked="true"
+  data-series='[{"name":"Production","data":[20,28,24,32]},{"name":"Preview","color":"var(--info)","data":[12,9,15,11]}]'></div>
+```
+
+```tsx [React]
+<Chart type="bar" stacked series={[
+  { name: "Production", data: [20, 28, 24, 32] },
+  { name: "Preview", color: "var(--info)", data: [12, 9, 15, 11] },
+]} />
+```
+
+:::
+
+## Sparkline
+
+`type="sparkline"` is a tiny, axis-less inline trend — perfect under a KPI value.
+
+<Preview src="/preview/chart/sparkline.html" />
+
+::: code-group
+
+```html [HTML]
+<div class="jl-chart" data-type="sparkline" data-height="40" data-values="8,12,9,14,13,18,17,20"></div>
+```
+
+```tsx [React]
+<Chart type="sparkline" height={40} data={[8, 12, 9, 14, 13, 18, 17, 20]} />
+```
+
+:::
+
 ## Props
 
 ### React
@@ -122,10 +207,14 @@ const series = [
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `data` | `number[] \| { label, value }[]` | — | Series data |
-| `type` | `"area" \| "line" \| "bar"` | `"area"` | Visual form |
-| `height` | `number` | `200` | Plot height (px); width is fluid |
-| `color` | `string` | `--accent` | Series color |
+| `data` | `number[] \| { label, value }[]` | — | Single-series data |
+| `series` | `{ name, data, color? }[]` | — | Multi-series data (overrides `data`) |
+| `type` | `"area" \| "line" \| "bar" \| "sparkline"` | `"area"` | Visual form |
+| `stacked` | `boolean` | `false` | Stack bar series instead of grouping |
+| `referenceLine` | `number \| { value, label?, color? }` | — | Dashed threshold line |
+| `showLegend` | `boolean` | multi | Show the series legend |
+| `height` | `number` | `200` (44 spark) | Plot height (px); width is fluid |
+| `color` | `string` | `--accent` | Single-series color |
 | `showGrid` | `boolean` | `true` | Horizontal grid lines |
 | `showAxis` | `boolean` | `true` | Value + label axes |
 | `showDots` | `boolean` | `false` | Always show point markers (line/area) |
@@ -133,7 +222,8 @@ const series = [
 
 ### Vue
 
-Same options. `valueFormat` maps to `:value-format`.
+Same options. `valueFormat` maps to `:value-format`, `referenceLine` to `:reference-line`,
+`showLegend` to `:show-legend`.
 
 ## CSS classes (HTML)
 
@@ -142,7 +232,12 @@ Same options. `valueFormat` maps to `:value-format`.
 | `.jl-chart` | Root (self-measuring); the SVG + tooltip are generated inside |
 | `.jl-chart__grid` / `__axis` | Grid lines and axis labels |
 | `.jl-chart__area` / `__line` / `__bar` / `__dot` | Series marks |
+| `.jl-chart__ref` / `__ref-label` | Reference/threshold line + label |
+| `.jl-chart__legend` / `__swatch` | Multi-series legend |
 | `.jl-chart__cursor` / `__tip` | Hover cursor line and value tooltip |
 
-Data attributes on the root: `data-values` (comma-separated), `data-labels`, `data-type`,
-`data-height`, `data-grid="false"`, `data-axis="false"`, `data-dots="true"`, `data-suffix`.
+Data attributes on the root: `data-values` (comma-separated), `data-labels`, `data-type`
+(`area`/`line`/`bar`/`sparkline`), `data-height`, `data-grid="false"`, `data-axis="false"`,
+`data-dots="true"`, `data-suffix`. Multi-series: `data-series` (a JSON array of
+`{ name, data, color? }`) plus `data-stacked="true"`. Reference line: `data-ref`, `data-ref-label`,
+`data-ref-color`.

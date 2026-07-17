@@ -128,6 +128,44 @@ several panels stay open.
 
 :::
 
+## Header meta
+
+`Accordion.Item` accepts a `meta` node (React) or `meta` slot (Vue) for right-aligned trailing
+content — a badge, count, or hint — shown before the chevron.
+
+<Preview src="/preview/accordion/meta.html" />
+
+::: code-group
+
+```html [HTML]
+<button type="button" class="jl-acc-trigger" aria-expanded="true" aria-controls="m1">
+  <span class="jl-acc-trigger__label">Environments</span>
+  <span class="jl-acc-trigger__meta"><span class="jl-badge jl-badge--brand jl-badge--pill">3</span></span>
+  <span class="jl-acc-trigger__chevron">…</span>
+</button>
+```
+
+```vue [Vue]
+<template>
+  <Accordion default-value="a">
+    <AccordionItem value="a" title="Environments">
+      <template #meta><Badge color="brand" pill>3</Badge></template>
+      Production, Preview, and Development.
+    </AccordionItem>
+  </Accordion>
+</template>
+```
+
+```tsx [React]
+<Accordion defaultValue="a">
+  <Accordion.Item value="a" title="Environments" meta={<Badge color="brand" pill>3</Badge>}>
+    Production, Preview, and Development.
+  </Accordion.Item>
+</Accordion>
+```
+
+:::
+
 ## Props
 
 ### React
@@ -140,12 +178,13 @@ several panels stay open.
 | `variant` | `"bordered" \| "separated"` | `"bordered"` | Visual treatment |
 | `defaultValue` | `string \| string[]` | — | Initially-open item value(s) |
 
-`Accordion.Item` props: `value` (stable id), `title` (header), `icon`, `disabled`.
+`Accordion.Item` props: `value` (stable id), `title` (header), `icon`, `meta` (trailing header
+content), `disabled`.
 
 ### Vue
 
 Same options. `Accordion` + `AccordionItem` (each item needs a `value`); pass the header via the
-`title` prop and an optional `icon` slot.
+`title` prop, and optional `icon` / `meta` slots.
 
 ## CSS classes (HTML)
 
@@ -154,5 +193,5 @@ Same options. `Accordion` + `AccordionItem` (each item needs a `value`); pass th
 | `.jl-accordion` + `--bordered` / `--separated` | Container and variant |
 | `[data-type="multiple"]` | On the container: allow several open |
 | `.jl-acc-item` + `[data-open="true"]` | A section and its open state |
-| `.jl-acc-trigger` + `__label` / `__icon` / `__chevron` | The header button parts |
+| `.jl-acc-trigger` + `__label` / `__icon` / `__meta` / `__chevron` | The header button parts |
 | `.jl-acc-region` / `.jl-acc-content` / `__inner` | The animated collapsible panel |

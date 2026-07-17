@@ -10,6 +10,7 @@ interface TimelineItemData {
   time?: string;
   description?: string;
   tone?: TimelineTone;
+  plain?: boolean;
 }
 
 const props = withDefaults(
@@ -29,7 +30,7 @@ const cls = computed(() => ["jl-timeline", props.size === "sm" ? "jl-timeline--s
     <slot>
       <li v-for="(it, i) in props.items" :key="it.id ?? i" class="jl-timeline__item">
         <div class="jl-timeline__rail">
-          <span class="jl-timeline__dot" :data-tone="it.tone || 'muted'" data-plain="true" aria-hidden="true" />
+          <span class="jl-timeline__dot" :data-tone="it.tone || 'muted'" :data-plain="it.plain || undefined" aria-hidden="true" />
           <span class="jl-timeline__line" aria-hidden="true" />
         </div>
         <div class="jl-timeline__body">

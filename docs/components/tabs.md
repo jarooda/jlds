@@ -143,6 +143,52 @@ Pass `count` on an item for a trailing badge.
 
 :::
 
+## Vertical & disabled
+
+`orientation="vertical"` lays the tabs in a column with a side indicator. Any item can set
+`disabled` to dim it and skip it in keyboard navigation.
+
+<Preview src="/preview/tabs/vertical.html" />
+
+::: code-group
+
+```html [HTML]
+<div class="jl-tabs jl-tabs--line jl-tabs--vertical" role="tablist" aria-orientation="vertical">
+  <button type="button" role="tab" class="jl-tab" aria-selected="true">Overview</button>
+  <button type="button" role="tab" class="jl-tab" aria-selected="false" aria-disabled="true" disabled>Billing</button>
+  <button type="button" role="tab" class="jl-tab" aria-selected="false">Team</button>
+</div>
+```
+
+```vue [Vue]
+<template>
+  <Tabs
+    v-model="tab"
+    orientation="vertical"
+    :items="[
+      { value: 'overview', label: 'Overview' },
+      { value: 'billing', label: 'Billing', disabled: true },
+      { value: 'team', label: 'Team' },
+    ]"
+  />
+</template>
+```
+
+```tsx [React]
+<Tabs
+  value={tab}
+  onChange={setTab}
+  orientation="vertical"
+  items={[
+    { value: "overview", label: "Overview" },
+    { value: "billing", label: "Billing", disabled: true },
+    { value: "team", label: "Team" },
+  ]}
+/>
+```
+
+:::
+
 ## Props
 
 ### React
@@ -151,10 +197,11 @@ Pass `count` on an item for a trailing badge.
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `items` | `(string \| { value, label, icon?, count? })[]` | — | The tabs |
+| `items` | `(string \| { value, label, icon?, count?, disabled? })[]` | — | The tabs |
 | `value` | `string` | — | Active tab value (controlled) |
 | `onChange` | `(value: string) => void` | — | Fires with the selected value |
 | `variant` | `"line" \| "pill"` | `"line"` | Underline or pill style |
+| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Row or column layout |
 
 ### Vue
 
@@ -166,7 +213,8 @@ Same options. Use `v-model` for the value; also emits `change`.
 |---|---|
 | `.jl-tabs` | The strip (`role="tablist"`) |
 | `.jl-tabs--line` / `--pill` | Variant |
-| `.jl-tab` | A tab (`role="tab"` + `aria-selected`; `aria-controls` pairs it with a panel) |
+| `.jl-tabs--vertical` | Column layout with a side indicator |
+| `.jl-tab` | A tab (`role="tab"` + `aria-selected`; `aria-controls` pairs it with a panel; `disabled` / `aria-disabled` to dim) |
 | `.jl-tab__count` | Trailing count badge |
 
 In HTML, give each tab `aria-controls="panelId"` and each panel a matching `id` (+ `role="tabpanel"`,

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/dropdown-menu.css">
+    <link rel="stylesheet" href="/css/button.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); display: flex; justify-content: center; min-height: 320px; align-items: flex-start; }
+    </style>
+  </head>
+  <body>
+    <span class="jl-menu">
+      <button class="jl-btn jl-btn--secondary jl-btn--md">View options</button>
+      <div class="jl-menu__pop" role="menu" data-side="bottom" data-align="start" hidden>
+        <div class="jl-menu__label">Show</div>
+        <button type="button" role="menuitemcheckbox" aria-checked="true" class="jl-menu__item">
+          <span class="jl-menu__item-check"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="jl-menu__item-label">Grid lines</span>
+        </button>
+        <button type="button" role="menuitemcheckbox" aria-checked="false" class="jl-menu__item">
+          <span class="jl-menu__item-check"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="jl-menu__item-label">Ruler</span>
+        </button>
+        <div class="jl-menu__sep" role="separator"></div>
+        <div class="jl-menu__label">Density</div>
+        <button type="button" role="menuitemradio" aria-checked="true" class="jl-menu__item">
+          <span class="jl-menu__item-check jl-menu__item-check--radio"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="3.5" fill="currentColor"/></svg></span>
+          <span class="jl-menu__item-label">Comfortable</span>
+        </button>
+        <button type="button" role="menuitemradio" aria-checked="false" class="jl-menu__item">
+          <span class="jl-menu__item-check jl-menu__item-check--radio"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="3.5" fill="currentColor"/></svg></span>
+          <span class="jl-menu__item-label">Compact</span>
+        </button>
+      </div>
+    </span>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

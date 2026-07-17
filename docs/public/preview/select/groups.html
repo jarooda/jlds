@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/select.css">
+    <style>
+      body { margin: 0; padding: var(--space-5); display: flex; justify-content: center; }
+      .jl-select-wrap { max-width: 260px; }
+    </style>
+  </head>
+  <body>
+    <span class="jl-select-wrap">
+      <select class="jl-select jl-select--md">
+        <optgroup label="Production">
+          <option value="us-east">us-east-1</option>
+          <option value="eu-west">eu-west-1</option>
+        </optgroup>
+        <optgroup label="Preview">
+          <option value="staging">staging</option>
+        </optgroup>
+        <option value="edge" disabled>Edge (soon)</option>
+      </select>
+      <span class="jl-select-chevron">
+        <svg viewBox="0 0 16 16" width="16" height="16" fill="none" aria-hidden="true">
+          <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+    </span>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

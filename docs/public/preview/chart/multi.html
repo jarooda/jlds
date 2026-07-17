@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/chart.css">
+    <style>
+      body { margin: 0; padding: var(--space-6) var(--space-8); font-family: var(--font-sans); }
+    </style>
+  </head>
+  <body>
+    <div
+      class="jl-chart"
+      data-type="line"
+      data-height="200"
+      data-ref="95"
+      data-ref-label="SLA 95%"
+      data-ref-color="var(--danger)"
+      data-series='[{"name":"us-east","data":[{"label":"Mon","value":92},{"label":"Tue","value":97},{"label":"Wed","value":99},{"label":"Thu","value":96},{"label":"Fri","value":98}]},{"name":"eu-west","color":"var(--info)","data":[{"label":"Mon","value":88},{"label":"Tue","value":91},{"label":"Wed","value":94},{"label":"Thu","value":90},{"label":"Fri","value":93}]}]'
+    ></div>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

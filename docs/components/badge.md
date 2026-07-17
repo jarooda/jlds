@@ -138,6 +138,38 @@ Add `pill` for fully-rounded corners and `dot` for a leading status dot.
 
 :::
 
+## Dismissible
+
+Provide `onRemove` (React) or `removable` + `@remove` (Vue) to render a trailing × — parity with
+`Tag`, for filter chips and token lists.
+
+<Preview src="/preview/badge/removable.html" />
+
+::: code-group
+
+```html [HTML]
+<span class="jl-badge jl-badge--pill jl-badge--brand">
+  production
+  <button type="button" class="jl-badge__remove" aria-label="Remove">
+    <svg viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+  </button>
+</span>
+```
+
+```vue [Vue]
+<template>
+  <Badge v-for="t in tags" :key="t" color="brand" pill removable @remove="drop(t)">{{ t }}</Badge>
+</template>
+```
+
+```tsx [React]
+{tags.map((t) => (
+  <Badge key={t} color="brand" pill onRemove={() => drop(t)}>{t}</Badge>
+))}
+```
+
+:::
+
 ## Props
 
 ### React
@@ -152,6 +184,7 @@ through).
 | `pill` | `boolean` | `false` | Fully rounded |
 | `dot` | `boolean` | `false` | Show a leading status dot |
 | `icon` | `React.ReactNode` | — | Leading icon node |
+| `onRemove` | `(e) => void` | — | Renders a trailing × and makes the badge dismissible |
 
 ### Vue
 
@@ -161,8 +194,9 @@ through).
 | `solid` | `boolean` | `false` | Filled instead of tinted |
 | `pill` | `boolean` | `false` | Fully rounded |
 | `dot` | `boolean` | `false` | Show a leading status dot |
+| `removable` | `boolean` | `false` | Render a trailing × that emits `remove` |
 
-**Slots:** `default` (label), `icon` (leading icon).
+**Slots:** `default` (label), `icon` (leading icon). **Emits:** `remove`.
 
 ## CSS classes (HTML)
 
@@ -173,3 +207,4 @@ through).
 | `.jl-badge--solid` | Filled, high-emphasis style |
 | `.jl-badge--pill` | Fully rounded corners |
 | `.jl-badge__dot` | Leading status dot element |
+| `.jl-badge__remove` | Trailing × button (dismissible) |

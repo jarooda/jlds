@@ -107,6 +107,35 @@ In React, pass `onRemove` to render the × button. In Vue, set `removable` and l
 
 :::
 
+## Colors
+
+Semantic `color` tints (parity with `Badge`) for filter chips and typed tokens.
+
+<Preview src="/preview/tag/colors.html" />
+
+::: code-group
+
+```html [HTML]
+<span class="jl-tag jl-tag--brand">api</span>
+<span class="jl-tag jl-tag--info">edge</span>
+<span class="jl-tag jl-tag--warning">preview</span>
+<span class="jl-tag jl-tag--success">db</span>
+```
+
+```vue [Vue]
+<template>
+  <Tag color="brand">api</Tag>
+  <Tag color="success" removable @remove="drop('db')">db</Tag>
+</template>
+```
+
+```tsx [React]
+<Tag color="brand">api</Tag>
+<Tag color="success" onRemove={() => drop("db")}>db</Tag>
+```
+
+:::
+
 ## Props
 
 ### React
@@ -117,6 +146,7 @@ through).
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `selected` | `boolean` | `false` | Active-filter styling |
+| `color` | `"neutral" \| "brand" \| "success" \| "warning" \| "danger" \| "info"` | `"neutral"` | Semantic tint |
 | `onRemove` | `(e: React.MouseEvent) => void` | — | If set, renders an × button |
 | `icon` | `React.ReactNode` | — | Leading icon node |
 
@@ -125,6 +155,7 @@ through).
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `selected` | `boolean` | `false` | Active-filter styling |
+| `color` | `"neutral" \| "brand" \| "success" \| "warning" \| "danger" \| "info"` | `"neutral"` | Semantic tint |
 | `removable` | `boolean` | `false` | Render an × button that emits `remove` |
 
 **Events:** `remove` (when the × is clicked). **Slots:** `default` (label), `icon` (leading).
@@ -136,5 +167,6 @@ A `@click` handler makes the tag interactive (adds the button hover style).
 |---|---|
 | `.jl-tag` | Base pill — always required |
 | `.jl-tag--button` | Interactive (cursor + hover affordance) |
+| `.jl-tag--brand` / `--success` / `--warning` / `--danger` / `--info` | Semantic color tints |
 | `.jl-tag--selected` | Active-filter styling |
 | `.jl-tag__remove` | The × remove button |

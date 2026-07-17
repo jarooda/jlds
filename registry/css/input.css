@@ -34,6 +34,24 @@
 .jl-input::placeholder { color: var(--text-tertiary); }
 .jl-input-adorn { display: inline-flex; color: var(--text-tertiary); flex: none; }
 .jl-input-adorn svg { width: 1.15em; height: 1.15em; }
+.jl-input-affix { flex: none; color: var(--text-tertiary); font-size: 0.95em; white-space: nowrap; user-select: none; }
+.jl-input-clear {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.3em;
+  height: 1.3em;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-standard), background var(--duration-fast) var(--ease-standard);
+}
+.jl-input-clear:hover { color: var(--text-primary); background: var(--surface-hover); }
+.jl-input-clear svg { width: 0.9em; height: 0.9em; }
 
 /* Responsive — Tier 1. On mobile: ≥44px height + 16px text (stops iOS focus
    auto-zoom). The wrap is already full-width (width:100%). */

@@ -8,7 +8,7 @@
   "files": {
     "shared": [],
     "react": ["table.tsx", "index.ts"],
-    "vue": ["Table.vue", "TableHead.vue", "TableBody.vue", "TableRow.vue", "TableHeaderCell.vue", "TableCell.vue", "index.ts"]
+    "vue": ["Table.vue", "TableHead.vue", "TableBody.vue", "TableRow.vue", "TableHeaderCell.vue", "TableCell.vue", "TableSelectCell.vue", "index.ts"]
   },
-  "registryDependencies": []
+  "registryDependencies": ["checkbox"]
 }

@@ -8,28 +8,49 @@ export interface ChartPoint {
   value: number;
 }
 
+export interface ChartSeries {
+  name: string;
+  data: number[] | ChartPoint[];
+  color?: string;
+}
+
+export interface ChartReferenceLine {
+  value: number;
+  label?: string;
+  color?: string;
+}
+
 const props = withDefaults(
   defineProps<{
-    /** Data — plain numbers (auto-indexed) or `{ label, value }` points. */
-    data: number[] | ChartPoint[];
-    /** Visual form. */
-    type?: "area" | "line" | "bar";
+    /** Single-series data — plain numbers (auto-indexed) or `{ label, value }` points. */
+    data?: number[] | ChartPoint[];
+    /** Multi-series data — overrides `data` when present. */
+    series?: ChartSeries[];
+    /** Visual form. `sparkline` is a tiny axis-less inline trend. */
+    type?: "area" | "line" | "bar" | "sparkline";
+    /** Stack multiple bar series instead of grouping them. */
+    stacked?: boolean;
+    /** Draw a dashed horizontal threshold line. */
+    referenceLine?: number | ChartReferenceLine;
+    /** Show the series legend. Defaults to true when multi-series (never for sparkline). */
+    showLegend?: boolean;
     /** Plot height in px (width is always fluid). */
     height?: number;
     /** Override the series color (any CSS color). Defaults to `--accent`. */
-    color?: string | undefined;
-    /** Draw horizontal grid lines. */
+    color?: string;
     showGrid?: boolean;
-    /** Draw value + label axes. */
     showAxis?: boolean;
-    /** Always show point markers (line/area). */
     showDots?: boolean;
-    /** Format axis ticks and tooltip values. */
     valueFormat?: (v: number) => string;
   }>(),
   {
+    data: () => [],
+    series: undefined,
     type: "area",
-    height: 200,
+    stacked: false,
+    referenceLine: undefined,
+    showLegend: undefined,
+    height: undefined,
     color: undefined,
     showGrid: true,
     showAxis: true,
@@ -37,6 +58,34 @@ const props = withDefaults(
     valueFormat: (v: number) => String(v),
   }
 );
+
+const PALETTE = [
+  "var(--accent)",
+  "var(--info)",
+  "var(--warning)",
+  "var(--danger)",
+  "var(--success)",
+  "var(--text-brand)",
+];
+
+interface ResolvedSeries {
+  name: string;
+  color: string;
+  values: number[];
+  labels: string[];
+}
+
+function normValues(data: number[] | ChartPoint[] | undefined): ChartPoint[] {
+  return (data || []).map((d, i) =>
+    typeof d === "number" ? { label: String(i + 1), value: d } : { label: d.label, value: d.value }
+  );
+}
+
+const spark = computed(() => props.type === "sparkline");
+const isBar = computed(() => props.type === "bar");
+const H = computed(() => (props.height != null ? props.height : spark.value ? 44 : 200));
+const gridOn = computed(() => (spark.value ? false : props.showGrid));
+const axisOn = computed(() => (spark.value ? false : props.showAxis));
 
 const wrapRef = ref<HTMLElement | null>(null);
 const w = ref(560);
@@ -46,7 +95,7 @@ let ro: ResizeObserver | null = null;
 onMounted(() => {
   const el = wrapRef.value;
   if (!el) return;
-  const update = () => (w.value = el.clientWidth || 560);
+  const update = () => (w.value = el.clientWidth || (spark.value ? 120 : 560));
   update();
   if (typeof ResizeObserver !== "undefined") {
     ro = new ResizeObserver(update);
@@ -57,107 +106,173 @@ onBeforeUnmount(() => {
   if (ro) ro.disconnect();
 });
 
-const points = computed<ChartPoint[]>(() =>
-  (props.data || []).map((d, i) =>
-    typeof d === "number" ? { label: String(i + 1), value: d } : { label: d.label, value: d.value }
-  )
+const resolved = computed<{ list: ResolvedSeries[]; labels: string[]; multi: boolean }>(() => {
+  if (Array.isArray(props.series) && props.series.length) {
+    const list = props.series.map((s, i) => {
+      const pts = normValues(s.data);
+      return {
+        name: s.name || `Series ${i + 1}`,
+        color: s.color || PALETTE[i % PALETTE.length]!,
+        values: pts.map((p) => p.value),
+        labels: pts.map((p) => p.label),
+      };
+    });
+    return { list, labels: list[0] ? list[0].labels : [], multi: list.length > 1 };
+  }
+  const pts = normValues(props.data);
+  return {
+    list: [
+      {
+        name: "Series 1",
+        color: props.color || PALETTE[0]!,
+        values: pts.map((p) => p.value),
+        labels: pts.map((p) => p.label),
+      },
+    ],
+    labels: pts.map((p) => p.label),
+    multi: false,
+  };
+});
+
+const legendOn = computed(() =>
+  props.showLegend != null ? props.showLegend : resolved.value.multi && !spark.value
 );
+const stackedBar = computed(() => isBar.value && props.stacked && resolved.value.multi);
 
 const geom = computed(() => {
-  const pts = points.value;
-  const padL = props.showAxis ? 34 : 6;
-  const padR = 6;
-  const padT = 10;
-  const padB = props.showAxis ? 22 : 6;
+  const { list, labels } = resolved.value;
+  const n = labels.length;
+  const padL = axisOn.value ? 34 : spark.value ? 1 : 6;
+  const padR = spark.value ? 1 : 6;
+  const padT = spark.value ? 3 : 10;
+  const padB = axisOn.value ? 22 : spark.value ? 3 : 6;
   const innerW = Math.max(10, w.value - padL - padR);
-  const innerH = Math.max(10, props.height - padT - padB);
-  const vals = pts.map((p) => p.value);
-  const maxV = Math.max(1, ...vals);
-  const minV = Math.min(0, ...vals);
+  const innerH = Math.max(10, H.value - padT - padB);
+
+  let maxV: number, minV: number;
+  if (stackedBar.value) {
+    const sums = labels.map((_, i) => list.reduce((a, s) => a + Math.max(0, s.values[i] || 0), 0));
+    maxV = Math.max(1, ...sums);
+    minV = 0;
+  } else {
+    const all = list.flatMap((s) => s.values);
+    maxV = Math.max(1, ...all);
+    minV = isBar.value ? 0 : Math.min(0, ...all);
+  }
   const span = maxV - minV || 1;
-  const x = (i: number) =>
-    padL + (pts.length <= 1 ? innerW / 2 : (innerW * i) / (pts.length - 1));
+  const x = (i: number) => padL + (n <= 1 ? innerW / 2 : (innerW * i) / (n - 1));
   const y = (v: number) => padT + innerH - ((v - minV) / span) * innerH;
   const ticks = 3;
   const gridLines = Array.from({ length: ticks + 1 }, (_, i) => {
     const v = minV + (span * i) / ticks;
     return { v, yy: padT + innerH - (innerH * i) / ticks };
   });
-  return { padL, padR, padT, padB, innerW, innerH, x, y, gridLines };
+  return { n, padL, padR, padT, padB, innerW, innerH, x, y, gridLines };
 });
 
 const bars = computed(() => {
-  if (props.type !== "bar") return [];
-  const { padL, innerW, y } = geom.value;
-  const pts = points.value;
-  const bw = pts.length ? Math.min(46, (innerW / pts.length) * 0.62) : 10;
-  return pts.map((p, i) => ({
-    x: padL + (innerW * (i + 0.5)) / pts.length - bw / 2,
-    y: y(Math.max(0, p.value)),
-    w: bw,
-    h: Math.max(1, Math.abs(y(p.value) - y(0))),
-    i,
-  }));
+  const out: Array<{ x: number; y: number; w: number; h: number; color: string; i: number }> = [];
+  if (!isBar.value) return out;
+  const { list } = resolved.value;
+  const { n, padL, innerW, y } = geom.value;
+  const band = n ? innerW / n : innerW;
+  if (stackedBar.value) {
+    const bw = Math.min(46, band * 0.62);
+    for (let i = 0; i < n; i++) {
+      let acc = 0;
+      list.forEach((s) => {
+        const val = Math.max(0, s.values[i] || 0);
+        const y0 = y(acc);
+        const y1 = y(acc + val);
+        acc += val;
+        out.push({ x: padL + band * i + (band - bw) / 2, y: y1, w: bw, h: Math.max(0, y0 - y1), color: s.color, i });
+      });
+    }
+  } else {
+    const groupW = band * 0.62;
+    const bw = groupW / list.length;
+    for (let i = 0; i < n; i++) {
+      list.forEach((s, si) => {
+        const val = s.values[i] || 0;
+        out.push({
+          x: padL + band * i + (band - groupW) / 2 + bw * si,
+          y: y(Math.max(0, val)),
+          w: Math.max(1, bw - 1),
+          h: Math.max(1, Math.abs(y(val) - y(0))),
+          color: s.color,
+          i,
+        });
+      });
+    }
+  }
+  return out;
 });
 
-const linePath = computed(() => {
-  if (props.type === "bar") return "";
-  const { x, y } = geom.value;
-  return points.value.map((p, i) => `${i === 0 ? "M" : "L"}${x(i)},${y(p.value)}`).join(" ");
+const lines = computed(() => {
+  const out: Array<{ color: string; line: string; area: string; dots: Array<{ cx: number; cy: number; i: number }> }> = [];
+  if (isBar.value) return out;
+  const { list, labels } = resolved.value;
+  const { x, y, padT, innerH } = geom.value;
+  const n = labels.length;
+  list.forEach((s) => {
+    const line = s.values.map((v, i) => `${i === 0 ? "M" : "L"}${x(i)},${y(v)}`).join(" ");
+    out.push({
+      color: s.color,
+      line,
+      area: `${line} L${x(n - 1)},${padT + innerH} L${x(0)},${padT + innerH} Z`,
+      dots: s.values.map((v, i) => ({ cx: x(i), cy: y(v), i })),
+    });
+  });
+  return out;
 });
-const areaPath = computed(() => {
-  if (props.type !== "area") return "";
-  const { x, padT, innerH } = geom.value;
-  const n = points.value.length;
-  return `${linePath.value} L${x(n - 1)},${padT + innerH} L${x(0)},${padT + innerH} Z`;
-});
+
+const refLine = computed<ChartReferenceLine | null>(() =>
+  props.referenceLine != null
+    ? typeof props.referenceLine === "number"
+      ? { value: props.referenceLine }
+      : props.referenceLine
+    : null
+);
 
 function showXLabel(i: number) {
-  const n = points.value.length;
+  const n = geom.value.n;
   return n <= 8 || i % Math.ceil(n / 8) === 0;
 }
 function xLabelPos(i: number) {
-  const { padL, innerW, x } = geom.value;
-  return props.type === "bar" ? padL + (innerW * (i + 0.5)) / points.value.length : x(i);
+  const { padL, innerW, x, n } = geom.value;
+  return isBar.value ? padL + (innerW * (i + 0.5)) / n : x(i);
 }
 
-const rootStyle = computed<CSSProperties | undefined>(() =>
-  props.color ? ({ ["--_c" as string]: props.color } as CSSProperties) : undefined
-);
-
 function onMove(e: MouseEvent) {
-  if (!wrapRef.value) return;
-  const pts = points.value;
-  if (!pts.length) return;
+  if (spark.value || !wrapRef.value) return;
+  const { list, labels } = resolved.value;
+  const n = labels.length;
+  if (!n) return;
   const { padL, innerW, x, y } = geom.value;
   const rect = wrapRef.value.getBoundingClientRect();
   const px = e.clientX - rect.left;
-  let i: number;
-  if (props.type === "bar") i = Math.floor(((px - padL) / innerW) * pts.length);
-  else i = Math.round(((px - padL) / innerW) * (pts.length - 1));
-  i = Math.max(0, Math.min(pts.length - 1, i));
-  const p = pts[i];
-  if (!p) return;
-  hover.value = {
-    i,
-    x: x(i),
-    y: props.type === "bar" ? y(Math.max(0, p.value)) : y(p.value),
-  };
+  let i = isBar.value
+    ? Math.floor(((px - padL) / innerW) * n)
+    : Math.round(((px - padL) / innerW) * (n - 1));
+  i = Math.max(0, Math.min(n - 1, i));
+  const cx = isBar.value ? padL + (innerW * (i + 0.5)) / n : x(i);
+  const topV = stackedBar.value
+    ? list.reduce((a, s) => a + Math.max(0, s.values[i] || 0), 0)
+    : Math.max(...list.map((s) => s.values[i] || 0));
+  hover.value = { i, x: cx, y: y(topV) };
 }
-
-const hoverPoint = computed(() => (hover.value ? points.value[hover.value.i] : null));
 </script>
 
 <template>
   <div
     ref="wrapRef"
     class="jl-chart"
-    :style="rootStyle"
-    @mousemove="points.length ? onMove($event) : undefined"
+    :class="spark ? 'jl-chart--spark' : ''"
+    @mousemove="onMove"
     @mouseleave="hover = null"
   >
-    <svg :viewBox="`0 0 ${w} ${height}`" :height="height" role="img" aria-label="Chart">
-      <template v-if="showGrid">
+    <svg :viewBox="`0 0 ${w} ${H}`" :height="H" role="img" aria-label="Chart">
+      <template v-if="gridOn">
         <line
           v-for="(g, i) in geom.gridLines"
           :key="`g${i}`"
@@ -169,7 +284,7 @@ const hoverPoint = computed(() => (hover.value ? points.value[hover.value.i] : n
           :opacity="i === 0 ? 1 : 0.6"
         />
       </template>
-      <template v-if="showAxis">
+      <template v-if="axisOn">
         <text
           v-for="(g, i) in geom.gridLines"
           :key="`a${i}`"
@@ -180,61 +295,96 @@ const hoverPoint = computed(() => (hover.value ? points.value[hover.value.i] : n
         >
           {{ valueFormat(Math.round(g.v)) }}
         </text>
-      </template>
-      <template v-if="showAxis">
         <text
-          v-for="(p, i) in points"
+          v-for="(lb, i) in resolved.labels"
           v-show="showXLabel(i)"
           :key="`x${i}`"
           class="jl-chart__axis"
           :x="xLabelPos(i)"
-          :y="height - 6"
+          :y="H - 6"
           text-anchor="middle"
         >
-          {{ p.label }}
+          {{ lb }}
         </text>
       </template>
+      <g v-if="refLine" :style="{ '--_rc': refLine.color || 'var(--text-tertiary)' } as CSSProperties">
+        <line
+          class="jl-chart__ref"
+          :x1="geom.padL"
+          :y1="geom.y(refLine.value)"
+          :x2="w - geom.padR"
+          :y2="geom.y(refLine.value)"
+        />
+        <text
+          v-if="refLine.label"
+          class="jl-chart__ref-label"
+          :x="w - geom.padR"
+          :y="geom.y(refLine.value) - 4"
+          text-anchor="end"
+        >
+          {{ refLine.label }}
+        </text>
+      </g>
       <line
-        v-if="hover"
+        v-if="hover && !spark"
         class="jl-chart__cursor"
         :x1="hover.x"
         :y1="geom.padT"
         :x2="hover.x"
         :y2="geom.padT + geom.innerH"
       />
-      <template v-if="type === 'bar'">
+      <template v-if="isBar">
         <rect
-          v-for="b in bars"
-          :key="b.i"
+          v-for="(b, bi) in bars"
+          :key="bi"
           class="jl-chart__bar"
           :x="b.x"
           :y="b.y"
           :width="b.w"
           :height="b.h"
-          rx="4"
+          rx="3"
+          :style="{ '--_c': b.color } as CSSProperties"
           :opacity="hover && hover.i !== b.i ? 0.55 : 1"
         />
       </template>
       <template v-else>
-        <path v-if="type === 'area'" class="jl-chart__area" :d="areaPath" />
-        <path class="jl-chart__line" :d="linePath" />
-        <template v-for="(p, i) in points" :key="`d${i}`">
-          <circle
-            v-if="showDots || (hover && hover.i === i)"
-            class="jl-chart__dot"
-            :cx="geom.x(i)"
-            :cy="geom.y(p.value)"
-            r="3.5"
-          />
-        </template>
+        <g v-for="(s, si) in lines" :key="si" :style="{ '--_c': s.color } as CSSProperties">
+          <path v-if="type === 'area'" class="jl-chart__area" :d="s.area" />
+          <path class="jl-chart__line" :d="s.line" />
+          <template v-for="d in s.dots" :key="d.i">
+            <circle
+              v-if="showDots || (hover && !spark && hover.i === d.i)"
+              class="jl-chart__dot"
+              :cx="d.cx"
+              :cy="d.cy"
+              r="3.5"
+            />
+          </template>
+        </g>
       </template>
     </svg>
     <div
-      v-if="hover && hoverPoint"
+      v-if="hover && resolved.labels.length"
       class="jl-chart__tip"
       :style="{ left: `${hover.x}px`, top: `${hover.y - 8}px` }"
     >
-      {{ hoverPoint.label }} · <b>{{ valueFormat(hoverPoint.value) }}</b>
+      <div :style="{ marginBottom: resolved.multi ? '3px' : '0', opacity: resolved.multi ? 0.75 : 1 }">
+        {{ resolved.labels[hover.i] }}
+      </div>
+      <template v-if="resolved.multi">
+        <div v-for="(s, si) in resolved.list" :key="si" class="jl-chart__tip-row">
+          <span class="jl-chart__tip-dot" :style="{ background: s.color }" />
+          <span>{{ s.name }}</span>
+          <b style="margin-left: auto">{{ valueFormat(s.values[hover.i] ?? 0) }}</b>
+        </div>
+      </template>
+      <b v-else>{{ valueFormat(resolved.list[0]?.values[hover.i] ?? 0) }}</b>
+    </div>
+    <div v-if="legendOn" class="jl-chart__legend">
+      <span v-for="(s, si) in resolved.list" :key="si" class="jl-chart__legend-item">
+        <span class="jl-chart__swatch" :style="{ background: s.color }" />
+        {{ s.name }}
+      </span>
     </div>
   </div>
 </template>

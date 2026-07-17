@@ -96,10 +96,11 @@ Pass a `description` for a secondary line under the label.
 
 :::
 
-## Indeterminate & disabled
+## Indeterminate, invalid & disabled
 
 `indeterminate` renders the mixed dash — useful for a "select all" parent. It's a DOM property,
-so it's set by the component (React/Vue) rather than markup. Add `disabled` to dim and lock.
+so it's set by the component (React/Vue) rather than markup. `invalid` shows error styling on the
+box (parity with Input/Textarea/Combobox); add `disabled` to dim and lock.
 
 <Preview src="/preview/checkbox/states.html" />
 
@@ -117,12 +118,14 @@ so it's set by the component (React/Vue) rather than markup. Add `disabled` to d
 ```vue [Vue]
 <template>
   <Checkbox indeterminate label="Select all" />
+  <Checkbox invalid label="I accept the terms" description="Required to continue." />
   <Checkbox disabled label="Disabled" />
 </template>
 ```
 
 ```tsx [React]
 <Checkbox indeterminate label="Select all" />
+<Checkbox invalid label="I accept the terms" description="Required to continue." />
 <Checkbox disabled label="Disabled" />
 ```
 
@@ -140,6 +143,7 @@ so it's set by the component (React/Vue) rather than markup. Add `disabled` to d
 | `label` | `React.ReactNode` | — | Label beside the box |
 | `description` | `React.ReactNode` | — | Secondary line under the label |
 | `indeterminate` | `boolean` | `false` | Render the mixed dash |
+| `invalid` | `boolean` | `false` | Error styling on the box |
 
 ### Vue
 
@@ -150,6 +154,7 @@ so it's set by the component (React/Vue) rather than markup. Add `disabled` to d
 | `label` | `string` | — | Label beside the box |
 | `description` | `string` | — | Secondary line under the label |
 | `indeterminate` | `boolean` | `false` | Render the mixed dash |
+| `invalid` | `boolean` | `false` | Error styling on the box |
 | `disabled` | `boolean` | `false` | Dim and lock |
 | `modelValue` | `boolean` | `false` | Checked state (`v-model`) |
 
@@ -164,4 +169,5 @@ so it's set by the component (React/Vue) rather than markup. Add `disabled` to d
 | `.jl-check__box` | The drawn box (holds the check mark + dash) |
 | `.jl-check__mark` / `.jl-check__dash` | Checked tick / indeterminate dash |
 | `.jl-check__body` / `__label` / `__desc` | Text column, label, and description |
+| `[data-invalid="true"]` | Error styling (on the label) |
 | `[data-disabled="true"]` | Disabled styling (on the label) |

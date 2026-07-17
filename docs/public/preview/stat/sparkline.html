@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/stat.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); }
+    </style>
+  </head>
+  <body>
+    <div class="jl-stat-group" style="grid-template-columns: repeat(2, minmax(0, 1fr));">
+      <div class="jl-stat">
+        <div class="jl-stat__top"><span class="jl-stat__label">Requests</span></div>
+        <div class="jl-stat__value">1.2M</div>
+        <div class="jl-stat__foot">
+          <span class="jl-stat__delta jl-stat__delta--positive">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" /></svg>
+            +8%
+          </span>
+        </div>
+        <div class="jl-stat__spark">
+          <svg viewBox="0 0 100 36" preserveAspectRatio="none" width="100%" height="36" aria-hidden="true">
+            <path class="jl-stat__spark-line" vector-effect="non-scaling-stroke" d="M3,33 L16.43,23 L29.86,30.5 L43.29,18 L56.71,20.5 L70.14,8 L83.57,10.5 L97,3" />
+          </svg>
+        </div>
+      </div>
+      <div class="jl-stat">
+        <div class="jl-stat__top"><span class="jl-stat__label">Error rate</span></div>
+        <div class="jl-stat__value">0.4%</div>
+        <div class="jl-stat__foot">
+          <span class="jl-stat__delta jl-stat__delta--negative">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" /></svg>
+            -0.1%
+          </span>
+        </div>
+        <div class="jl-stat__spark" style="--_sc: var(--danger);">
+          <svg viewBox="0 0 100 36" preserveAspectRatio="none" width="100%" height="36" aria-hidden="true">
+            <path class="jl-stat__spark-line" vector-effect="non-scaling-stroke" d="M3,3 L16.43,13 L29.86,8 L43.29,18 L56.71,23 L70.14,18 L83.57,28 L97,33" />
+          </svg>
+        </div>
+      </div>
+    </div>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

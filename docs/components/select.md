@@ -99,6 +99,55 @@ is chosen.
 
 :::
 
+## Groups & disabled options
+
+An option of the form `{ label, options }` renders a native `<optgroup>`, and any option can set
+`disabled`.
+
+<Preview src="/preview/select/groups.html" />
+
+::: code-group
+
+```html [HTML]
+<select class="jl-select jl-select--md">
+  <optgroup label="Production">
+    <option value="us-east">us-east-1</option>
+    <option value="eu-west">eu-west-1</option>
+  </optgroup>
+  <option value="edge" disabled>Edge (soon)</option>
+</select>
+```
+
+```vue [Vue]
+<template>
+  <Select
+    v-model="region"
+    :options="[
+      { label: 'Production', options: [
+        { value: 'us-east', label: 'us-east-1' },
+        { value: 'eu-west', label: 'eu-west-1' },
+      ] },
+      { value: 'edge', label: 'Edge (soon)', disabled: true },
+    ]"
+  />
+</template>
+```
+
+```tsx [React]
+<Select
+  defaultValue="us-east"
+  options={[
+    { label: "Production", options: [
+      { value: "us-east", label: "us-east-1" },
+      { value: "eu-west", label: "eu-west-1" },
+    ] },
+    { value: "edge", label: "Edge (soon)", disabled: true },
+  ]}
+/>
+```
+
+:::
+
 ## Sizes
 
 `sm` (32px) · `md` (38px, default) · `lg` (44px)
@@ -139,7 +188,7 @@ is chosen.
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `size` | `"sm" \| "md" \| "lg"` | `"md"` | Control height and font size |
-| `options` | `(string \| { value, label })[]` | `[]` | Option list (or use `<option>` children) |
+| `options` | `(string \| { value, label, disabled? } \| { label, options })[]` | `[]` | Option list, groups via `{ label, options }` (or use `<option>` children) |
 | `placeholder` | `string` | — | Disabled first option, shown until a value is chosen |
 
 ### Vue
@@ -149,7 +198,7 @@ is chosen.
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `size` | `"sm" \| "md" \| "lg"` | `"md"` | Control height and font size |
-| `options` | `(string \| { value, label })[]` | `[]` | Option list (or use slot `<option>`s) |
+| `options` | `(string \| { value, label, disabled? } \| { label, options })[]` | `[]` | Option list, groups via `{ label, options }` (or use slot `<option>`s) |
 | `placeholder` | `string` | — | Disabled first option |
 | `disabled` | `boolean` | `false` | Disable the field |
 | `modelValue` | `string` | — | Selected value (`v-model`) |

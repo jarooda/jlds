@@ -11,6 +11,8 @@ export interface TimelineItemData {
   description?: React.ReactNode;
   tone?: TimelineTone;
   icon?: React.ReactNode;
+  /** Render a small dot instead of a full-size marker (for compact, icon-less feeds). */
+  plain?: boolean;
   /** Extra content rendered below the description. */
   children?: React.ReactNode;
 }
@@ -27,6 +29,7 @@ export interface TimelineItemProps extends Omit<React.LiHTMLAttributes<HTMLLIEle
   description?: React.ReactNode;
   tone?: TimelineTone;
   icon?: React.ReactNode;
+  plain?: boolean;
 }
 
 interface TimelineComponent extends React.FC<TimelineProps> {
@@ -39,10 +42,10 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
   description,
   tone = "muted",
   icon,
+  plain = false,
   children,
   ...rest
 }) => {
-  const plain = !icon;
   return (
     <li className="jl-timeline__item" {...rest}>
       <div className="jl-timeline__rail">
@@ -87,6 +90,7 @@ const Timeline = (({ items = [], size = "md", className = "", children, ...rest 
           description={it.description}
           tone={it.tone}
           icon={it.icon}
+          plain={it.plain}
         >
           {it.children}
         </TimelineItem>

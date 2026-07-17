@@ -9,6 +9,8 @@ export interface AlertProps
   title?: React.ReactNode;
   /** Override the default tone icon. */
   icon?: React.ReactNode;
+  /** Action node(s) rendered under the body (e.g. buttons). */
+  action?: React.ReactNode;
   /** If provided, shows a dismiss button. */
   onClose?: () => void;
 }
@@ -21,7 +23,7 @@ const ICONS: Record<AlertTone, React.ReactNode> = {
 };
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
-  ({ tone = "info", title, icon, onClose, className = "", children, ...props }, ref) => {
+  ({ tone = "info", title, icon, action, onClose, className = "", children, ...props }, ref) => {
     return (
       <div
         ref={ref}
@@ -40,6 +42,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
         <div className="jl-alert__body">
           {title && <div className="jl-alert__title">{title}</div>}
           {children && <div className="jl-alert__text">{children}</div>}
+          {action && <div className="jl-alert__action">{action}</div>}
         </div>
         {onClose && (
           <button type="button" className="jl-alert__close" aria-label="Dismiss" onClick={onClose}>

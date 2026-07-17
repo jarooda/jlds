@@ -73,10 +73,18 @@
   }
 
   function initSelect(table) {
-    var all = table.querySelector(".jl-table__check[data-select-all]");
+    // Find the select checkbox by its cell, so it works whether the cell holds the
+    // compact native `.jl-table__check` or a full `.jl-check` component input.
+    var all =
+      table.querySelector('.jl-table__head .jl-th--select input[type="checkbox"]') ||
+      table.querySelector(".jl-table__check[data-select-all]");
     var checks = Array.prototype.slice.call(
-      table.querySelectorAll(".jl-table__body .jl-table__check")
-    );
+      table.querySelectorAll(
+        '.jl-table__body .jl-td--select input[type="checkbox"], .jl-table__body .jl-table__check'
+      )
+    ).filter(function (c, i, arr) {
+      return arr.indexOf(c) === i; // de-dupe if both selectors match the same input
+    });
     if (!checks.length) return;
 
     function rowOf(cb) {
@@ -126,6 +134,7 @@
         emit();
       });
     }
+    checks.forEach(paint);
     syncAll();
   }
 

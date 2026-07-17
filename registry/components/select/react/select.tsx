@@ -1,8 +1,14 @@
 import * as React from "react";
 import "./select.css";
 
-export type SelectOption = string | { value: string; label: string };
+export type SelectLeafOption = string | { value: string; label: string; disabled?: boolean };
+export type SelectOptionGroup = { label: string; options: SelectLeafOption[] };
+export type SelectOption = SelectLeafOption | SelectOptionGroup;
 export type SelectSize = "sm" | "md" | "lg";
+
+function isGroup(o: SelectOption): o is SelectOptionGroup {
+  return typeof o === "object" && "options" in o && Array.isArray(o.options);
+}
 
 export interface SelectProps
   extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>, "size"> {
@@ -34,10 +40,32 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
               {placeholder}
             </option>
           )}
-          {options.map((o) => {
+          {options.map((o, i) => {
+            if (isGroup(o)) {
+              return (
+                <optgroup key={o.label || i} label={o.label}>
+                  {o.options.map((g) => {
+                    const opt = typeof g === "string" ? { value: g, label: g } : g;
+                    return (
+                      <option
+                        key={opt.value}
+                        value={opt.value}
+                        disabled={("disabled" in opt && opt.disabled) || undefined}
+                      >
+                        {opt.label}
+                      </option>
+                    );
+                  })}
+                </optgroup>
+              );
+            }
             const opt = typeof o === "string" ? { value: o, label: o } : o;
             return (
-              <option key={opt.value} value={opt.value}>
+              <option
+                key={opt.value}
+                value={opt.value}
+                disabled={("disabled" in opt && opt.disabled) || undefined}
+              >
                 {opt.label}
               </option>
             );

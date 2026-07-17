@@ -150,6 +150,43 @@ Add `invalid` for error styling (red border + danger focus ring) or `disabled`.
 
 :::
 
+## Clearable & affixes
+
+`clearable` shows a × that resets a controlled value; `prefix` / `suffix` add inline text addons
+(URLs, units) — distinct from the `icon` / `trailing` node slots.
+
+<Preview src="/preview/input/affixes.html" />
+
+::: code-group
+
+```html [HTML]
+<div class="jl-input-wrap jl-input-wrap--md">
+  <span class="jl-input-affix">jlds.dev/</span>
+  <input class="jl-input" value="acme" />
+</div>
+<div class="jl-input-wrap jl-input-wrap--md">
+  <input class="jl-input" value="40" />
+  <span class="jl-input-affix">ms</span>
+</div>
+<!-- clearable: add a .jl-input-clear button (toggle it yourself in vanilla) -->
+```
+
+```vue [Vue]
+<template>
+  <Input v-model="q" clearable :icon="…" placeholder="Search projects" />
+  <Input v-model="slug" prefix="jlds.dev/" />
+  <Input v-model="ttl" suffix="ms" />
+</template>
+```
+
+```tsx [React]
+<Input clearable value={q} onChange={(e) => setQ(e.target.value)} icon={<SearchIcon />} placeholder="Search projects" />
+<Input prefix="jlds.dev/" value={slug} onChange={…} />
+<Input suffix="ms" value={ttl} onChange={…} />
+```
+
+:::
+
 ## Props
 
 ### React
@@ -162,6 +199,10 @@ Add `invalid` for error styling (red border + danger focus ring) or `disabled`.
 | `size` | `"sm" \| "md" \| "lg"` | `"md"` | Control height and font size |
 | `icon` | `React.ReactNode` | — | Leading icon node |
 | `trailing` | `React.ReactNode` | — | Trailing node (icon, button, hint) |
+| `prefix` | `React.ReactNode` | — | Inline text/node before the field |
+| `suffix` | `React.ReactNode` | — | Inline text/node after the field |
+| `clearable` | `boolean` | `false` | Show a × to clear a non-empty controlled value |
+| `onClear` | `(e) => void` | — | Clear handler (defaults to emitting an empty-value change) |
 | `invalid` | `boolean` | `false` | Show error styling |
 
 ### Vue
@@ -172,11 +213,14 @@ inner `<input>`.
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `size` | `"sm" \| "md" \| "lg"` | `"md"` | Control height and font size |
+| `prefix` | `string` | — | Inline text before the field (or `prefix` slot) |
+| `suffix` | `string` | — | Inline text after the field (or `suffix` slot) |
+| `clearable` | `boolean` | `false` | Show a × to clear; emits `clear` and sets value to `""` |
 | `invalid` | `boolean` | `false` | Show error styling |
 | `disabled` | `boolean` | `false` | Disable the field |
 | `modelValue` | `string \| number` | — | Bound value (`v-model`) |
 
-**Slots:** `icon` (leading), `trailing` (trailing).
+**Slots:** `icon` (leading), `trailing` (trailing), `prefix`, `suffix`.
 
 ## CSS classes (HTML)
 
@@ -186,5 +230,7 @@ inner `<input>`.
 | `.jl-input-wrap--sm` / `--md` / `--lg` | Size |
 | `.jl-input` | The inner `<input>` element |
 | `.jl-input-adorn` | Leading/trailing icon or text slot |
+| `.jl-input-affix` | Inline prefix/suffix text addon |
+| `.jl-input-clear` | Clear (×) button |
 | `[data-invalid="true"]` | Error styling (on the wrapper) |
 | `[data-disabled="true"]` | Disabled styling (on the wrapper) |

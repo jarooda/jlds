@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-type SelectOption = string | { value: string; label: string };
+type SelectLeafOption = string | { value: string; label: string; disabled?: boolean };
+type SelectOption = SelectLeafOption | { label: string; options: SelectLeafOption[] };
 type SelectSize = "sm" | "md" | "lg";
 
 const props = withDefaults(
@@ -19,8 +20,19 @@ const emit = defineEmits<{
   "update:modelValue": [value: string];
 }>();
 
-const normalized = computed(() =>
-  props.options.map((o) => (typeof o === "string" ? { value: o, label: o } : o))
+type NormLeaf = { value: string; label: string; disabled?: boolean };
+type NormEntry = ({ kind: "option" } & NormLeaf) | { kind: "group"; label: string; options: NormLeaf[] };
+
+const normLeaf = (o: SelectLeafOption): NormLeaf =>
+  typeof o === "string" ? { value: o, label: o } : o;
+
+const normalized = computed<NormEntry[]>(() =>
+  props.options.map((o) => {
+    if (o && typeof o === "object" && "options" in o && Array.isArray(o.options)) {
+      return { kind: "group", label: o.label, options: o.options.map(normLeaf) };
+    }
+    return { kind: "option", ...normLeaf(o as SelectLeafOption) };
+  })
 );
 
 const isPlaceholder = computed(
@@ -44,7 +56,12 @@ function onChange(event: Event) {
       @change="onChange"
     >
       <option v-if="props.placeholder" value="" disabled>{{ props.placeholder }}</option>
-      <option v-for="opt in normalized" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
+      <template v-for="(entry, i) in normalized" :key="entry.kind === 'group' ? `g${i}` : entry.value">
+        <optgroup v-if="entry.kind === 'group'" :label="entry.label">
+          <option v-for="opt in entry.options" :key="opt.value" :value="opt.value" :disabled="opt.disabled || undefined">{{ opt.label }}</option>
+        </optgroup>
+        <option v-else :value="entry.value" :disabled="entry.disabled || undefined">{{ entry.label }}</option>
+      </template>
       <slot />
     </select>
     <span class="jl-select-chevron">

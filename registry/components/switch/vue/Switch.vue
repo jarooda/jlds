@@ -4,11 +4,15 @@ type SwitchSize = "sm" | "md";
 const props = withDefaults(
   defineProps<{
     label?: string;
+    /** Supporting text under the label. */
+    description?: string;
+    /** Which side the label sits on. @default "end" */
+    labelPlacement?: "start" | "end";
     size?: SwitchSize;
     disabled?: boolean;
     modelValue?: boolean;
   }>(),
-  { label: "", size: "md", disabled: false, modelValue: false }
+  { label: "", description: "", labelPlacement: "end", size: "md", disabled: false, modelValue: false }
 );
 
 const emit = defineEmits<{
@@ -23,7 +27,7 @@ function onChange(event: Event) {
 <template>
   <label
     class="jl-switch"
-    :class="`jl-switch--${props.size}`"
+    :class="[`jl-switch--${props.size}`, props.labelPlacement === 'start' ? 'jl-switch--start' : '']"
     :data-disabled="props.disabled || undefined"
   >
     <input
@@ -36,7 +40,10 @@ function onChange(event: Event) {
       @change="onChange"
     />
     <span class="jl-switch__track"><span class="jl-switch__thumb" /></span>
-    <span v-if="props.label || $slots.default" class="jl-switch__label"><slot>{{ props.label }}</slot></span>
+    <span v-if="props.label || props.description || $slots.default" class="jl-switch__body">
+      <span v-if="props.label || $slots.default" class="jl-switch__label"><slot>{{ props.label }}</slot></span>
+      <span v-if="props.description" class="jl-switch__desc">{{ props.description }}</span>
+    </span>
   </label>
 </template>
 

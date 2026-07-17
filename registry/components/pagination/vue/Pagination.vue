@@ -7,16 +7,33 @@ const props = withDefaults(
     pageCount: number;
     total?: number;
     pageSize?: number;
+    /** Rows-per-page options; renders a selector when provided. */
+    pageSizeOptions?: number[];
     siblingCount?: number;
     showSummary?: boolean;
   }>(),
-  { page: 1, total: undefined, pageSize: undefined, siblingCount: 1, showSummary: false }
+  {
+    page: 1,
+    total: undefined,
+    pageSize: undefined,
+    pageSizeOptions: undefined,
+    siblingCount: 1,
+    showSummary: false,
+  }
 );
 
 const emit = defineEmits<{
   "update:page": [page: number];
   change: [page: number];
+  "update:pageSize": [size: number];
+  pageSizeChange: [size: number];
 }>();
+
+function onSize(e: Event) {
+  const size = Number((e.target as HTMLSelectElement).value);
+  emit("update:pageSize", size);
+  emit("pageSizeChange", size);
+}
 
 function go(p: number) {
   if (p >= 1 && p <= props.pageCount && p !== props.page) {
@@ -85,6 +102,12 @@ const to = computed(() => (hasSummary.value ? Math.min(props.page * props.pageSi
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg>
       </button>
     </div>
+    <label v-if="pageSizeOptions && pageSizeOptions.length" class="jl-pagination__size">
+      <span>Rows</span>
+      <select :value="pageSize" aria-label="Rows per page" @change="onSize">
+        <option v-for="n in pageSizeOptions" :key="n" :value="n">{{ n }}</option>
+      </select>
+    </label>
   </nav>
 </template>
 

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/alert.css">
+    <link rel="stylesheet" href="/css/button.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); max-width: 520px; }
+    </style>
+  </head>
+  <body>
+    <div class="jl-alert jl-alert--warning" role="status">
+      <span class="jl-alert__icon">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" opacity="0.35"/><path d="M12 8.5v4M12 16h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </span>
+      <div class="jl-alert__body">
+        <div class="jl-alert__title">Your trial ends in 3 days</div>
+        <div class="jl-alert__text">Upgrade to keep your environments running.</div>
+        <div class="jl-alert__action">
+          <button class="jl-btn jl-btn--primary jl-btn--sm">Upgrade</button>
+          <button class="jl-btn jl-btn--ghost jl-btn--sm">Remind me</button>
+        </div>
+      </div>
+    </div>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

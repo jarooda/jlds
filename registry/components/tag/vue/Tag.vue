@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import { computed, useAttrs } from "vue";
 
+type TagColor = "neutral" | "brand" | "success" | "warning" | "danger" | "info";
+
 const props = withDefaults(
   defineProps<{
     selected?: boolean;
+    /** Semantic color tint. @default "neutral" */
+    color?: TagColor;
     /** When true, renders an × button that emits `remove`. */
     removable?: boolean;
   }>(),
-  { selected: false, removable: false }
+  { selected: false, color: "neutral", removable: false }
 );
 
 const emit = defineEmits<{
@@ -22,6 +26,7 @@ const cls = computed(() =>
   [
     "jl-tag",
     interactive.value ? "jl-tag--button" : "",
+    props.color !== "neutral" ? `jl-tag--${props.color}` : "",
     props.selected ? "jl-tag--selected" : "",
   ]
     .filter(Boolean)
