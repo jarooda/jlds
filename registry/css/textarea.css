@@ -20,6 +20,20 @@
 .jl-textarea[aria-invalid="true"] { border-color: var(--danger); }
 .jl-textarea[aria-invalid="true"]:focus { box-shadow: var(--ring-danger); }
 .jl-textarea:disabled { opacity: 0.55; background: var(--bg-subtle); pointer-events: none; }
+.jl-textarea-wrap { position: relative; width: 100%; }
+.jl-textarea--auto { resize: none; overflow: hidden; }
+.jl-textarea__count {
+  position: absolute;
+  right: var(--space-2);
+  bottom: var(--space-2);
+  font-size: var(--text-2xs);
+  font-family: var(--font-mono);
+  color: var(--text-tertiary);
+  pointer-events: none;
+  background: var(--surface-card);
+  padding: 0 2px;
+}
+.jl-textarea__count[data-over="true"] { color: var(--danger-text); }
 
 /* Responsive — Tier 1. 16px text on mobile stops iOS focus auto-zoom. */
 @media (max-width: 600px) {

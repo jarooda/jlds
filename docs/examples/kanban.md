@@ -8,7 +8,7 @@ and a count [badge](/components/badge) per column.
 
 <Preview src="/examples/preview/kanban.html" />
 
-[Open full screen ↗](/examples/preview/kanban.html){target="_blank" rel="noopener"}
+[Preview full screen](/examples/preview/kanban.html){target="_blank" rel="noopener"}
 
 ## Use it
 

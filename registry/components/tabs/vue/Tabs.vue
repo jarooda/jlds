@@ -3,15 +3,16 @@ import { computed } from "vue";
 
 type TabItem =
   | string
-  | { value: string; label: string; count?: number };
+  | { value: string; label: string; count?: number; disabled?: boolean };
 
 const props = withDefaults(
   defineProps<{
     items: TabItem[];
     modelValue: string;
     variant?: "line" | "pill";
+    orientation?: "horizontal" | "vertical";
   }>(),
-  { variant: "line" }
+  { variant: "line", orientation: "horizontal" }
 );
 
 const emit = defineEmits<{
@@ -19,18 +20,24 @@ const emit = defineEmits<{
   change: [value: string];
 }>();
 
+const vertical = computed(() => props.orientation === "vertical");
 const norm = computed(() =>
   props.items.map((it) => (typeof it === "string" ? { value: it, label: it } : it))
 );
 
-function select(v: string) {
+function select(v: string, disabled?: boolean) {
+  if (disabled) return;
   emit("update:modelValue", v);
   emit("change", v);
 }
 </script>
 
 <template>
-  <div :class="['jl-tabs', `jl-tabs--${variant}`]" role="tablist">
+  <div
+    :class="['jl-tabs', `jl-tabs--${variant}`, vertical ? 'jl-tabs--vertical' : '']"
+    role="tablist"
+    :aria-orientation="vertical ? 'vertical' : undefined"
+  >
     <button
       v-for="t in norm"
       :key="t.value"
@@ -38,7 +45,9 @@ function select(v: string) {
       role="tab"
       class="jl-tab"
       :aria-selected="modelValue === t.value"
-      @click="select(t.value)"
+      :aria-disabled="('disabled' in t && t.disabled) || undefined"
+      :disabled="('disabled' in t && t.disabled) || undefined"
+      @click="select(t.value, 'disabled' in t ? t.disabled : false)"
     >
       {{ t.label }}
       <span v-if="'count' in t && t.count != null" class="jl-tab__count">{{ t.count }}</span>

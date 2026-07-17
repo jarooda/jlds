@@ -131,6 +131,47 @@ removes the alert automatically.
 
 :::
 
+## With action
+
+Pass an `action` node (React) or an `action` slot (Vue) for buttons under the body — parity with
+`Banner`.
+
+<Preview src="/preview/alert/action.html" />
+
+::: code-group
+
+```html [HTML]
+<div class="jl-alert jl-alert--warning" role="status">
+  <span class="jl-alert__icon">…</span>
+  <div class="jl-alert__body">
+    <div class="jl-alert__title">Your trial ends in 3 days</div>
+    <div class="jl-alert__text">Upgrade to keep your environments running.</div>
+    <div class="jl-alert__action">
+      <button class="jl-btn jl-btn--primary jl-btn--sm">Upgrade</button>
+    </div>
+  </div>
+</div>
+```
+
+```vue [Vue]
+<template>
+  <Alert tone="warning" title="Your trial ends in 3 days">
+    Upgrade to keep your environments running.
+    <template #action>
+      <Button size="sm" variant="primary">Upgrade</Button>
+    </template>
+  </Alert>
+</template>
+```
+
+```tsx [React]
+<Alert tone="warning" title="Your trial ends in 3 days" action={<Button size="sm" variant="primary">Upgrade</Button>}>
+  Upgrade to keep your environments running.
+</Alert>
+```
+
+:::
+
 ## Props
 
 ### React
@@ -142,6 +183,7 @@ removes the alert automatically.
 | `tone` | `"info" \| "success" \| "warning" \| "danger"` | `"info"` | Semantic tone (sets color + default icon) |
 | `title` | `React.ReactNode` | — | Bold title line |
 | `icon` | `React.ReactNode` | — | Override the default tone icon |
+| `action` | `React.ReactNode` | — | Action node(s) under the body |
 | `onClose` | `() => void` | — | If set, shows a dismiss button |
 
 ### Vue
@@ -152,7 +194,8 @@ removes the alert automatically.
 | `title` | `string` | — | Bold title line |
 | `dismissible` | `boolean` | `false` | Show a dismiss × that emits `close` |
 
-**Events:** `close`. **Slots:** `default` (body text), `icon` (override the tone icon).
+**Events:** `close`. **Slots:** `default` (body text), `icon` (override the tone icon), `action`
+(buttons under the body).
 
 ## CSS classes (HTML)
 
@@ -162,4 +205,5 @@ removes the alert automatically.
 | `.jl-alert--info` / `--success` / `--warning` / `--danger` | Tone |
 | `.jl-alert__icon` | Leading icon slot |
 | `.jl-alert__body` / `__title` / `__text` | Text column, title, body |
+| `.jl-alert__action` | Action row under the body |
 | `.jl-alert__close` | Dismiss button |

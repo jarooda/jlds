@@ -83,6 +83,11 @@ button/
 (For Vue, the same `button.css` lands alongside `Button.vue` and `index.ts`, referenced via
 `<style src="./button.css">`.)
 
+Dependencies install automatically: any **npm packages** a component needs are added with your
+package manager, and any **other components** it builds on (its registry dependencies) are fetched
+too. For example `jlds add table` also installs `checkbox`, since the table's row-selection cell
+uses the Checkbox component.
+
 ## Use it
 
 ::: code-group

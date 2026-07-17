@@ -44,6 +44,32 @@
   stroke-width: 1;
   stroke-dasharray: 3 3;
 }
+.jl-chart__ref {
+  stroke: var(--_rc, var(--text-tertiary));
+  stroke-width: 1.5;
+  stroke-dasharray: 5 4;
+}
+.jl-chart__ref-label {
+  fill: var(--_rc, var(--text-tertiary));
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+}
+.jl-chart--spark .jl-chart__line { stroke-width: 1.75; }
+.jl-chart__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  margin-top: var(--space-2);
+}
+.jl-chart__legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+.jl-chart__swatch { width: 10px; height: 10px; border-radius: 3px; flex: none; }
 .jl-chart__tip {
   position: absolute;
   transform: translate(-50%, -100%);
@@ -62,3 +88,6 @@
   font-family: var(--font-mono);
   font-weight: var(--weight-semibold, 600);
 }
+.jl-chart__tip-row { display: flex; align-items: center; gap: 6px; }
+.jl-chart__tip-row + .jl-chart__tip-row { margin-top: 2px; }
+.jl-chart__tip-dot { width: 7px; height: 7px; border-radius: 2px; flex: none; }

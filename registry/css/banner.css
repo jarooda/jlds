@@ -44,7 +44,7 @@
 .jl-banner--subtle .jl-banner__text { color: var(--text-secondary); opacity: 1; }
 
 /* Solid variants */
-.jl-banner--solid { color: #fff; }
+.jl-banner--solid { color: var(--text-on-brand); }
 .jl-banner--solid.jl-banner--info    { background: var(--info); }
 .jl-banner--solid.jl-banner--success { background: var(--success); }
 .jl-banner--solid.jl-banner--warning { background: var(--warning); }

@@ -1,7 +1,7 @@
 # @jarooda/jlds
 
 The CLI for the [JLDS design system](https://github.com/jarooda/jlds). It downloads React/Vue
-component source straight into your project — you own and customize the code, shadcn-style.
+component source straight into your project — the code is yours to read, own, and customize.
 
 ## Run it
 

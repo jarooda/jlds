@@ -4,16 +4,16 @@ JLDS is a design system and component CLI. Instead of installing components as a
 dependency, `jlds` downloads component source code directly into your project — you own it,
 read it, and customize it freely.
 
-This is the same philosophy popularized by [shadcn/ui](https://ui.shadcn.com/): there's no
-`node_modules/jlds` to fight with, no breaking changes from an upstream major version, and no
-black-box components. A component is just files in your repo.
+The trade-off is simple: there's no `node_modules/jlds` to fight with, no breaking changes from
+an upstream major version, and no black-box components. A component is just files in your repo,
+so you can read them, change them, and keep them.
 
-## The aesthetic
+## The look
 
-The default look is a premium SaaS product, **light-first**: a low-glare off-white canvas with
-a deep-emerald accent, clean layouts, strong hierarchy, soft 12–16px corners, comfortable
-spacing, and small, confident micro-interactions. A full **dark theme ships alongside**, opt-in
-via `<html data-theme="dark">`. All of it is driven by
+The default is **light-first**: a low-glare off-white canvas with a deep-emerald accent, clean
+layouts, clear hierarchy, soft 12–16px corners, roomy spacing, and small, restrained
+interactions. A full **dark theme ships alongside**, opt-in via `<html data-theme="dark">`. All
+of it is driven by
 [CSS variable design tokens](/guide/theming), so you can switch themes — or re-theme entirely —
 without touching component files.
 

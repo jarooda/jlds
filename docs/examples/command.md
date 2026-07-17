@@ -7,7 +7,7 @@ button, then type to filter), a [combobox](/components/combobox) for jumping to 
 
 <Preview src="/examples/preview/command.html" />
 
-[Open full screen ↗](/examples/preview/command.html){target="_blank" rel="noopener"}
+[Preview full screen](/examples/preview/command.html){target="_blank" rel="noopener"}
 
 ## Use it
 

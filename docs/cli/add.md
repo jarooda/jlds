@@ -7,6 +7,12 @@ jlds add button
 jlds add button input badge   # multiple at once
 ```
 
+Before installing, `jlds add` resolves each component's **registry dependencies** — other
+components it builds on, declared as `registryDependencies` in `meta.json` — and adds them too
+(transitively, de-duplicated). For example `jlds add table` also installs `checkbox`, because the
+table's row-selection cell uses the Checkbox component. Dependency-only components are labelled
+`(registry dependency)` in the output.
+
 ## What it does, per component
 
 1. Fetches `components/<name>/meta.json` from the [registry](/registry/) and selects the file

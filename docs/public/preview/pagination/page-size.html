@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/pagination.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); }
+    </style>
+  </head>
+  <body>
+    <nav class="jl-pagination" aria-label="Pagination">
+      <div class="jl-pagination__summary"><b>51–75</b> of <b>578</b></div>
+      <div class="jl-pagination__spacer"></div>
+      <div class="jl-pagination__list">
+        <button class="jl-page jl-page--arrow" aria-label="Previous page">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 6-6 6 6 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        </button>
+        <button class="jl-page" aria-label="Page 1">1</button>
+        <span class="jl-page jl-page--ellipsis" aria-hidden="true">…</span>
+        <button class="jl-page" aria-label="Page 3">3</button>
+        <button class="jl-page" aria-current="page" aria-label="Page 4">4</button>
+        <button class="jl-page" aria-label="Page 5">5</button>
+        <span class="jl-page jl-page--ellipsis" aria-hidden="true">…</span>
+        <button class="jl-page" aria-label="Page 24">24</button>
+        <button class="jl-page jl-page--arrow" aria-label="Next page">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        </button>
+      </div>
+      <label class="jl-pagination__size">
+        <span>Rows</span>
+        <select aria-label="Rows per page">
+          <option>10</option>
+          <option selected>25</option>
+          <option>50</option>
+        </select>
+      </label>
+    </nav>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

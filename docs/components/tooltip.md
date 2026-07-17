@@ -94,9 +94,13 @@ import { Button } from "@/components/ui/button"
 | `content` | `React.ReactNode` | — | Tooltip text / content (Vue: prop or `content` slot) |
 | `side` | `"top" \| "bottom" \| "left" \| "right"` | `"top"` | Placement relative to the trigger |
 | `delay` | `number` | `120` | Open delay in ms |
+| `open` | `boolean` | — | Controlled open state (Vue: `v-model:open`); omit for hover/focus |
+| `onOpenChange` | `(open: boolean) => void` | — | Fires when the tip wants to open/close (Vue: `update:open`) |
+| `disabled` | `boolean` | `false` | Render the trigger with no tooltip |
 
 In Vue, the trigger goes in the default slot; the tip content in the `content` slot (or the
-`content` prop).
+`content` prop). Drive it as a controlled overlay with `v-model:open`, or set `disabled` to render
+the trigger without any tooltip.
 
 ## CSS classes (HTML)
 

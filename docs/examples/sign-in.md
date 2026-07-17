@@ -8,7 +8,7 @@ starting point for your own auth flow.
 
 <Preview src="/examples/preview/sign-in.html" />
 
-[Open full screen ↗](/examples/preview/sign-in.html){target="_blank" rel="noopener"}
+[Preview full screen](/examples/preview/sign-in.html){target="_blank" rel="noopener"}
 
 ## Use it
 

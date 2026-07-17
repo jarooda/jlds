@@ -10,6 +10,8 @@ const props = withDefaults(
     precision?: number;
     size?: "sm" | "md" | "lg";
     align?: "left" | "center";
+    /** Leading affix (e.g. a currency symbol). */
+    prefix?: string;
     suffix?: string;
     disabled?: boolean;
     invalid?: boolean;
@@ -23,6 +25,7 @@ const props = withDefaults(
     precision: undefined,
     size: "md",
     align: "center",
+    prefix: "",
     suffix: "",
     disabled: false,
     invalid: false,
@@ -110,6 +113,7 @@ const cls = computed(() =>
     >
       <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
     </button>
+    <span v-if="prefix" class="jl-number__affix jl-number__affix--prefix">{{ prefix }}</span>
     <input
       class="jl-number__input"
       type="text"

@@ -39,6 +39,7 @@ const ICON_PATHS: Record<AlertTone, string> = {
     <div class="jl-alert__body">
       <div v-if="props.title" class="jl-alert__title">{{ props.title }}</div>
       <div v-if="slots.default" class="jl-alert__text"><slot /></div>
+      <div v-if="slots.action" class="jl-alert__action"><slot name="action" /></div>
     </div>
     <button
       v-if="props.dismissible"

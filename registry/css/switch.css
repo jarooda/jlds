@@ -17,7 +17,7 @@
   left: 2px;
   width: 18px;
   height: 18px;
-  background: #fff;
+  background: var(--text-on-brand);
   border-radius: 50%;
   box-shadow: var(--shadow-sm);
   transition: transform var(--duration-fast) var(--ease-standard);
@@ -28,8 +28,15 @@
 .jl-switch--sm .jl-switch__input:checked + .jl-switch__track .jl-switch__thumb { transform: translateX(14px); }
 .jl-switch__input:focus-visible + .jl-switch__track { box-shadow: var(--ring-focus); }
 .jl-switch__label { font-size: var(--text-base); color: var(--text-primary); }
+.jl-switch--start { flex-direction: row-reverse; justify-content: space-between; }
+.jl-switch__body { display: flex; flex-direction: column; gap: 2px; }
+.jl-switch__desc { font-size: var(--text-sm); color: var(--text-tertiary); line-height: var(--leading-snug); }
 
 /* Responsive — Tier 1. The label wrapper clears a 44px touch target on coarse pointers. */
 @media (pointer: coarse) {
   .jl-switch { min-height: var(--target-min); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jl-switch, .jl-switch * { transition: none !important; animation: none !important; }
 }

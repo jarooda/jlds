@@ -9,8 +9,10 @@ const props = withDefaults(
     time?: string;
     description?: string;
     tone?: TimelineTone;
+    /** Render a small dot instead of a full-size marker (for compact, icon-less feeds). */
+    plain?: boolean;
   }>(),
-  { title: undefined, time: undefined, description: undefined, tone: "muted" }
+  { title: undefined, time: undefined, description: undefined, tone: "muted", plain: false }
 );
 
 const slots = useSlots();
@@ -19,7 +21,7 @@ const slots = useSlots();
 <template>
   <li class="jl-timeline__item">
     <div class="jl-timeline__rail">
-      <span class="jl-timeline__dot" :data-tone="props.tone" :data-plain="slots.icon ? undefined : true" aria-hidden="true">
+      <span class="jl-timeline__dot" :data-tone="props.tone" :data-plain="props.plain || undefined" aria-hidden="true">
         <slot name="icon" />
       </span>
       <span class="jl-timeline__line" aria-hidden="true" />

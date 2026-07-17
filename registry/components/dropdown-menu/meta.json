@@ -8,7 +8,7 @@
   "files": {
     "shared": [],
     "react": ["dropdown-menu.tsx", "index.ts"],
-    "vue": ["DropdownMenu.vue", "DropdownMenuItem.vue", "DropdownMenuLabel.vue", "DropdownMenuSeparator.vue", "index.ts"]
+    "vue": ["DropdownMenu.vue", "DropdownMenuItem.vue", "DropdownMenuLabel.vue", "DropdownMenuSeparator.vue", "DropdownMenuCheckboxItem.vue", "DropdownMenuRadioGroup.vue", "DropdownMenuRadioItem.vue", "index.ts"]
   },
   "registryDependencies": []
 }

@@ -1,7 +1,7 @@
 <script lang="ts">
 import { computed, onBeforeUnmount, ref, watch } from "vue";
 
-export type ToastTone = "success" | "warning" | "danger" | "info";
+export type ToastTone = "success" | "warning" | "danger" | "info" | "loading";
 
 export interface ToastOptions {
   title?: string;
@@ -41,6 +41,29 @@ export const toast = Object.assign(
       add({ tone: "danger", description, ...opts }),
     info: (description: string, opts?: ToastOptions) =>
       add({ tone: "info", description, ...opts }),
+    loading: (description: string, opts?: ToastOptions) =>
+      add({ tone: "loading", description, duration: Infinity, ...opts }),
+    promise: <T,>(
+      promise: Promise<T> | (() => Promise<T>),
+      msgs: {
+        loading?: string;
+        success?: string | ((data: T) => string);
+        error?: string | ((err: unknown) => string);
+      } = {}
+    ) => {
+      const id = add({ tone: "loading", description: msgs.loading ?? "Loading…", duration: Infinity });
+      const p = typeof promise === "function" ? promise() : promise;
+      Promise.resolve(p)
+        .then((data) => {
+          const m = typeof msgs.success === "function" ? msgs.success(data) : msgs.success;
+          add({ id, tone: "success", description: m ?? "Done", duration: 4500 });
+        })
+        .catch((err) => {
+          const m = typeof msgs.error === "function" ? msgs.error(err) : msgs.error;
+          add({ id, tone: "danger", description: m ?? "Something went wrong", duration: 4500 });
+        });
+      return id;
+    },
     dismiss: (id: number) => removeToast(id),
   }
 );
@@ -105,7 +128,10 @@ const ordered = computed(() =>
       role="status"
       :data-leaving="leaving.has(t.id) || undefined"
     >
-      <span v-if="t.tone" class="jl-toast__icon">
+      <span v-if="t.tone === 'loading'" class="jl-toast__icon">
+        <span class="jl-toast__spin" aria-hidden="true" />
+      </span>
+      <span v-else-if="t.tone" class="jl-toast__icon">
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" opacity="0.35" />
           <template v-if="t.tone === 'success'"><path d="M8 12.5l2.5 2.5 5.5-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></template>

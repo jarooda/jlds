@@ -111,6 +111,39 @@ Add `disabled` to dim and lock.
 
 :::
 
+## Description & placement
+
+Add a `description` under the label, and set `labelPlacement="start"` to move the label to the
+leading side (parity with `Checkbox`).
+
+<Preview src="/preview/switch/description.html" />
+
+::: code-group
+
+```html [HTML]
+<label class="jl-switch jl-switch--md">
+  <input type="checkbox" role="switch" class="jl-switch__input" checked />
+  <span class="jl-switch__track"><span class="jl-switch__thumb"></span></span>
+  <span class="jl-switch__body">
+    <span class="jl-switch__label">Auto-deploy</span>
+    <span class="jl-switch__desc">Ship on every push to main.</span>
+  </span>
+</label>
+<!-- label at start: add jl-switch--start on the label -->
+```
+
+```vue [Vue]
+<template>
+  <Switch v-model="on" label="Auto-deploy" description="Ship on every push to main." />
+</template>
+```
+
+```tsx [React]
+<Switch label="Auto-deploy" description="Ship on every push to main." defaultChecked />
+```
+
+:::
+
 ## Props
 
 ### React
@@ -121,6 +154,8 @@ Add `disabled` to dim and lock.
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `label` | `React.ReactNode` | — | Inline label beside the switch |
+| `description` | `React.ReactNode` | — | Supporting text under the label |
+| `labelPlacement` | `"start" \| "end"` | `"end"` | Which side the label sits on |
 | `size` | `"sm" \| "md"` | `"md"` | Switch size |
 
 ### Vue
@@ -130,6 +165,8 @@ Add `disabled` to dim and lock.
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `label` | `string` | — | Inline label |
+| `description` | `string` | — | Supporting text under the label |
+| `labelPlacement` | `"start" \| "end"` | `"end"` | Which side the label sits on |
 | `size` | `"sm" \| "md"` | `"md"` | Switch size |
 | `disabled` | `boolean` | `false` | Dim and lock |
 | `modelValue` | `boolean` | `false` | On/off state (`v-model`) |
@@ -144,5 +181,6 @@ Add `disabled` to dim and lock.
 | `.jl-switch--sm` / `--md` | Size |
 | `.jl-switch__input` | Visually-hidden `<input type="checkbox" role="switch">` |
 | `.jl-switch__track` / `.jl-switch__thumb` | The track and sliding thumb |
-| `.jl-switch__label` | Inline label |
+| `.jl-switch--start` | Label on the leading side |
+| `.jl-switch__body` / `__label` / `__desc` | Text column, label, and description |
 | `[data-disabled="true"]` | Disabled styling (on the label) |

@@ -4,6 +4,7 @@ export type {
   TableRowProps,
   TableHeaderCellProps,
   TableCellProps,
+  TableSelectCellProps,
   CellAlign,
   SortDirection,
 } from "./table";

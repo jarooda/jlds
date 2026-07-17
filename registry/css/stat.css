@@ -52,6 +52,15 @@
 .jl-stat__delta--negative { color: var(--danger-text); }
 .jl-stat__delta--neutral  { color: var(--text-tertiary); }
 .jl-stat__caption { font-size: var(--text-sm); color: var(--text-tertiary); }
+.jl-stat__spark { margin-top: var(--space-2); }
+.jl-stat__spark svg { display: block; width: 100%; height: 36px; overflow: visible; }
+.jl-stat__spark-line {
+  fill: none;
+  stroke: var(--_sc, var(--accent));
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 
 .jl-stat-group {
   display: grid;
@@ -59,7 +68,8 @@
   gap: var(--space-4);
 }
 
-/* Responsive — Tier 1. Single column below mobile (--bp-mobile 600px). */
+/* Responsive — Tier 1. Single column + tighter padding below mobile (--bp-mobile 600px). */
 @media (max-width: 600px) {
   .jl-stat-group { grid-template-columns: 1fr; }
+  .jl-stat:not(.jl-stat--plain) { padding: var(--space-4) var(--space-5); }
 }

@@ -12,9 +12,28 @@ export interface StatProps extends React.HTMLAttributes<HTMLDivElement> {
   deltaTone?: StatDeltaTone;
   caption?: React.ReactNode;
   icon?: React.ReactNode;
+  /** Inline sparkline values rendered under the delta. Needs ≥2 points. */
+  data?: number[];
+  /** Sparkline stroke color. Defaults to the delta tone (danger when negative, else accent). */
+  sparkColor?: string;
   /** Drop the card surface (no border/padding) for embedding. @default false */
   plain?: boolean;
   size?: StatSize;
+}
+
+/** Build a normalized sparkline path in a 100×36 box (stretched to fit). */
+function sparkPath(data: number[], w = 100, h = 36, pad = 3): string {
+  const max = Math.max(...data);
+  const min = Math.min(...data);
+  const span = max - min || 1;
+  const n = data.length;
+  return data
+    .map((v, i) => {
+      const x = pad + (n <= 1 ? (w - 2 * pad) / 2 : ((w - 2 * pad) * i) / (n - 1));
+      const y = pad + (h - 2 * pad) - ((v - min) / span) * (h - 2 * pad);
+      return `${i === 0 ? "M" : "L"}${x},${y}`;
+    })
+    .join(" ");
 }
 
 export interface StatGroupProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -40,6 +59,8 @@ const Stat = (({
   deltaTone,
   caption,
   icon,
+  data,
+  sparkColor,
   plain = false,
   size = "md",
   className = "",
@@ -77,6 +98,24 @@ const Stat = (({
             </span>
           )}
           {caption && <span className="jl-stat__caption">{caption}</span>}
+        </div>
+      )}
+      {data && data.length > 1 && (
+        <div className="jl-stat__spark">
+          <svg
+            viewBox="0 0 100 36"
+            preserveAspectRatio="none"
+            width="100%"
+            height="36"
+            aria-hidden="true"
+            style={
+              {
+                "--_sc": sparkColor || (tone === "negative" ? "var(--danger)" : "var(--accent)"),
+              } as React.CSSProperties
+            }
+          >
+            <path className="jl-stat__spark-line" vectorEffect="non-scaling-stroke" d={sparkPath(data)} />
+          </svg>
         </div>
       )}
     </div>

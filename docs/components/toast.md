@@ -105,12 +105,47 @@ function App() {
 
 :::
 
+## Async — loading & promise
+
+`toast.loading` shows a spinner toast that stays until dismissed or replaced. `toast.promise` shows
+the loading toast, then resolves it to success or danger when the promise settles (messages may be
+strings or functions of the resolved value / error).
+
+<Preview src="/preview/toast/promise.html" />
+
+::: code-group
+
+```html [HTML]
+<button class="jl-btn jl-btn--primary" onclick="
+  JLDS.toast.promise(fetch('/api/deploy'), {
+    loading: 'Deploying…', success: 'Build #1843 is live', error: 'Deploy failed'
+  })">Deploy</button>
+```
+
+```vue [Vue]
+<template>
+  <Button @click="toast.promise(deploy(), {
+    loading: 'Deploying…', success: 'Build #1843 is live', error: 'Deploy failed',
+  })">Deploy</Button>
+</template>
+```
+
+```tsx [React]
+<Button onClick={() => toast.promise(deploy(), {
+  loading: "Deploying…", success: "Build #1843 is live", error: "Deploy failed",
+})}>Deploy</Button>
+```
+
+:::
+
 ## API
 
 | Call | Description |
 |---|---|
 | `toast(opts \| string)` | Fire a toast; returns an id (React/Vue) or the element (HTML) |
 | `toast.success/warning/danger/info(description, opts?)` | Toned shorthands |
+| `toast.loading(description, opts?)` | Spinner toast that stays until dismissed/replaced |
+| `toast.promise(promise, { loading, success, error })` | Loading → success/danger on settle |
 | `toast.dismiss(id)` | Dismiss by id (HTML: pass the returned element) |
 
 **`ToastOptions`:** `title`, `description`, `tone`, `duration` (ms; `Infinity`/`0` = sticky, default
@@ -125,6 +160,6 @@ created automatically.
 | Class | Purpose |
 |---|---|
 | `.jl-toaster` + `data-pos="…"` | The fixed stack container (auto-created) |
-| `.jl-toast` + `--success` / `--warning` / `--danger` / `--info` | A toast and its tone |
-| `.jl-toast__icon` / `__body` / `__title` / `__desc` / `__action` / `__close` | Toast parts |
+| `.jl-toast` + `--success` / `--warning` / `--danger` / `--info` / `--loading` | A toast and its tone |
+| `.jl-toast__icon` / `__spin` / `__body` / `__title` / `__desc` / `__action` / `__close` | Toast parts |
 | `[data-leaving="true"]` | Plays the exit animation before removal |

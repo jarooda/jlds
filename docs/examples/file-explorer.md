@@ -8,7 +8,7 @@ holds the actions.
 
 <Preview src="/examples/preview/file-explorer.html" />
 
-[Open full screen ↗](/examples/preview/file-explorer.html){target="_blank" rel="noopener"}
+[Preview full screen](/examples/preview/file-explorer.html){target="_blank" rel="noopener"}
 
 ## Use it
 

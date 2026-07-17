@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/table.css">
+    <link rel="stylesheet" href="/css/checkbox.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); }
+    </style>
+  </head>
+  <body>
+    <div class="jl-table-wrap">
+      <table class="jl-table jl-table--compact">
+        <thead class="jl-table__head">
+          <tr>
+            <th class="jl-th--select" scope="col">
+              <label class="jl-check">
+                <input type="checkbox" class="jl-check__input" aria-label="Select all rows" />
+                <span class="jl-check__box">
+                  <svg class="jl-check__mark" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 6.2l2.2 2.3 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                  <span class="jl-check__dash" aria-hidden="true"></span>
+                </span>
+              </label>
+            </th>
+            <th scope="col">Project</th>
+            <th class="jl-th--num" scope="col">Deploys</th>
+          </tr>
+        </thead>
+        <tbody class="jl-table__body">
+          <tr>
+            <td class="jl-td--select">
+              <label class="jl-check">
+                <input type="checkbox" class="jl-check__input" aria-label="Select row" />
+                <span class="jl-check__box">
+                  <svg class="jl-check__mark" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 6.2l2.2 2.3 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                  <span class="jl-check__dash" aria-hidden="true"></span>
+                </span>
+              </label>
+            </td>
+            <td>acme-web</td>
+            <td class="jl-td--num">128</td>
+          </tr>
+          <tr>
+            <td class="jl-td--select">
+              <label class="jl-check">
+                <input type="checkbox" class="jl-check__input" checked aria-label="Select row" />
+                <span class="jl-check__box">
+                  <svg class="jl-check__mark" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 6.2l2.2 2.3 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                  <span class="jl-check__dash" aria-hidden="true"></span>
+                </span>
+              </label>
+            </td>
+            <td>docs-site</td>
+            <td class="jl-td--num">54</td>
+          </tr>
+          <tr>
+            <td class="jl-td--select">
+              <label class="jl-check">
+                <input type="checkbox" class="jl-check__input" aria-label="Select row" />
+                <span class="jl-check__box">
+                  <svg class="jl-check__mark" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 6.2l2.2 2.3 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                  <span class="jl-check__dash" aria-hidden="true"></span>
+                </span>
+              </label>
+            </td>
+            <td>edge-api</td>
+            <td class="jl-td--num">311</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

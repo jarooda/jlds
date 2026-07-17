@@ -8,7 +8,7 @@ footer. Narrow the frame — the table stacks into key/value cards and the toolb
 
 <Preview src="/examples/preview/data-table.html" />
 
-[Open full screen ↗](/examples/preview/data-table.html){target="_blank" rel="noopener"}
+[Preview full screen](/examples/preview/data-table.html){target="_blank" rel="noopener"}
 
 ## Use it
 

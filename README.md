@@ -6,7 +6,7 @@
 
 JLDS is a design system and component CLI. Instead of installing components as a package dependency, `jlds` downloads component source code directly into your project — you own it, read it, and customize it freely.
 
-The aesthetic: a premium SaaS product, **light-first** — a low-glare off-white canvas with a deep-emerald accent. Clean layouts, strong hierarchy, soft 12–16px corners, comfortable spacing, subtle depth (hairline borders over heavy shadows), and small, confident micro-interactions. A full **dark theme ships alongside**, opt-in via `<html data-theme="dark">`.
+The look is **light-first** — a low-glare off-white canvas with a deep-emerald accent. Clean layouts, clear hierarchy, soft 12–16px corners, roomy spacing, subtle depth (hairline borders over heavy shadows), and small, restrained interactions. A full **dark theme ships alongside**, opt-in via `<html data-theme="dark">`.
 
 **Supported frameworks:** React, Vue
 **Styling:** Self-contained CSS (`.jl-btn`-style classes) + CSS variable design tokens — Tailwind is **not required**

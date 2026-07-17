@@ -167,3 +167,8 @@
   .jl-combobox__opt { padding: var(--space-3); }
 }
 @keyframes jl-combobox-sheet { from { opacity: 0; transform: translateY(100%); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .jl-combobox__spinner { animation-duration: 1.4s; }
+  .jl-combobox__pop { animation: none; }
+}

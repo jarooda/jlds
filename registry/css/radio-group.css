@@ -23,7 +23,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--text-on-brand);
   transform: scale(0);
   transition: transform var(--duration-fast) var(--ease-standard);
 }
@@ -37,4 +37,8 @@
 /* Responsive — Tier 1. Each option clears a 44px touch target on coarse pointers. */
 @media (pointer: coarse) {
   .jl-radio { min-height: var(--target-min); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [class*="jl-radio"] { transition: none !important; animation: none !important; }
 }

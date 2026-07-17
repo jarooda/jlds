@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/toast.css">
+    <link rel="stylesheet" href="/css/button.css">
+    <style>
+      body { margin: 0; padding: var(--space-4); min-height: 200px; display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--space-2); }
+      .jl-toaster { position: absolute; }
+    </style>
+  </head>
+  <body>
+    <button
+      class="jl-btn jl-btn--primary jl-btn--sm"
+      onclick="JLDS.toast.promise(new Promise(function(r){setTimeout(r,1800)}), { loading: 'Deploying…', success: 'Build #1843 is live in production.', error: 'Deploy failed' })"
+    >Deploy (promise)</button>
+    <button
+      class="jl-btn jl-btn--secondary jl-btn--sm"
+      onclick="JLDS.toast.loading('Building…')"
+    >Loading toast</button>
+    <script src="/js/all.js" defer></script>
+    <script src="/preview/resize.js"></script>
+  </body>
+</html>

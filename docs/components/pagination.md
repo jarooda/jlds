@@ -131,6 +131,52 @@ Pass `total`, `pageSize`, and `showSummary` for the "1–20 of 482" readout on t
 
 :::
 
+## Rows per page
+
+Pass `pageSizeOptions` (with `pageSize`) to render a rows-per-page selector alongside the pager.
+
+<Preview src="/preview/pagination/page-size.html" />
+
+::: code-group
+
+```html [HTML]
+<label class="jl-pagination__size">
+  <span>Rows</span>
+  <select aria-label="Rows per page">
+    <option>10</option><option selected>25</option><option>50</option>
+  </select>
+</label>
+```
+
+```vue [Vue]
+<template>
+  <Pagination
+    v-model:page="page"
+    v-model:page-size="size"
+    :page-count="24"
+    :total="578"
+    show-summary
+    :page-size-options="[10, 25, 50]"
+    @page-size-change="page = 1"
+  />
+</template>
+```
+
+```tsx [React]
+<Pagination
+  page={page}
+  pageCount={24}
+  total={578}
+  pageSize={size}
+  showSummary
+  pageSizeOptions={[10, 25, 50]}
+  onPageSizeChange={(s) => { setSize(s); setPage(1); }}
+  onChange={setPage}
+/>
+```
+
+:::
+
 ## Props
 
 ### React
@@ -143,13 +189,16 @@ Pass `total`, `pageSize`, and `showSummary` for the "1–20 of 482" readout on t
 | `pageCount` | `number` | — | Total number of pages (required) |
 | `total` | `number` | — | Record count — for the summary |
 | `pageSize` | `number` | — | Records per page — for the summary |
+| `pageSizeOptions` | `number[]` | — | Rows-per-page options; renders a selector |
+| `onPageSizeChange` | `(size: number) => void` | — | Fires when a page size is chosen |
 | `siblingCount` | `number` | `1` | Pages shown each side of current before "…" |
 | `showSummary` | `boolean` | `false` | Show the "1–20 of 482" summary |
 | `onChange` | `(page: number) => void` | — | Fires with the next page |
 
 ### Vue
 
-Same props. Supports `v-model:page`, and also emits a `change` event with the next page.
+Same props. Supports `v-model:page` and `v-model:page-size` (also emits `change` and
+`pageSizeChange`).
 
 ## CSS classes (HTML)
 
@@ -158,6 +207,7 @@ Same props. Supports `v-model:page`, and also emits a `change` event with the ne
 | `.jl-pagination` | Wrapper (`nav`) |
 | `.jl-pagination__summary` | The "1–20 of 482" readout |
 | `.jl-pagination__spacer` | Pushes the page list to the right |
+| `.jl-pagination__size` | Rows-per-page selector wrapper |
 | `.jl-pagination__list` | The control group |
 | `.jl-page` | A page button (use `aria-current="page"` for the active one) |
 | `.jl-page--arrow` | Previous/next arrow buttons |

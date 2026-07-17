@@ -32,6 +32,15 @@
 
 .jl-toast__icon { flex: none; margin-top: 1px; display: inline-flex; }
 .jl-toast__icon svg { width: 18px; height: 18px; }
+.jl-toast__spin {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--border-strong);
+  border-top-color: var(--accent);
+  animation: jl-toast-spin 0.7s linear infinite;
+}
+@keyframes jl-toast-spin { to { transform: rotate(360deg); } }
 .jl-toast--success .jl-toast__icon { color: var(--success-text); }
 .jl-toast--warning .jl-toast__icon { color: var(--warning-text); }
 .jl-toast--danger  .jl-toast__icon { color: var(--danger-text); }
@@ -68,4 +77,5 @@
 
 @media (prefers-reduced-motion: reduce) {
   .jl-toast, .jl-toast[data-leaving="true"] { animation: none; }
+  .jl-toast__spin { animation-duration: 1.4s; }
 }

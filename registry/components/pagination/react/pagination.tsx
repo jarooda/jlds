@@ -7,6 +7,10 @@ export interface PaginationProps
   pageCount: number;
   total?: number;
   pageSize?: number;
+  /** Rows-per-page options; renders a selector when provided. */
+  pageSizeOptions?: number[];
+  /** Fires when a new page size is chosen. */
+  onPageSizeChange?: (size: number) => void;
   siblingCount?: number;
   showSummary?: boolean;
   onChange?: (page: number) => void;
@@ -46,6 +50,8 @@ export function Pagination({
   pageCount,
   total,
   pageSize,
+  pageSizeOptions,
+  onPageSizeChange,
   siblingCount = 1,
   showSummary = false,
   onChange,
@@ -113,6 +119,22 @@ export function Pagination({
           <Arrow dir="right" />
         </button>
       </div>
+      {pageSizeOptions && pageSizeOptions.length > 0 && (
+        <label className="jl-pagination__size">
+          <span>Rows</span>
+          <select
+            value={pageSize}
+            onChange={(e) => onPageSizeChange?.(Number(e.target.value))}
+            aria-label="Rows per page"
+          >
+            {pageSizeOptions.map((n) => (
+              <option key={n} value={n}>
+                {n}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
     </nav>
   );
 }

@@ -1,19 +1,24 @@
 import * as React from "react";
 import "./tag.css";
 
+export type TagColor = "neutral" | "brand" | "success" | "warning" | "danger" | "info";
+
 export interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
   selected?: boolean;
+  /** Semantic color tint. @default "neutral" */
+  color?: TagColor;
   /** If provided, renders an × button; called when clicked. */
   onRemove?: (e: React.MouseEvent) => void;
   icon?: React.ReactNode;
 }
 
 const Tag = React.forwardRef<HTMLSpanElement, TagProps>(
-  ({ selected = false, onRemove, icon, onClick, className = "", children, ...props }, ref) => {
+  ({ selected = false, color = "neutral", onRemove, icon, onClick, className = "", children, ...props }, ref) => {
     const interactive = !!onClick;
     const cls = [
       "jl-tag",
       interactive ? "jl-tag--button" : "",
+      color !== "neutral" ? `jl-tag--${color}` : "",
       selected ? "jl-tag--selected" : "",
       className,
     ]

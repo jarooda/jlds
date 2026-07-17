@@ -141,6 +141,45 @@ import { Rocket } from "lucide-react"
 
 :::
 
+## Inline sparkline
+
+Pass a `data` array (≥2 numbers) to render a small trend sparkline under the delta — the classic
+dashboard tile. `sparkColor` overrides the stroke (defaults to the delta tone).
+
+<Preview src="/preview/stat/sparkline.html" />
+
+::: code-group
+
+```html [HTML]
+<div class="jl-stat">
+  <div class="jl-stat__top"><span class="jl-stat__label">Requests</span></div>
+  <div class="jl-stat__value">1.2M</div>
+  <div class="jl-stat__spark">
+    <svg viewBox="0 0 100 36" preserveAspectRatio="none" width="100%" height="36" aria-hidden="true">
+      <path class="jl-stat__spark-line" vector-effect="non-scaling-stroke" d="M3,33 L16.4,23 L29.9,30.5 L43.3,18 L56.7,20.5 L70.1,8 L83.6,10.5 L97,3" />
+    </svg>
+  </div>
+</div>
+```
+
+```vue [Vue]
+<template>
+  <StatGroup :columns="2">
+    <Stat label="Requests" value="1.2M" delta="+8%" :data="[8, 12, 9, 14, 13, 18, 17, 20]" />
+    <Stat label="Error rate" value="0.4%" delta="-0.1%" :data="[9, 7, 8, 6, 5, 6, 4, 3]" />
+  </StatGroup>
+</template>
+```
+
+```tsx [React]
+<Stat.Group columns={2}>
+  <Stat label="Requests" value="1.2M" delta="+8%" data={[8, 12, 9, 14, 13, 18, 17, 20]} />
+  <Stat label="Error rate" value="0.4%" delta="-0.1%" data={[9, 7, 8, 6, 5, 6, 4, 3]} />
+</Stat.Group>
+```
+
+:::
+
 ## Props
 
 ### React — `Stat`
@@ -155,6 +194,8 @@ import { Rocket } from "lucide-react"
 | `deltaTone` | `"positive" \| "negative" \| "neutral"` | auto | Override the derived tone |
 | `caption` | `React.ReactNode` | — | Muted text after the delta |
 | `icon` | `React.ReactNode` | — | Accent icon in a tinted chip (top-right) |
+| `data` | `number[]` | — | Inline sparkline values (≥2 points) |
+| `sparkColor` | `string` | tone | Sparkline stroke color |
 | `plain` | `boolean` | `false` | Drop the card surface (border/padding) |
 | `size` | `"sm" \| "md"` | `"md"` | Value scale |
 
@@ -176,4 +217,5 @@ import { Rocket } from "lucide-react"
 | `.jl-stat__value` | The headline figure |
 | `.jl-stat__foot` / `__delta` / `__caption` | Footer: trend delta + caption |
 | `.jl-stat__delta--positive` / `--negative` / `--neutral` | Delta tone |
+| `.jl-stat__spark` / `__spark-line` | Inline sparkline container + stroke (`--_sc` sets color) |
 | `.jl-stat-group` | Responsive grid wrapper for a row of tiles |
