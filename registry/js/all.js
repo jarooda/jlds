@@ -618,13 +618,25 @@
 })();
 
 /* ---- chart.js ---- */
-/* JLDS behavior — Chart. Builds a responsive area/line/bar SVG from data attributes and
- * re-measures on resize; hover shows a value tooltip. Requires core.js.
- * Contract: <div class="jl-chart" data-values="28,41,35" data-labels="Mon,Tue,Wed"
- *   data-type="area|line|bar" data-height="200" data-grid="false" data-axis="false"
- *   data-dots="true" data-suffix="k"></div>. Labels are optional (default 1..n). */
+/* JLDS behavior — Chart. Builds a responsive area/line/bar/sparkline SVG from data
+ * attributes and re-measures on resize; hover shows a value tooltip. Requires core.js.
+ * Contract (single series):
+ *   <div class="jl-chart" data-values="28,41,35" data-labels="Mon,Tue,Wed"
+ *     data-type="area|line|bar|sparkline" data-height="200" data-grid="false"
+ *     data-axis="false" data-dots="true" data-suffix="k"></div>
+ * Multi-series: data-series='[{"name":"A","data":[1,2,3],"color":"var(--info)"}]'
+ *   plus optional data-stacked="true" (bars). Reference line: data-ref="90"
+ *   data-ref-label="SLA" data-ref-color="var(--danger)". Labels default 1..n. */
 (function () {
   var NS = "http://www.w3.org/2000/svg";
+  var PALETTE = [
+    "var(--accent)",
+    "var(--info)",
+    "var(--warning)",
+    "var(--danger)",
+    "var(--success)",
+    "var(--text-brand)",
+  ];
   function register(name, fn) {
     var J = (window.JLDS = window.JLDS || {});
     if (J.register) J.register(name, fn);
@@ -635,12 +647,8 @@
     for (var k in attrs) if (attrs[k] != null) e.setAttribute(k, attrs[k]);
     return e;
   }
-
-  function initChart(root) {
-    if (root.__jlChart) return;
-    root.__jlChart = true;
-
-    var values = (root.getAttribute("data-values") || "")
+  function nums(str) {
+    return (str || "")
       .split(",")
       .map(function (s) {
         return parseFloat(s.trim());
@@ -648,25 +656,100 @@
       .filter(function (v) {
         return !isNaN(v);
       });
-    var labels = (root.getAttribute("data-labels") || "")
-      .split(",")
-      .map(function (s) {
-        return s.trim();
-      })
-      .filter(Boolean);
-    var points = values.map(function (v, i) {
-      return { label: labels[i] != null ? labels[i] : String(i + 1), value: v };
+  }
+  function normValues(data, labels) {
+    return (data || []).map(function (d, i) {
+      if (d && typeof d === "object") return { label: d.label, value: d.value };
+      return { label: labels && labels[i] != null ? labels[i] : String(i + 1), value: d };
     });
+  }
+
+  function initChart(root) {
+    if (root.__jlChart) return;
+    root.__jlChart = true;
 
     var type = root.getAttribute("data-type") || "area";
-    var height = parseInt(root.getAttribute("data-height"), 10) || 200;
-    var showGrid = root.getAttribute("data-grid") !== "false";
-    var showAxis = root.getAttribute("data-axis") !== "false";
+    var spark = type === "sparkline";
+    var isBar = type === "bar";
+    var height = parseInt(root.getAttribute("data-height"), 10) || (spark ? 44 : 200);
+    var stacked = root.getAttribute("data-stacked") === "true";
+    var showGrid = spark ? false : root.getAttribute("data-grid") !== "false";
+    var showAxis = spark ? false : root.getAttribute("data-axis") !== "false";
     var showDots = root.getAttribute("data-dots") === "true";
     var suffix = root.getAttribute("data-suffix") || "";
     var fmt = function (v) {
       return v + suffix;
     };
+
+    // Resolve single-series or multi-series into a uniform list + shared labels.
+    var list, labels, multi;
+    var seriesAttr = root.getAttribute("data-series");
+    if (seriesAttr) {
+      var raw;
+      try {
+        raw = JSON.parse(seriesAttr);
+      } catch (e) {
+        raw = [];
+      }
+      list = raw.map(function (s, i) {
+        var pts = normValues(s.data, null);
+        return {
+          name: s.name || "Series " + (i + 1),
+          color: s.color || PALETTE[i % PALETTE.length],
+          values: pts.map(function (p) {
+            return p.value;
+          }),
+          labels: pts.map(function (p) {
+            return p.label;
+          }),
+        };
+      });
+      labels = list[0] ? list[0].labels : [];
+      multi = list.length > 1;
+    } else {
+      var pts = normValues(
+        nums(root.getAttribute("data-values")),
+        (root.getAttribute("data-labels") || "")
+          .split(",")
+          .map(function (s) {
+            return s.trim();
+          })
+          .filter(Boolean)
+      );
+      list = [
+        {
+          name: "Series 1",
+          color: root.getAttribute("data-color") || PALETTE[0],
+          values: pts.map(function (p) {
+            return p.value;
+          }),
+          labels: pts.map(function (p) {
+            return p.label;
+          }),
+        },
+      ];
+      labels = pts.map(function (p) {
+        return p.label;
+      });
+      multi = false;
+    }
+    var n = labels.length;
+    var stackedBar = isBar && stacked && multi;
+    var legendOn =
+      root.getAttribute("data-legend") != null
+        ? root.getAttribute("data-legend") !== "false"
+        : multi && !spark;
+
+    var ref = null;
+    if (root.getAttribute("data-ref") != null) {
+      ref = {
+        value: parseFloat(root.getAttribute("data-ref")),
+        label: root.getAttribute("data-ref-label"),
+        color: root.getAttribute("data-ref-color"),
+      };
+    }
+
+    if (spark) root.classList.add("jl-chart--spark");
 
     var svg = el("svg", { role: "img", "aria-label": "Chart", height: height });
     root.appendChild(svg);
@@ -674,47 +757,67 @@
     tip.className = "jl-chart__tip";
     tip.style.display = "none";
     root.appendChild(tip);
+    if (legendOn) {
+      var legend = document.createElement("div");
+      legend.className = "jl-chart__legend";
+      list.forEach(function (s) {
+        var item = document.createElement("span");
+        item.className = "jl-chart__legend-item";
+        var sw = document.createElement("span");
+        sw.className = "jl-chart__swatch";
+        sw.style.background = s.color;
+        item.appendChild(sw);
+        item.appendChild(document.createTextNode(s.name));
+        legend.appendChild(item);
+      });
+      root.appendChild(legend);
+    }
 
     function draw() {
-      var w = root.clientWidth || 560;
+      var w = root.clientWidth || (spark ? 120 : 560);
       svg.setAttribute("viewBox", "0 0 " + w + " " + height);
       svg.textContent = "";
 
-      var padL = showAxis ? 34 : 6,
-        padR = 6,
-        padT = 10,
-        padB = showAxis ? 22 : 6;
+      var padL = showAxis ? 34 : spark ? 1 : 6;
+      var padR = spark ? 1 : 6;
+      var padT = spark ? 3 : 10;
+      var padB = showAxis ? 22 : spark ? 3 : 6;
       var innerW = Math.max(10, w - padL - padR);
       var innerH = Math.max(10, height - padT - padB);
-      var vals = points.map(function (p) {
-        return p.value;
-      });
-      var maxV = Math.max.apply(null, [1].concat(vals));
-      var minV = Math.min.apply(null, [0].concat(vals));
+
+      var maxV, minV;
+      if (stackedBar) {
+        var sums = labels.map(function (_, i) {
+          return list.reduce(function (a, s) {
+            return a + Math.max(0, s.values[i] || 0);
+          }, 0);
+        });
+        maxV = Math.max.apply(null, [1].concat(sums));
+        minV = 0;
+      } else {
+        var all = list.reduce(function (a, s) {
+          return a.concat(s.values);
+        }, []);
+        maxV = Math.max.apply(null, [1].concat(all));
+        minV = isBar ? 0 : Math.min.apply(null, [0].concat(all));
+      }
       var span = maxV - minV || 1;
       var x = function (i) {
-        return padL + (points.length <= 1 ? innerW / 2 : (innerW * i) / (points.length - 1));
+        return padL + (n <= 1 ? innerW / 2 : (innerW * i) / (n - 1));
       };
       var y = function (v) {
         return padT + innerH - ((v - minV) / span) * innerH;
       };
       var ticks = 3;
       var grid = [];
-      for (var i = 0; i <= ticks; i++) {
-        grid.push({ v: minV + (span * i) / ticks, yy: padT + innerH - (innerH * i) / ticks });
+      for (var gi = 0; gi <= ticks; gi++) {
+        grid.push({ v: minV + (span * gi) / ticks, yy: padT + innerH - (innerH * gi) / ticks });
       }
 
       if (showGrid) {
         grid.forEach(function (g, i) {
           svg.appendChild(
-            el("line", {
-              class: "jl-chart__grid",
-              x1: padL,
-              y1: g.yy,
-              x2: w - padR,
-              y2: g.yy,
-              opacity: i === 0 ? 1 : 0.6,
-            })
+            el("line", { class: "jl-chart__grid", x1: padL, y1: g.yy, x2: w - padR, y2: g.yy, opacity: i === 0 ? 1 : 0.6 })
           );
         });
       }
@@ -724,70 +827,100 @@
           t.textContent = fmt(Math.round(g.v));
           svg.appendChild(t);
         });
-        points.forEach(function (p, i) {
-          if (!(points.length <= 8 || i % Math.ceil(points.length / 8) === 0)) return;
-          var tx = type === "bar" ? padL + (innerW * (i + 0.5)) / points.length : x(i);
+        labels.forEach(function (lb, i) {
+          if (!(n <= 8 || i % Math.ceil(n / 8) === 0)) return;
+          var tx = isBar ? padL + (innerW * (i + 0.5)) / n : x(i);
           var t = el("text", { class: "jl-chart__axis", x: tx, y: height - 6, "text-anchor": "middle" });
-          t.textContent = p.label;
+          t.textContent = lb;
           svg.appendChild(t);
         });
       }
 
-      var geo = { x: x, y: y, padL: padL, padT: padT, innerW: innerW, innerH: innerH };
-
-      if (type === "bar") {
-        var bw = points.length ? Math.min(46, (innerW / points.length) * 0.62) : 10;
-        points.forEach(function (p, i) {
-          var bx = padL + (innerW * (i + 0.5)) / points.length - bw / 2;
-          svg.appendChild(
-            el("rect", {
-              class: "jl-chart__bar",
-              x: bx,
-              y: y(Math.max(0, p.value)),
-              width: bw,
-              height: Math.max(1, Math.abs(y(p.value) - y(0))),
-              rx: 4,
-            })
-          );
-        });
-      } else {
-        var d = points
-          .map(function (p, i) {
-            return (i === 0 ? "M" : "L") + x(i) + "," + y(p.value);
-          })
-          .join(" ");
-        if (type === "area") {
-          svg.appendChild(
-            el("path", {
-              class: "jl-chart__area",
-              d: d + " L" + x(points.length - 1) + "," + (padT + innerH) + " L" + x(0) + "," + (padT + innerH) + " Z",
-            })
-          );
+      if (ref) {
+        var rg = el("g", {});
+        if (ref.color) rg.setAttribute("style", "--_rc:" + ref.color);
+        rg.appendChild(el("line", { class: "jl-chart__ref", x1: padL, y1: y(ref.value), x2: w - padR, y2: y(ref.value) }));
+        if (ref.label) {
+          var rl = el("text", { class: "jl-chart__ref-label", x: w - padR, y: y(ref.value) - 4, "text-anchor": "end" });
+          rl.textContent = ref.label;
+          rg.appendChild(rl);
         }
-        svg.appendChild(el("path", { class: "jl-chart__line", d: d }));
-        if (showDots) {
-          points.forEach(function (p, i) {
-            svg.appendChild(el("circle", { class: "jl-chart__dot", cx: x(i), cy: y(p.value), r: 3.5 }));
+        svg.appendChild(rg);
+      }
+
+      if (isBar) {
+        var band = n ? innerW / n : innerW;
+        if (stackedBar) {
+          var bw = Math.min(46, band * 0.62);
+          labels.forEach(function (_, i) {
+            var acc = 0;
+            list.forEach(function (s) {
+              var val = Math.max(0, s.values[i] || 0);
+              var y0 = y(acc);
+              var y1 = y(acc + val);
+              acc += val;
+              svg.appendChild(
+                el("rect", { class: "jl-chart__bar", x: padL + band * i + (band - bw) / 2, y: y1, width: bw, height: Math.max(0, y0 - y1), rx: 3, style: "--_c:" + s.color })
+              );
+            });
+          });
+        } else {
+          var groupW = band * 0.62;
+          var gbw = groupW / list.length;
+          labels.forEach(function (_, i) {
+            list.forEach(function (s, si) {
+              var val = s.values[i] || 0;
+              svg.appendChild(
+                el("rect", { class: "jl-chart__bar", x: padL + band * i + (band - groupW) / 2 + gbw * si, y: y(Math.max(0, val)), width: Math.max(1, gbw - 1), height: Math.max(1, Math.abs(y(val) - y(0))), rx: 3, style: "--_c:" + s.color })
+              );
+            });
           });
         }
+      } else {
+        list.forEach(function (s) {
+          var lg = el("g", { style: "--_c:" + s.color });
+          var d = s.values
+            .map(function (v, i) {
+              return (i === 0 ? "M" : "L") + x(i) + "," + y(v);
+            })
+            .join(" ");
+          if (type === "area") {
+            lg.appendChild(el("path", { class: "jl-chart__area", d: d + " L" + x(n - 1) + "," + (padT + innerH) + " L" + x(0) + "," + (padT + innerH) + " Z" }));
+          }
+          lg.appendChild(el("path", { class: "jl-chart__line", d: d }));
+          if (showDots) {
+            s.values.forEach(function (v, i) {
+              lg.appendChild(el("circle", { class: "jl-chart__dot", cx: x(i), cy: y(v), r: 3.5 }));
+            });
+          }
+          svg.appendChild(lg);
+        });
       }
-      root.__jlChartGeo = geo;
+      root.__jlChartGeo = { x: x, y: y, padL: padL, padT: padT, innerW: innerW, innerH: innerH };
     }
 
-    var cursor, hoverDot;
+    var cursor;
     function onMove(e) {
       var geo = root.__jlChartGeo;
-      if (!geo || !points.length) return;
+      if (spark || !geo || !n) return;
       var rect = root.getBoundingClientRect();
       var px = e.clientX - rect.left;
-      var i;
-      if (type === "bar") i = Math.floor(((px - geo.padL) / geo.innerW) * points.length);
-      else i = Math.round(((px - geo.padL) / geo.innerW) * (points.length - 1));
-      i = Math.max(0, Math.min(points.length - 1, i));
-      var p = points[i];
-      if (!p) return;
-      var hx = geo.x(i);
-      var hy = type === "bar" ? geo.y(Math.max(0, p.value)) : geo.y(p.value);
+      var i = isBar
+        ? Math.floor(((px - geo.padL) / geo.innerW) * n)
+        : Math.round(((px - geo.padL) / geo.innerW) * (n - 1));
+      i = Math.max(0, Math.min(n - 1, i));
+      var hx = isBar ? geo.padL + (geo.innerW * (i + 0.5)) / n : geo.x(i);
+      var topV = stackedBar
+        ? list.reduce(function (a, s) {
+            return a + Math.max(0, s.values[i] || 0);
+          }, 0)
+        : Math.max.apply(
+            null,
+            list.map(function (s) {
+              return s.values[i] || 0;
+            })
+          );
+      var hy = geo.y(topV);
       if (!cursor) {
         cursor = el("line", { class: "jl-chart__cursor" });
         svg.insertBefore(cursor, svg.firstChild);
@@ -797,12 +930,29 @@
       cursor.setAttribute("x2", hx);
       cursor.setAttribute("y2", geo.padT + geo.innerH);
       cursor.style.display = "";
-      if (type === "bar") {
-        Array.prototype.forEach.call(svg.querySelectorAll(".jl-chart__bar"), function (b, bi) {
-          b.setAttribute("opacity", bi === i ? 1 : 0.55);
+      if (isBar) {
+        Array.prototype.forEach.call(svg.querySelectorAll(".jl-chart__bar"), function (b) {
+          b.setAttribute("opacity", 0.55);
         });
       }
-      tip.innerHTML = p.label + " · <b>" + fmt(p.value) + "</b>";
+      if (multi) {
+        var rows = list
+          .map(function (s) {
+            return (
+              '<div class="jl-chart__tip-row"><span class="jl-chart__tip-dot" style="background:' +
+              s.color +
+              '"></span><span>' +
+              s.name +
+              '</span> <b style="margin-left:auto">' +
+              fmt(s.values[i]) +
+              "</b></div>"
+            );
+          })
+          .join("");
+        tip.innerHTML = '<div style="margin-bottom:3px;opacity:.75">' + labels[i] + "</div>" + rows;
+      } else {
+        tip.innerHTML = labels[i] + " · <b>" + fmt(list[0].values[i]) + "</b>";
+      }
       tip.style.left = hx + "px";
       tip.style.top = hy - 8 + "px";
       tip.style.display = "";
@@ -814,8 +964,10 @@
         b.setAttribute("opacity", 1);
       });
     }
-    root.addEventListener("mousemove", onMove);
-    root.addEventListener("mouseleave", onLeave);
+    if (!spark) {
+      root.addEventListener("mousemove", onMove);
+      root.addEventListener("mouseleave", onLeave);
+    }
 
     if (typeof ResizeObserver !== "undefined") {
       new ResizeObserver(draw).observe(root);
@@ -1396,15 +1548,26 @@
 
 /* ---- dropdown-menu.js ---- */
 /* JLDS behavior — DropdownMenu. Click the trigger to open the .jl-menu__pop
- * (initially `hidden`); closes on item click, outside-click, or Esc (via
+ * (initially `hidden`); closes on plain-item click, outside-click, or Esc (via
  * JLDS.util). Requires core.js + util.js (or the all.js bundle).
  * Contract: .jl-menu holds a trigger (first <button> / [data-menu-trigger]) and
- * a .jl-menu__pop[hidden] with .jl-menu__item buttons. */
+ * a .jl-menu__pop[hidden] with .jl-menu__item buttons. Roving ↑↓/Home/End
+ * navigation; menuitemcheckbox toggles aria-checked and keeps the menu open;
+ * menuitemradio selects within its parent group (single-select) and keeps it
+ * open. Add [data-close-on-select] to a checkable item to close after select. */
 (function () {
   function register(name, fn) {
     var J = (window.JLDS = window.JLDS || {});
     if (J.register) J.register(name, fn);
     else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  function items(pop) {
+    return Array.prototype.slice
+      .call(pop.querySelectorAll('[role^="menuitem"]'))
+      .filter(function (el) {
+        return el.getAttribute("aria-disabled") !== "true";
+      });
   }
 
   function initMenu(menu) {
@@ -1434,6 +1597,8 @@
         a();
         b();
       };
+      var first = items(pop)[0];
+      if (first) first.focus();
     }
 
     trigger.setAttribute("aria-haspopup", "menu");
@@ -1445,9 +1610,48 @@
       if (pop.hidden) open();
       else close();
     });
+
+    pop.addEventListener("keydown", function (e) {
+      var list = items(pop);
+      if (!list.length) return;
+      var i = list.indexOf(document.activeElement);
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        list[(i + 1) % list.length].focus();
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        list[(i - 1 + list.length) % list.length].focus();
+      } else if (e.key === "Home") {
+        e.preventDefault();
+        list[0].focus();
+      } else if (e.key === "End") {
+        e.preventDefault();
+        list[list.length - 1].focus();
+      }
+    });
+
     pop.querySelectorAll(".jl-menu__item").forEach(function (item) {
       item.addEventListener("click", function () {
         if (item.getAttribute("aria-disabled") === "true") return;
+        var role = item.getAttribute("role");
+        if (role === "menuitemcheckbox") {
+          item.setAttribute(
+            "aria-checked",
+            item.getAttribute("aria-checked") === "true" ? "false" : "true"
+          );
+          if (item.hasAttribute("data-close-on-select")) close();
+          return;
+        }
+        if (role === "menuitemradio") {
+          var parent = item.parentElement;
+          if (parent) {
+            parent.querySelectorAll('[role="menuitemradio"]').forEach(function (r) {
+              r.setAttribute("aria-checked", r === item ? "true" : "false");
+            });
+          }
+          if (item.hasAttribute("data-close-on-select")) close();
+          return;
+        }
         close();
       });
     });
@@ -2470,10 +2674,18 @@
   }
 
   function initSelect(table) {
-    var all = table.querySelector(".jl-table__check[data-select-all]");
+    // Find the select checkbox by its cell, so it works whether the cell holds the
+    // compact native `.jl-table__check` or a full `.jl-check` component input.
+    var all =
+      table.querySelector('.jl-table__head .jl-th--select input[type="checkbox"]') ||
+      table.querySelector(".jl-table__check[data-select-all]");
     var checks = Array.prototype.slice.call(
-      table.querySelectorAll(".jl-table__body .jl-table__check")
-    );
+      table.querySelectorAll(
+        '.jl-table__body .jl-td--select input[type="checkbox"], .jl-table__body .jl-table__check'
+      )
+    ).filter(function (c, i, arr) {
+      return arr.indexOf(c) === i; // de-dupe if both selectors match the same input
+    });
     if (!checks.length) return;
 
     function rowOf(cb) {
@@ -2523,6 +2735,7 @@
         emit();
       });
     }
+    checks.forEach(paint);
     syncAll();
   }
 
@@ -2578,18 +2791,33 @@
       }
     }
 
+    function isDisabled(t) {
+      return t.disabled || t.getAttribute("aria-disabled") === "true";
+    }
+    function step(from, dir) {
+      var n = tabs.length;
+      for (var k = 1; k <= n; k++) {
+        var t = tabs[(from + dir * k + n * k) % n];
+        if (!isDisabled(t)) return t;
+      }
+      return null;
+    }
+
     tabs.forEach(function (tab, i) {
       tab.addEventListener("click", function () {
+        if (isDisabled(tab)) return;
         applyState(tab, true);
       });
       tab.addEventListener("keydown", function (e) {
         var next;
-        if (e.key === "ArrowRight") next = tabs[(i + 1) % tabs.length];
-        else if (e.key === "ArrowLeft") next = tabs[(i - 1 + tabs.length) % tabs.length];
-        else if (e.key === "Home") next = tabs[0];
-        else if (e.key === "End") next = tabs[tabs.length - 1];
+        if (e.key === "ArrowRight" || e.key === "ArrowDown") next = step(i, 1);
+        else if (e.key === "ArrowLeft" || e.key === "ArrowUp") next = step(i, -1);
+        else if (e.key === "Home") next = isDisabled(tabs[0]) ? step(0, 1) : tabs[0];
+        else if (e.key === "End")
+          next = isDisabled(tabs[tabs.length - 1]) ? step(tabs.length - 1, -1) : tabs[tabs.length - 1];
         else return;
         e.preventDefault();
+        if (!next) return;
         next.focus();
         applyState(next, true);
       });
@@ -2624,6 +2852,58 @@
         if (el) el.remove();
       });
     });
+  });
+})();
+
+/* ---- textarea.js ---- */
+/* JLDS behavior — Textarea. Opt-in auto-resize and a character counter for plain
+ * HTML. Requires core.js (or the all.js bundle).
+ * Contract:
+ *   Auto-resize — add `data-auto-resize` (or class `jl-textarea--auto`) to the
+ *     <textarea class="jl-textarea">; it grows to fit its content.
+ *   Counter — wrap the textarea in `.jl-textarea-wrap` with a sibling
+ *     `.jl-textarea__count`; set `maxlength` for an "n/max" readout that turns red
+ *     past the limit. */
+(function () {
+  function register(name, fn) {
+    var J = (window.JLDS = window.JLDS || {});
+    if (J.register) J.register(name, fn);
+    else (J._pending = J._pending || []).push([name, fn]);
+  }
+
+  function initTextarea(el) {
+    if (el.__jlTextarea) return;
+    el.__jlTextarea = true;
+
+    var auto = el.hasAttribute("data-auto-resize") || el.classList.contains("jl-textarea--auto");
+    if (auto) el.classList.add("jl-textarea--auto");
+    var wrap = el.closest(".jl-textarea-wrap");
+    var counter = wrap ? wrap.querySelector(".jl-textarea__count") : null;
+    var maxAttr = el.getAttribute("maxlength");
+    var max = maxAttr != null ? parseInt(maxAttr, 10) : null;
+
+    function fit() {
+      if (!auto) return;
+      el.style.height = "auto";
+      el.style.height = el.scrollHeight + "px";
+    }
+    function count() {
+      if (!counter) return;
+      var len = el.value.length;
+      counter.textContent = max != null ? len + "/" + max : String(len);
+      if (max != null) counter.setAttribute("data-over", len > max ? "true" : "false");
+    }
+
+    el.addEventListener("input", function () {
+      fit();
+      count();
+    });
+    fit();
+    count();
+  }
+
+  register("textarea", function (root) {
+    root.querySelectorAll(".jl-textarea").forEach(initTextarea);
   });
 })();
 
@@ -2682,7 +2962,12 @@
     el.className = "jl-toast" + (opts.tone ? " jl-toast--" + opts.tone : "");
     el.setAttribute("role", "status");
 
-    if (opts.tone && ICONS[opts.tone]) {
+    if (opts.tone === "loading") {
+      var spin = document.createElement("span");
+      spin.className = "jl-toast__icon";
+      spin.innerHTML = '<span class="jl-toast__spin" aria-hidden="true"></span>';
+      el.appendChild(spin);
+    } else if (opts.tone && ICONS[opts.tone]) {
       var icon = document.createElement("span");
       icon.className = "jl-toast__icon";
       icon.innerHTML =
@@ -2759,6 +3044,28 @@
   J.toast.warning = toned("warning");
   J.toast.danger = toned("danger");
   J.toast.info = toned("info");
+  J.toast.loading = function (description, opts) {
+    var o = { tone: "loading", description: description, duration: Infinity };
+    if (opts) for (var k in opts) o[k] = opts[k];
+    return show(o);
+  };
+  J.toast.promise = function (promise, msgs) {
+    msgs = msgs || {};
+    var el = show({ tone: "loading", description: msgs.loading || "Loading…", duration: Infinity });
+    var p = typeof promise === "function" ? promise() : promise;
+    Promise.resolve(p)
+      .then(function (data) {
+        var m = typeof msgs.success === "function" ? msgs.success(data) : msgs.success;
+        dismiss(el);
+        show({ tone: "success", description: m || "Done", duration: 4500 });
+      })
+      .catch(function (err) {
+        var m = typeof msgs.error === "function" ? msgs.error(err) : msgs.error;
+        dismiss(el);
+        show({ tone: "danger", description: m || "Something went wrong", duration: 4500 });
+      });
+    return el;
+  };
   J.toast.dismiss = function (el) {
     dismiss(el);
   };

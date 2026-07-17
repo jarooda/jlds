@@ -1,13 +1,13 @@
 use anyhow::{Context, Result};
 use colored::Colorize;
 use indicatif::{ProgressBar, ProgressStyle};
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet, VecDeque};
 use std::fs;
 use std::path::Path;
 use std::process::Command;
 
 use crate::config::Config;
-use crate::registry::RegistryClient;
+use crate::registry::{ComponentMeta, RegistryClient};
 
 pub async fn run(components: Vec<String>) -> Result<()> {
     let config = Config::load()?;
@@ -15,10 +15,43 @@ pub async fn run(components: Vec<String>) -> Result<()> {
     let framework = config.framework.to_string();
     let pm = detect_package_manager();
 
-    for name in &components {
-        println!("{} {}", "Adding".bold(), name.cyan().bold());
+    // Resolve the full install set: the requested components plus any transitive
+    // `registryDependencies` they declare. Metadata is fetched once here and reused
+    // during install. `requested` marks which names the user asked for directly, so
+    // dependency-only components can be labelled in the output.
+    let requested: HashSet<String> = components.iter().cloned().collect();
+    let mut order: Vec<String> = Vec::new();
+    let mut metas: HashMap<String, ComponentMeta> = HashMap::new();
+    let mut seen: HashSet<String> = HashSet::new();
+    let mut queue: VecDeque<String> = components.iter().cloned().collect();
 
-        let meta = client.fetch_component(name, &framework).await?;
+    while let Some(name) = queue.pop_front() {
+        if !seen.insert(name.clone()) {
+            continue;
+        }
+        let meta = client.fetch_component(&name, &framework).await?;
+        for dep in &meta.registry_dependencies {
+            if !seen.contains(dep) {
+                queue.push_back(dep.clone());
+            }
+        }
+        order.push(name.clone());
+        metas.insert(name, meta);
+    }
+
+    for name in &order {
+        let meta = &metas[name];
+
+        if requested.contains(name) {
+            println!("{} {}", "Adding".bold(), name.cyan().bold());
+        } else {
+            println!(
+                "{} {} {}",
+                "Adding".bold(),
+                name.cyan().bold(),
+                "(registry dependency)".dimmed()
+            );
+        }
 
         let files = match framework.as_str() {
             "react" => meta.files.react.as_ref(),
