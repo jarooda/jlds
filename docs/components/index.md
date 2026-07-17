@@ -1,6 +1,6 @@
 # Components
 
-All components are self-contained — each ships its own `.jl-*` CSS classes built on the
+50+ components, all self-contained — each ships its own `.jl-*` CSS classes built on the
 [design tokens](/guide/theming) and works with or without Tailwind.
 
 Every component ships in **HTML** (the `.jl-*` classes, plus a small vanilla JS controller for the
