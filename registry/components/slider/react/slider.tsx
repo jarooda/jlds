@@ -86,13 +86,9 @@ export function Slider({
     return roundStep(min + ratio * (max - min));
   };
 
-  const onTrackPointerDown = (e: React.PointerEvent) => {
-    if (disabled) return;
-    const v = valueFromClient(e.clientX);
-    const cur = valsRef.current;
-    const i = range ? (Math.abs(cur[0] - v) <= Math.abs(cur[1] - v) ? 0 : 1) : 0;
+  const startDrag = (i: number, clientX: number) => {
     dragRef.current = i;
-    applyThumb(i, v, false);
+    applyThumb(i, valueFromClient(clientX), false);
     const move = (ev: PointerEvent) =>
       applyThumb(dragRef.current!, valueFromClient(ev.clientX), false);
     const up = (ev: PointerEvent) => {
@@ -103,6 +99,23 @@ export function Slider({
     };
     window.addEventListener("pointermove", move);
     window.addEventListener("pointerup", up);
+  };
+
+  const onTrackPointerDown = (e: React.PointerEvent) => {
+    if (disabled) return;
+    const v = valueFromClient(e.clientX);
+    const cur = valsRef.current;
+    const i = range ? (Math.abs(cur[0] - v) <= Math.abs(cur[1] - v) ? 0 : 1) : 0;
+    startDrag(i, e.clientX);
+  };
+
+  const onThumbPointerDown = (i: number) => (e: React.PointerEvent<HTMLButtonElement>) => {
+    // Grab this specific thumb (don't let the track re-pick by proximity —
+    // matters when two range thumbs overlap), then start dragging it.
+    if (disabled) return;
+    e.stopPropagation();
+    e.currentTarget.focus();
+    startDrag(i, e.clientX);
   };
 
   const onThumbKeyDown = (i: number) => (e: React.KeyboardEvent) => {
@@ -181,7 +194,7 @@ export function Slider({
             aria-disabled={disabled || undefined}
             tabIndex={disabled ? -1 : 0}
             onKeyDown={onThumbKeyDown(i)}
-            onPointerDown={(e) => e.stopPropagation()}
+            onPointerDown={onThumbPointerDown(i)}
             onClick={(e) => e.preventDefault()}
           />
         ))}

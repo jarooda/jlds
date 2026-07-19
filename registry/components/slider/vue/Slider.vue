@@ -72,13 +72,9 @@ function valueFromClient(clientX: number) {
   return roundStep(props.min + ratio * (props.max - props.min));
 }
 
-function onTrackPointerDown(e: PointerEvent) {
-  if (props.disabled) return;
-  const v = valueFromClient(e.clientX);
-  const [lo = props.min, hi = props.max] = vals.value;
-  const i = props.range ? (Math.abs(lo - v) <= Math.abs(hi - v) ? 0 : 1) : 0;
+function startDrag(i: number, clientX: number) {
   dragIndex.value = i;
-  applyThumb(i, v, false);
+  applyThumb(i, valueFromClient(clientX), false);
   const move = (ev: PointerEvent) => applyThumb(dragIndex.value!, valueFromClient(ev.clientX), false);
   const up = (ev: PointerEvent) => {
     applyThumb(dragIndex.value!, valueFromClient(ev.clientX), true);
@@ -88,6 +84,22 @@ function onTrackPointerDown(e: PointerEvent) {
   };
   window.addEventListener("pointermove", move);
   window.addEventListener("pointerup", up);
+}
+
+function onTrackPointerDown(e: PointerEvent) {
+  if (props.disabled) return;
+  const v = valueFromClient(e.clientX);
+  const [lo = props.min, hi = props.max] = vals.value;
+  const i = props.range ? (Math.abs(lo - v) <= Math.abs(hi - v) ? 0 : 1) : 0;
+  startDrag(i, e.clientX);
+}
+
+function onThumbPointerDown(i: number, e: PointerEvent) {
+  // Grab this specific thumb (don't let the track re-pick by proximity —
+  // matters when two range thumbs overlap), then start dragging it.
+  if (props.disabled) return;
+  (e.currentTarget as HTMLElement).focus();
+  startDrag(i, e.clientX);
 }
 
 function onThumbKeyDown(i: number, e: KeyboardEvent) {
@@ -164,7 +176,7 @@ const normalizedMarks = computed(() =>
         :aria-disabled="props.disabled || undefined"
         :tabindex="props.disabled ? -1 : 0"
         @keydown="onThumbKeyDown(i, $event)"
-        @pointerdown.stop
+        @pointerdown.stop="onThumbPointerDown(i, $event)"
         @click.prevent
       />
     </div>

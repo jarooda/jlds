@@ -38,6 +38,7 @@
   border-radius: 50%;
   box-shadow: var(--shadow-sm);
   cursor: grab;
+  touch-action: none;
   transition: box-shadow var(--duration-fast) var(--ease-standard);
 }
 .jl-slider--sm .jl-slider__thumb { width: 15px; height: 15px; margin-left: -7.5px; }

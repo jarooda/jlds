@@ -82,11 +82,8 @@
       );
     }
 
-    track.addEventListener("pointerdown", function (e) {
-      if (sl.classList.contains("jl-slider--disabled")) return;
-      var v = fromX(e.clientX);
-      var i = range ? (Math.abs(vals[0] - v) <= Math.abs(vals[1] - v) ? 0 : 1) : 0;
-      apply(i, v);
+    function startDrag(i, clientX) {
+      apply(i, fromX(clientX));
       function move(ev) {
         apply(i, fromX(ev.clientX));
       }
@@ -96,11 +93,23 @@
       }
       window.addEventListener("pointermove", move);
       window.addEventListener("pointerup", up);
+    }
+
+    track.addEventListener("pointerdown", function (e) {
+      if (sl.classList.contains("jl-slider--disabled")) return;
+      var v = fromX(e.clientX);
+      var i = range ? (Math.abs(vals[0] - v) <= Math.abs(vals[1] - v) ? 0 : 1) : 0;
+      startDrag(i, e.clientX);
     });
 
     thumbs.forEach(function (t, i) {
       t.addEventListener("pointerdown", function (e) {
+        // Grab this specific thumb (don't let the track re-pick by proximity —
+        // matters when two range thumbs overlap), then start dragging it.
+        if (sl.classList.contains("jl-slider--disabled")) return;
         e.stopPropagation();
+        t.focus();
+        startDrag(i, e.clientX);
       });
       t.addEventListener("keydown", function (e) {
         if (sl.classList.contains("jl-slider--disabled")) return;
