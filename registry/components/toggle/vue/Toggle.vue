@@ -8,7 +8,7 @@ const props = withDefaults(
     size?: "sm" | "md" | "lg";
     disabled?: boolean;
   }>(),
-  { defaultPressed: false, size: "md", disabled: false }
+  { defaultPressed: false, size: "md", disabled: false, pressed: undefined }
 );
 
 const emit = defineEmits<{
