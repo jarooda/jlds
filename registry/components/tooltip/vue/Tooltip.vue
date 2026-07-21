@@ -13,7 +13,7 @@ const props = withDefaults(
     /** Render the trigger without any tooltip. @default false */
     disabled?: boolean;
   }>(),
-  { content: "", side: "top", delay: 120, disabled: false }
+  { content: "", side: "top", delay: 120, disabled: false, open: undefined }
 );
 
 const emit = defineEmits<{ "update:open": [value: boolean] }>();

@@ -22,6 +22,7 @@ const props = withDefaults(
     emptyMessage?: string;
   }>(),
   {
+    open: undefined,
     defaultOpen: false,
     shortcut: () => ["mod", "k"],
     placeholder: "Type a command or search…",

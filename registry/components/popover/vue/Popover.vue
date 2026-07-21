@@ -13,7 +13,7 @@ const props = withDefaults(
     defaultOpen?: boolean;
     open?: boolean;
   }>(),
-  { side: "bottom", align: "center", arrow: true, padded: true, defaultOpen: false }
+  { side: "bottom", align: "center", arrow: true, padded: true, defaultOpen: false, open: undefined }
 );
 
 const emit = defineEmits<{ (e: "update:open", v: boolean): void }>();
