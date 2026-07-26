@@ -137,14 +137,25 @@ jlds init
 ```
 
 `jlds init` auto-detects everything from `package.json`:
-- **Framework** — React (or Next.js) / Vue (or Nuxt). Errors if neither or both are found.
+- **Framework** — React (or Next.js) / Vue (or Nuxt). Errors if neither or both are found — pass `--framework react|vue` to settle it.
 - **TypeScript** — from `package.json` or presence of `tsconfig.json`
 - **Tailwind** — detected and version-labeled if present, but not required
 
 You'll only be prompted for:
 - Global CSS file path (where design tokens get injected)
-- Components install path (default `src/components/ui`)
-- Utils install path (default `src/lib/utils`)
+- Components install path (default `src/components/ui`, `app/components/ui` on Nuxt 4)
+- Utils install path (default `src/lib/utils`, `app/lib/utils` on Nuxt 4)
+
+Defaults follow the project layout: Nuxt 4 keeps everything under its `app/` source directory,
+Nuxt 3 at the root, everything else under `src/`.
+
+Every prompt has a flag (`--css`, `--components`, `--utils`), and `--yes` accepts the detected
+defaults outright. Prompts are skipped automatically when there's no TTY, so `jlds init` works
+unattended in CI, Docker builds, and agent shells:
+
+```bash
+jlds init --yes --framework vue --components app/components/ui --css app/assets/css/main.css
+```
 
 `jlds init` then injects the JLDS design tokens (colors, typography, spacing, radius, shadows, motion + Geist font) into your global CSS file. If the file already has content, the `@import` is hoisted to the top and the `:root` token block is appended — existing styles are preserved.
 

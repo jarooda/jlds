@@ -5,6 +5,8 @@ mod registry;
 use anyhow::Result;
 use clap::{Parser, Subcommand};
 
+use commands::init::InitArgs;
+
 #[derive(Parser)]
 #[command(name = "jlds", version, about = "JLDS design system CLI")]
 struct Cli {
@@ -15,7 +17,7 @@ struct Cli {
 #[derive(Subcommand)]
 enum Command {
     /// Initialize JLDS in your project
-    Init,
+    Init(InitArgs),
     /// Add a component to your project
     Add {
         /// Component name(s) to add
@@ -37,7 +39,7 @@ async fn main() -> Result<()> {
     let cli = Cli::parse();
 
     match cli.command {
-        Command::Init => commands::init::run().await,
+        Command::Init(args) => commands::init::run(args).await,
         Command::Add { components } => commands::add::run(components).await,
         Command::List => commands::list::run().await,
         Command::Update { components } => commands::update::run(components).await,
