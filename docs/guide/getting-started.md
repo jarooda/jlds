@@ -53,11 +53,19 @@ jlds init
 
 You'll only be prompted for three things:
 
-| Prompt | Default |
-|---|---|
-| Global CSS file path | `src/index.css` (React) / `src/assets/main.css` (Vue) |
-| Components install path | `src/components/ui` |
-| Utils install path | `src/lib/utils` |
+| Prompt | Flag | Default |
+|---|---|---|
+| Global CSS file path | `--css` | `src/index.css` (React) / `src/assets/main.css` (Vue) |
+| Components install path | `--components` | `src/components/ui` |
+| Utils install path | `--utils` | `src/lib/utils` |
+
+Nuxt uses its own source directory instead: `app/components/ui` and `app/assets/css/main.css`
+on Nuxt 4, or the same paths without the `app/` prefix on Nuxt 3. See
+[defaults by layout](/cli/init#defaults-by-layout).
+
+Each prompt can be answered up front with its flag, and `jlds init --yes` takes the detected
+defaults for all three. Without a TTY — CI, Docker builds, scripted setup — the prompts are
+skipped automatically. See [`jlds init`](/cli/init#non-interactive-use).
 
 `jlds init` then writes [`jlds.json`](/cli/#jldsjson-reference) and injects the JLDS design
 tokens (colors, typography, spacing, radius, shadows, motion + the Geist font) into your

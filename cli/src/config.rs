@@ -26,7 +26,7 @@ pub struct Config {
     pub registry: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, clap::ValueEnum)]
 #[serde(rename_all = "lowercase")]
 pub enum Framework {
     React,
