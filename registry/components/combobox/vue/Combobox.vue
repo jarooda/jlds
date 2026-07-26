@@ -102,6 +102,13 @@ function close() {
   query.value = "";
   emit("inputChange", "");
 }
+// Kept out of the template: a multi-statement inline handler is valid Vue, but a formatter
+// configured with `semi: false` parses it as JS and drops the separator, which then fails
+// template compilation.
+function onControlClick() {
+  openPop();
+  inputRef.value?.focus();
+}
 function choose(o: Opt) {
   if (!o || o.disabled) return;
   if (props.multiple) {
@@ -195,7 +202,7 @@ const cls = computed(() =>
 
 <template>
   <div ref="root" :class="cls">
-    <div class="jl-combobox__control" @click="openPop(); inputRef?.focus()">
+    <div class="jl-combobox__control" @click="onControlClick">
       <span v-for="val in (multiple ? (selected as string[]) || [] : [])" :key="val" class="jl-combobox__chip">
         {{ labelFor(val) }}
         <button type="button" class="jl-combobox__chip-x" :aria-label="`Remove ${val}`" @click.stop="removeChip(val)">
