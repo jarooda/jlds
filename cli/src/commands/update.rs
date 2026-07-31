@@ -4,9 +4,12 @@ use colored::Colorize;
 use crate::config::Config;
 use crate::registry::RegistryClient;
 
-pub async fn run(components: Vec<String>) -> Result<()> {
+pub async fn run(components: Vec<String>, registry: Option<String>) -> Result<()> {
     let config = Config::load()?;
-    let client = RegistryClient::new(&config.registry);
+    // A --registry override applies to this run only; the pin in jlds.json is left alone.
+    let registry = registry.unwrap_or_else(|| config.registry.clone());
+    super::warn_if_registry_behind(&registry);
+    let client = RegistryClient::new(&registry);
     let framework = config.framework.to_string();
 
     for name in &components {
@@ -17,7 +20,7 @@ pub async fn run(components: Vec<String>) -> Result<()> {
 
         // Re-use add logic by calling add::run for now
         // TODO: diff local vs registry and warn on local modifications
-        crate::commands::add::run(vec![name.clone()]).await?;
+        crate::commands::add::run(vec![name.clone()], Some(registry.clone())).await?;
     }
 
     Ok(())
