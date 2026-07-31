@@ -10,5 +10,5 @@
     "react": ["date-picker.tsx", "index.ts"],
     "vue": ["Calendar.vue", "DatePicker.vue", "index.ts"]
   },
-  "registryDependencies": []
+  "registryDependencies": ["anchored-popup"]
 }

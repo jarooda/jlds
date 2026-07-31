@@ -9,6 +9,11 @@ outside-click or Escape.
 jlds add date-picker
 ```
 
+The calendar is rendered into `<body>` and anchored to the trigger by
+[Anchored Popup](/components/anchored-popup), so it opens over the edge of a Card, a scrolling
+table, or any other ancestor that would otherwise clip it. That primitive installs automatically
+as a registry dependency.
+
 ## Usage
 
 Click the trigger to open the calendar; pick a day to set the value.

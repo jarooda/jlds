@@ -406,6 +406,13 @@
       "frameworks": ["react", "vue"],
       "dependencies": [],
       "devDependencies": []
+    },
+    {
+      "name": "anchored-popup",
+      "description": "Positioning primitive — renders a popup into <body> and anchors it to its trigger, so it escapes any clipping ancestor. Installed automatically by the overlay components.",
+      "frameworks": ["react", "vue"],
+      "dependencies": [],
+      "devDependencies": []
     }
   ]
 }

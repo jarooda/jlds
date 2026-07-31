@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch, nextTick, onBeforeUnmount, provide } from "vue";
+import { useAnchoredPopup } from "../anchored-popup";
 
 const props = withDefaults(
   defineProps<{ align?: "start" | "end"; side?: "bottom" | "top" }>(),
@@ -7,14 +8,21 @@ const props = withDefaults(
 );
 
 const open = ref(false);
-const root = ref<HTMLElement | null>(null);
-const panel = ref<HTMLElement | null>(null);
+
+// The menu is teleported to <body> so a clipping ancestor (a Card's overflow: hidden,
+// a scrolling table wrapper) can't crop it, and anchored to the trigger instead.
+const {
+  anchorRef,
+  popupRef: panel,
+  contains,
+} = useAnchoredPopup({ open, side: props.side, align: props.align, gap: 8 });
 const close = () => (open.value = false);
 const toggle = () => (open.value = !open.value);
 provide("jlMenu", { close });
 
 function onDown(e: MouseEvent) {
-  if (root.value && !root.value.contains(e.target as Node)) close();
+  // `contains` covers the teleported menu as well as the trigger.
+  if (!contains(e.target as Node)) close();
 }
 function onKey(e: KeyboardEvent) {
   if (e.key === "Escape") close();
@@ -67,22 +75,24 @@ const origin = computed(
 </script>
 
 <template>
-  <span ref="root" class="jl-menu">
+  <span ref="anchorRef" class="jl-menu">
     <span :aria-haspopup="'menu'" :aria-expanded="open" @click="toggle">
       <slot name="trigger" />
     </span>
-    <div
-      v-if="open"
-      ref="panel"
-      class="jl-menu__pop"
-      role="menu"
-      :data-side="side"
-      :data-align="align"
-      :style="{ '--_origin': origin }"
-      @keydown="onPanelKey"
-    >
-      <slot />
-    </div>
+    <Teleport to="body">
+      <div
+        v-if="open"
+        ref="panel"
+        class="jl-menu__pop"
+        role="menu"
+        :data-side="side"
+        :data-align="align"
+        :style="{ '--_origin': origin }"
+        @keydown="onPanelKey"
+      >
+        <slot />
+      </div>
+    </Teleport>
   </span>
 </template>
 

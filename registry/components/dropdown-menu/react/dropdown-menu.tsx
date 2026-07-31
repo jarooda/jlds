@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import * as React from "react";
+import { useAnchoredPopup, AnchoredPortal } from "../anchored-popup";
 import "./dropdown-menu.css";
 
 export interface DropdownMenuProps {
@@ -111,23 +112,31 @@ function DropdownMenuRoot({
   children,
 }: DropdownMenuProps) {
   const [open, setOpen] = React.useState(false);
-  const ref = React.useRef<HTMLSpanElement>(null);
-  const panelRef = React.useRef<HTMLDivElement>(null);
-  const onMenuKey = useMenuKeys(panelRef);
+
+  // The menu is portaled to <body> so a clipping ancestor (a Card's overflow: hidden,
+  // a scrolling table wrapper) can't crop it, and anchored to the trigger instead.
+  const { anchorRef, popupRef, contains } = useAnchoredPopup<HTMLSpanElement, HTMLDivElement>({
+    open,
+    side,
+    align,
+    gap: 8,
+  });
+  const onMenuKey = useMenuKeys(popupRef);
   const close = React.useCallback(() => setOpen(false), []);
 
   React.useEffect(() => {
-    if (!open || !panelRef.current) return;
-    const first = panelRef.current.querySelector<HTMLElement>(
+    if (!open || !popupRef.current) return;
+    const first = popupRef.current.querySelector<HTMLElement>(
       '[role^="menuitem"]:not([aria-disabled="true"])'
     );
     if (first) first.focus();
-  }, [open]);
+  }, [open, popupRef]);
 
   React.useEffect(() => {
     if (!open) return;
     const onDown = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      // `contains` covers the portaled menu as well as the trigger.
+      if (!contains(e.target as Node)) setOpen(false);
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
@@ -138,7 +147,7 @@ function DropdownMenuRoot({
       document.removeEventListener("mousedown", onDown);
       document.removeEventListener("keydown", onKey);
     };
-  }, [open]);
+  }, [open, contains]);
 
   const triggerEl = React.isValidElement(trigger)
     ? React.cloneElement(trigger as React.ReactElement<TriggerProps>, {
@@ -154,21 +163,23 @@ function DropdownMenuRoot({
   const origin = `${side === "top" ? "bottom" : "top"} ${align === "end" ? "right" : "left"}`;
 
   return (
-    <span className={["jl-menu", className].filter(Boolean).join(" ")} ref={ref}>
+    <span className={["jl-menu", className].filter(Boolean).join(" ")} ref={anchorRef}>
       {triggerEl}
       {open && (
         <MenuCtx.Provider value={{ close }}>
-          <div
-            className="jl-menu__pop"
-            role="menu"
-            data-side={side}
-            data-align={align}
-            ref={panelRef}
-            onKeyDown={onMenuKey}
-            style={{ "--_origin": origin } as React.CSSProperties}
-          >
-            {children}
-          </div>
+          <AnchoredPortal>
+            <div
+              className="jl-menu__pop"
+              role="menu"
+              data-side={side}
+              data-align={align}
+              ref={popupRef}
+              onKeyDown={onMenuKey}
+              style={{ "--_origin": origin } as React.CSSProperties}
+            >
+              {children}
+            </div>
+          </AnchoredPortal>
         </MenuCtx.Provider>
       )}
     </span>

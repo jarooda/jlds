@@ -53,16 +53,27 @@
     bar.appendChild(more);
 
     var open = false;
+    var anchored = null;
     function setOpen(o) {
       open = o;
       menu.hidden = !o;
       moreBtn.setAttribute("aria-expanded", o ? "true" : "false");
+      // The menu is moved to <body> so a clipping ancestor (a Card, a scrolling table
+      // wrapper) can't crop it — which also makes it "outside" bar, hence the extra
+      // menu check in the outside-click handler below.
+      var u = window.JLDS && window.JLDS.util;
+      if (o && u && u.anchorPopup && !anchored) {
+        anchored = u.anchorPopup(moreBtn, menu, { align: "end", gap: 6, sheetBreakpoint: 0 });
+      } else if (!o && anchored) {
+        anchored.release();
+        anchored = null;
+      }
     }
     moreBtn.addEventListener("click", function () {
       setOpen(!open);
     });
     document.addEventListener("mousedown", function (e) {
-      if (open && !bar.contains(e.target)) setOpen(false);
+      if (open && !bar.contains(e.target) && !menu.contains(e.target)) setOpen(false);
     });
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape" && open) setOpen(false);

@@ -10,5 +10,5 @@
     "react": ["toolbar.tsx", "index.ts"],
     "vue": ["Toolbar.vue", "index.ts"]
   },
-  "registryDependencies": []
+  "registryDependencies": ["anchored-popup"]
 }

@@ -29,10 +29,15 @@
     if (!trigger || !pop) return;
 
     var cleanup = null;
+    var anchored = null;
     function close() {
       if (pop.hidden) return;
       pop.hidden = true;
       trigger.setAttribute("aria-expanded", "false");
+      if (anchored) {
+        anchored.release();
+        anchored = null;
+      }
       if (cleanup) {
         cleanup();
         cleanup = null;
@@ -42,7 +47,17 @@
       pop.hidden = false;
       trigger.setAttribute("aria-expanded", "true");
       var u = window.JLDS && window.JLDS.util;
-      var a = u && u.onClickOutside ? u.onClickOutside(menu, close) : function () {};
+      // The menu is moved to <body> so a clipping ancestor (a Card, a scrolling table
+      // wrapper) can't crop it — which also makes it "outside" menu, hence the
+      // two-element click-outside test.
+      if (u && u.anchorPopup) {
+        anchored = u.anchorPopup(trigger, pop, {
+          side: pop.getAttribute("data-side") === "top" ? "top" : "bottom",
+          align: pop.getAttribute("data-align") === "end" ? "end" : "start",
+          gap: 8,
+        });
+      }
+      var a = u && u.onClickOutside ? u.onClickOutside([menu, pop], close) : function () {};
       var b = u && u.onEscape ? u.onEscape(close) : function () {};
       cleanup = function () {
         a();

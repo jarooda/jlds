@@ -8,6 +8,12 @@ Escape.
 jlds add popover
 ```
 
+The panel is rendered into `<body>` and anchored to the trigger by
+[Anchored Popup](/components/anchored-popup), so it escapes any ancestor that would clip it (a
+Card's `overflow: hidden`, a scrolling table wrapper). It also flips above the trigger when there
+isn't room below — the arrow follows. That primitive installs automatically as a registry
+dependency.
+
 ## Usage
 
 <Preview src="/preview/popover/usage.html" />

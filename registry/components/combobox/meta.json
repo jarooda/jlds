@@ -10,5 +10,5 @@
     "react": ["combobox.tsx", "index.ts"],
     "vue": ["Combobox.vue", "index.ts"]
   },
-  "registryDependencies": []
+  "registryDependencies": ["anchored-popup"]
 }

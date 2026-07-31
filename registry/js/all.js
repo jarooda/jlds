@@ -105,10 +105,16 @@
       : window.innerWidth <= bp;
   };
 
-  /* Call handler when a pointerdown lands outside `el`. Returns a cleanup fn. */
+  /* Call handler when a pointerdown lands outside `el`. Accepts an array of elements
+   * too — an anchored popup lives in <body>, so "outside" means outside both the
+   * component and its popup. Returns a cleanup fn. */
   util.onClickOutside = function (el, handler) {
+    var els = Array.isArray(el) ? el : [el];
     function onDown(e) {
-      if (!el.contains(e.target)) handler(e);
+      for (var i = 0; i < els.length; i++) {
+        if (els[i] && els[i].contains(e.target)) return;
+      }
+      handler(e);
     }
     document.addEventListener("pointerdown", onDown, true);
     return function () {
@@ -150,6 +156,141 @@
         document.body.style.overflow = prevOverflow;
         document.body.style.paddingRight = prevPad;
       }
+    };
+  };
+
+  /* Anchor `popup` to `anchor`, escaping any clipping ancestor.
+   *
+   * A popup positioned in-flow (`position: absolute` next to its trigger) is cropped
+   * by any ancestor with a non-visible overflow — a Card (`overflow: hidden` for its
+   * rounded corners), a scrolling table wrapper, an accordion panel. `z-index` can't
+   * help; only a different containing block escapes. So the popup is moved to
+   * <body> and positioned against the trigger's viewport rect, flipping above the
+   * trigger when there is no room below.
+   *
+   * Below `opts.sheetBreakpoint` (default --bp-mobile) the component's own @media
+   * block docks the popup as a bottom sheet, so positioning steps aside.
+   *
+   * Options: side ("bottom"|"top"|"left"|"right"), align ("start"|"center"|"end"),
+   * gap (px), matchWidth (bool), sheetBreakpoint (px, 0 disables), retainOnClose
+   * (bool — keep the last position on release, for popups that fade out in place).
+   * Returns a handle: { update, release } — release() restores the popup to its
+   * original place in the DOM. Call it when the popup closes. */
+  var VIEWPORT_MARGIN = 8;
+
+  function clearPosition(popup) {
+    var s = popup.style;
+    s.position = "";
+    s.top = "";
+    s.left = "";
+    s.right = "";
+    s.bottom = "";
+    s.width = "";
+    s.margin = "";
+    s.translate = "";
+    popup.removeAttribute("data-jl-placement");
+  }
+
+  /* Keep pos inside the viewport along one axis, without pushing past the near edge
+   * when the popup is bigger than the space available. */
+  function clampAxis(pos, viewport, size) {
+    return Math.min(
+      Math.max(pos, VIEWPORT_MARGIN),
+      Math.max(VIEWPORT_MARGIN, viewport - size - VIEWPORT_MARGIN)
+    );
+  }
+
+  util.anchorPopup = function (anchor, popup, opts) {
+    opts = opts || {};
+    var side = opts.side || "bottom";
+    var align = opts.align || "start";
+    var gap = opts.gap == null ? 5 : opts.gap;
+    var matchWidth = !!opts.matchWidth;
+    var retainOnClose = !!opts.retainOnClose;
+    var sheetBp = opts.sheetBreakpoint == null ? null : opts.sheetBreakpoint;
+
+    var parent = popup.parentNode;
+    var next = popup.nextSibling;
+    if (parent !== document.body) document.body.appendChild(popup);
+    popup.setAttribute("data-jl-anchored", "");
+
+    function docked() {
+      if (sheetBp === 0) return false;
+      return sheetBp == null ? util.isMobile() : window.matchMedia("(max-width: " + sheetBp + "px)").matches;
+    }
+
+    function update() {
+      if (docked()) {
+        popup.setAttribute("data-jl-docked", "");
+        clearPosition(popup);
+        return;
+      }
+      popup.removeAttribute("data-jl-docked");
+
+      var a = anchor.getBoundingClientRect();
+      var s = popup.style;
+
+      // Neutralize the component's in-flow rule (`top: calc(100% + 5px)`, `right: 0`,
+      // the `translate` some popups centre themselves with) before measuring, and take
+      // the anchor's width first so the height we measure is the height at the final width.
+      s.position = "fixed";
+      s.right = "auto";
+      s.bottom = "auto";
+      s.margin = "0";
+      s.translate = "none";
+      if (matchWidth) s.width = a.width + "px";
+
+      var p = popup.getBoundingClientRect();
+      var vw = document.documentElement.clientWidth;
+      var vh = document.documentElement.clientHeight;
+      var top, left, placement;
+
+      if (side === "left" || side === "right") {
+        // Horizontal sides: `align` runs down the anchor's edge instead of across it.
+        var fitsRight = p.width <= vw - a.right - gap;
+        var fitsLeft = p.width <= a.left - gap;
+        var onLeft = side === "left" ? fitsLeft || !fitsRight : !fitsRight && fitsLeft;
+        left = onLeft ? a.left - p.width - gap : a.right + gap;
+        top =
+          align === "start" ? a.top : align === "end" ? a.bottom - p.height : a.top + (a.height - p.height) / 2;
+        placement = onLeft ? "left" : "right";
+      } else {
+        var fitsBelow = p.height <= vh - a.bottom - gap;
+        var fitsAbove = p.height <= a.top - gap;
+        var onTop = side === "top" ? fitsAbove || !fitsBelow : !fitsBelow && fitsAbove;
+        top = onTop ? a.top - p.height - gap : a.bottom + gap;
+        left =
+          align === "end" ? a.right - p.width : align === "center" ? a.left + (a.width - p.width) / 2 : a.left;
+        placement = onTop ? "top" : "bottom";
+      }
+
+      s.top = Math.round(clampAxis(top, vh, p.height)) + "px";
+      s.left = Math.round(clampAxis(left, vw, p.width)) + "px";
+      popup.setAttribute("data-jl-placement", placement);
+    }
+
+    update();
+    // Capture-phase scroll so the popup follows a scrolling ancestor, not just the page.
+    window.addEventListener("scroll", update, true);
+    window.addEventListener("resize", update);
+    var ro = null;
+    if (typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(update);
+      ro.observe(popup);
+      ro.observe(anchor);
+    }
+
+    return {
+      update: update,
+      release: function () {
+        window.removeEventListener("scroll", update, true);
+        window.removeEventListener("resize", update);
+        if (ro) ro.disconnect();
+        if (!retainOnClose) clearPosition(popup);
+        popup.removeAttribute("data-jl-anchored");
+        popup.removeAttribute("data-jl-docked");
+        if (parent && popup.parentNode !== parent) parent.insertBefore(popup, next);
+      },
     };
   };
 
@@ -1044,6 +1185,7 @@
 
     var active = 0;
     var cleanup = null;
+    var anchored = null;
 
     function labelOf(opt) {
       var l = opt.querySelector(".jl-combobox__opt-label");
@@ -1075,7 +1217,11 @@
       input.setAttribute("aria-expanded", "true");
       filter();
       var u = window.JLDS && window.JLDS.util;
-      cleanup = u && u.onClickOutside ? u.onClickOutside(cb, close) : function () {};
+      // The list is moved to <body> so a clipping ancestor (a Card, a scrolling
+      // table wrapper) can't crop it — which also makes it "outside" cb, hence the
+      // two-element click-outside test.
+      if (u && u.anchorPopup) anchored = u.anchorPopup(control || cb, pop, { matchWidth: true });
+      cleanup = u && u.onClickOutside ? u.onClickOutside([cb, pop], close) : function () {};
     }
     function close() {
       if (pop.hidden) return;
@@ -1084,6 +1230,7 @@
       input.setAttribute("aria-expanded", "false");
       input.value = "";
       if (single) single.style.display = "";
+      if (anchored) { anchored.release(); anchored = null; }
       if (cleanup) { cleanup(); cleanup = null; }
     }
     function choose(opt) {
@@ -1357,11 +1504,13 @@
     var pop = dp.querySelector(".jl-datepicker__pop");
     var cal = pop && pop.querySelector(".jl-cal");
     var cleanup = null;
+    var anchored = null;
 
     function close() {
       if (!pop || pop.hidden) return;
       pop.hidden = true;
       trigger.setAttribute("aria-expanded", "false");
+      if (anchored) { anchored.release(); anchored = null; }
       if (cleanup) { cleanup(); cleanup = null; }
     }
     function open() {
@@ -1385,7 +1534,16 @@
       pop.hidden = false;
       trigger.setAttribute("aria-expanded", "true");
       var u = window.JLDS && window.JLDS.util;
-      var offOutside = u && u.onClickOutside ? u.onClickOutside(dp, close) : function () {};
+      // The calendar is moved to <body> so a clipping ancestor (a Card, a scrolling
+      // table wrapper) can't crop it — which also makes it "outside" dp, hence the
+      // two-element click-outside test.
+      if (u && u.anchorPopup) {
+        anchored = u.anchorPopup(trigger, pop, {
+          align: pop.getAttribute("data-align") === "end" ? "end" : "start",
+          gap: 8,
+        });
+      }
+      var offOutside = u && u.onClickOutside ? u.onClickOutside([dp, pop], close) : function () {};
       var offEsc = u && u.onEscape ? u.onEscape(close) : function () {};
       cleanup = function () { offOutside(); offEsc(); };
     }
@@ -1578,10 +1736,15 @@
     if (!trigger || !pop) return;
 
     var cleanup = null;
+    var anchored = null;
     function close() {
       if (pop.hidden) return;
       pop.hidden = true;
       trigger.setAttribute("aria-expanded", "false");
+      if (anchored) {
+        anchored.release();
+        anchored = null;
+      }
       if (cleanup) {
         cleanup();
         cleanup = null;
@@ -1591,7 +1754,17 @@
       pop.hidden = false;
       trigger.setAttribute("aria-expanded", "true");
       var u = window.JLDS && window.JLDS.util;
-      var a = u && u.onClickOutside ? u.onClickOutside(menu, close) : function () {};
+      // The menu is moved to <body> so a clipping ancestor (a Card, a scrolling table
+      // wrapper) can't crop it — which also makes it "outside" menu, hence the
+      // two-element click-outside test.
+      if (u && u.anchorPopup) {
+        anchored = u.anchorPopup(trigger, pop, {
+          side: pop.getAttribute("data-side") === "top" ? "top" : "bottom",
+          align: pop.getAttribute("data-align") === "end" ? "end" : "start",
+          gap: 8,
+        });
+      }
+      var a = u && u.onClickOutside ? u.onClickOutside([menu, pop], close) : function () {};
       var b = u && u.onEscape ? u.onEscape(close) : function () {};
       cleanup = function () {
         a();
@@ -1875,11 +2048,16 @@
     if (!trigger || !panel) return;
 
     var cleanup = null;
+    var anchored = null;
 
     function close() {
       if (panel.hidden) return;
       panel.hidden = true;
       trigger.setAttribute("aria-expanded", "false");
+      if (anchored) {
+        anchored.release();
+        anchored = null;
+      }
       if (cleanup) {
         cleanup();
         cleanup = null;
@@ -1890,7 +2068,17 @@
       panel.hidden = false;
       trigger.setAttribute("aria-expanded", "true");
       var u = window.JLDS && window.JLDS.util;
-      var offOutside = u && u.onClickOutside ? u.onClickOutside(pop, close) : function () {};
+      // The panel is moved to <body> so a clipping ancestor (a Card, a scrolling table
+      // wrapper) can't crop it — which also makes it "outside" pop, hence the
+      // two-element click-outside test.
+      if (u && u.anchorPopup) {
+        anchored = u.anchorPopup(trigger, panel, {
+          side: panel.getAttribute("data-side") === "top" ? "top" : "bottom",
+          align: panel.getAttribute("data-align") || "center",
+          gap: 8,
+        });
+      }
+      var offOutside = u && u.onClickOutside ? u.onClickOutside([pop, panel], close) : function () {};
       var offEsc = u && u.onEscape ? u.onEscape(close) : function () {};
       cleanup = function () {
         offOutside();
@@ -3204,16 +3392,27 @@
     bar.appendChild(more);
 
     var open = false;
+    var anchored = null;
     function setOpen(o) {
       open = o;
       menu.hidden = !o;
       moreBtn.setAttribute("aria-expanded", o ? "true" : "false");
+      // The menu is moved to <body> so a clipping ancestor (a Card, a scrolling table
+      // wrapper) can't crop it — which also makes it "outside" bar, hence the extra
+      // menu check in the outside-click handler below.
+      var u = window.JLDS && window.JLDS.util;
+      if (o && u && u.anchorPopup && !anchored) {
+        anchored = u.anchorPopup(moreBtn, menu, { align: "end", gap: 6, sheetBreakpoint: 0 });
+      } else if (!o && anchored) {
+        anchored.release();
+        anchored = null;
+      }
     }
     moreBtn.addEventListener("click", function () {
       setOpen(!open);
     });
     document.addEventListener("mousedown", function (e) {
-      if (open && !bar.contains(e.target)) setOpen(false);
+      if (open && !bar.contains(e.target) && !menu.contains(e.target)) setOpen(false);
     });
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape" && open) setOpen(false);
@@ -3290,8 +3489,10 @@
 
 /* ---- tooltip.js ---- */
 /* JLDS behavior — Tooltip. Shows the .jl-tooltip__pop on hover/focus of the
- * .jl-tooltip wrapper (after an optional data-delay). Requires core.js (or all.js).
- * Positioning is pure CSS via the pop's data-side. */
+ * .jl-tooltip wrapper (after an optional data-delay). Requires core.js + util.js
+ * (or all.js). The bubble is anchored to the trigger via JLDS.util.anchorPopup so a
+ * clipping ancestor (a Card, a scrolling table wrapper) can't crop it; the pop's
+ * data-side is the requested side, data-jl-placement the one it landed on. */
 (function () {
   function register(name, fn) {
     var J = (window.JLDS = window.JLDS || {});
@@ -3307,15 +3508,31 @@
     var delay = parseInt(tip.dataset.delay, 10);
     if (isNaN(delay)) delay = 120;
     var timer;
+    var anchored = null;
 
     function open() {
       timer = setTimeout(function () {
+        var u = window.JLDS && window.JLDS.util;
+        if (u && u.anchorPopup && !anchored) {
+          anchored = u.anchorPopup(tip, pop, {
+            side: pop.getAttribute("data-side") || "top",
+            align: "center",
+            gap: 8,
+            sheetBreakpoint: 0,
+            // Keep the position while it fades out, then release on the next open.
+            retainOnClose: true,
+          });
+        }
         pop.setAttribute("data-show", "true");
       }, delay);
     }
     function close() {
       clearTimeout(timer);
       pop.removeAttribute("data-show");
+      if (anchored) {
+        anchored.release();
+        anchored = null;
+      }
     }
 
     tip.addEventListener("mouseenter", open);

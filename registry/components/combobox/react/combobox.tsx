@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useAnchoredPopup, AnchoredPortal } from "../anchored-popup";
 import "./combobox.css";
 
 export type ComboboxOption =
@@ -66,8 +67,14 @@ export function Combobox({
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [active, setActive] = React.useState(0);
-  const rootRef = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
+
+  // The list is portaled to <body> so a clipping ancestor (a Card's overflow: hidden,
+  // a scrolling table wrapper) can't crop it, and anchored to the control instead.
+  const { anchorRef, popupRef, contains } = useAnchoredPopup<HTMLDivElement, HTMLDivElement>({
+    open,
+    matchWidth: true,
+  });
 
   const setValue = (v: string | string[] | null) => {
     if (!isControlled) setUnc(v);
@@ -122,22 +129,23 @@ export function Combobox({
   React.useEffect(() => {
     if (!open) return;
     const onDoc = (e: MouseEvent) => {
-      if (rootRef.current && !rootRef.current.contains(e.target as Node)) close();
+      // `contains` covers the portaled list as well as the control.
+      if (!contains(e.target as Node)) close();
     };
     document.addEventListener("mousedown", onDoc);
     return () => document.removeEventListener("mousedown", onDoc);
-  }, [open, close]);
+  }, [open, close, contains]);
 
   React.useEffect(() => {
-    if (!open || !rootRef.current) return;
-    const el = rootRef.current.querySelector<HTMLElement>('.jl-combobox__opt[data-active="true"]');
-    const pop = rootRef.current.querySelector<HTMLElement>(".jl-combobox__pop");
-    if (!el || !pop) return;
+    const pop = popupRef.current;
+    if (!open || !pop) return;
+    const el = pop.querySelector<HTMLElement>('.jl-combobox__opt[data-active="true"]');
+    if (!el) return;
     const top = el.offsetTop;
     const bottom = top + el.offsetHeight;
     if (top < pop.scrollTop) pop.scrollTop = top - 6;
     else if (bottom > pop.scrollTop + pop.clientHeight) pop.scrollTop = bottom - pop.clientHeight + 6;
-  }, [active, open]);
+  }, [active, open, popupRef]);
 
   const openPop = () => {
     if (!disabled) setOpen(true);
@@ -224,8 +232,9 @@ export function Combobox({
 
   let idx = -1;
   return (
-    <div className={cls} ref={rootRef}>
+    <div className={cls}>
       <div
+        ref={anchorRef}
         className="jl-combobox__control"
         onClick={() => {
           openPop();
@@ -294,65 +303,67 @@ export function Combobox({
       </div>
 
       {open && (
-        <div className="jl-combobox__pop" role="listbox">
-          {loading ? (
-            <div className="jl-combobox__loading">
-              <span className="jl-combobox__spinner" />
-              {loadingMessage}
-            </div>
-          ) : flat.length === 0 ? (
-            <div className="jl-combobox__empty">{emptyMessage}</div>
-          ) : (
-            <>
-              {groups.map((g) => (
-                <div key={g.name || "_"} role="group">
-                  {g.name && <div className="jl-combobox__group-label">{g.name}</div>}
-                  {g.items.map((o) => {
+        <AnchoredPortal>
+          <div ref={popupRef} className="jl-combobox__pop" role="listbox">
+            {loading ? (
+              <div className="jl-combobox__loading">
+                <span className="jl-combobox__spinner" />
+                {loadingMessage}
+              </div>
+            ) : flat.length === 0 ? (
+              <div className="jl-combobox__empty">{emptyMessage}</div>
+            ) : (
+              <>
+                {groups.map((g) => (
+                  <div key={g.name || "_"} role="group">
+                    {g.name && <div className="jl-combobox__group-label">{g.name}</div>}
+                    {g.items.map((o) => {
+                      idx += 1;
+                      const i = idx;
+                      return (
+                        <div
+                          key={o.value}
+                          className="jl-combobox__opt"
+                          role="option"
+                          aria-selected={isSel(o.value)}
+                          aria-disabled={o.disabled || undefined}
+                          data-active={i === active}
+                          onMouseMove={() => setActive(i)}
+                          onClick={() => choose(o)}
+                        >
+                          {o.icon && <span className="jl-combobox__opt-icon">{o.icon}</span>}
+                          <span className="jl-combobox__opt-label">{o.label}</span>
+                          {isSel(o.value) && <span className="jl-combobox__opt-check">{Checkicon}</span>}
+                        </div>
+                      );
+                    })}
+                  </div>
+                ))}
+                {showCreate &&
+                  (() => {
                     idx += 1;
                     const i = idx;
                     return (
                       <div
-                        key={o.value}
                         className="jl-combobox__opt"
                         role="option"
-                        aria-selected={isSel(o.value)}
-                        aria-disabled={o.disabled || undefined}
                         data-active={i === active}
                         onMouseMove={() => setActive(i)}
-                        onClick={() => choose(o)}
+                        onClick={create}
                       >
-                        {o.icon && <span className="jl-combobox__opt-icon">{o.icon}</span>}
-                        <span className="jl-combobox__opt-label">{o.label}</span>
-                        {isSel(o.value) && <span className="jl-combobox__opt-check">{Checkicon}</span>}
+                        <span className="jl-combobox__create-mark">
+                          <svg viewBox="0 0 16 16" width="16" height="16" fill="none" aria-hidden="true">
+                            <path d="M8 3v10M3 8h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                          </svg>
+                        </span>
+                        <span className="jl-combobox__opt-label">Create “{query.trim()}”</span>
                       </div>
                     );
-                  })}
-                </div>
-              ))}
-              {showCreate &&
-                (() => {
-                  idx += 1;
-                  const i = idx;
-                  return (
-                    <div
-                      className="jl-combobox__opt"
-                      role="option"
-                      data-active={i === active}
-                      onMouseMove={() => setActive(i)}
-                      onClick={create}
-                    >
-                      <span className="jl-combobox__create-mark">
-                        <svg viewBox="0 0 16 16" width="16" height="16" fill="none" aria-hidden="true">
-                          <path d="M8 3v10M3 8h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-                        </svg>
-                      </span>
-                      <span className="jl-combobox__opt-label">Create “{query.trim()}”</span>
-                    </div>
-                  );
-                })()}
-            </>
-          )}
-        </div>
+                  })()}
+              </>
+            )}
+          </div>
+        </AnchoredPortal>
       )}
     </div>
   );

@@ -17,6 +17,7 @@ small screens — for the details, see [Responsive & mobile](/guide/responsive):
 |---|:---:|:---:|:---:|:---:|:---:|
 | [Accordion](/components/accordion) | ✅ | ✅ | ✅ | — | — |
 | [Alert](/components/alert) | ✅ | ✅ | ✅ | — | — |
+| [Anchored Popup](/components/anchored-popup) | ✅ | ✅ | ✅ | ✅ | ✅ |
 | [App Shell](/components/app-shell) | ✅ | ✅ | ✅ | ✅ | ✅ |
 | [Avatar](/components/avatar) | ✅ | ✅ | ✅ | — | — |
 | [Badge](/components/badge) | ✅ | ✅ | ✅ | — | — |

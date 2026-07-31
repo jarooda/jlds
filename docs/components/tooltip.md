@@ -7,6 +7,11 @@ the content to a short phrase — for richer, interactive content use [Popover](
 jlds add tooltip
 ```
 
+The bubble is rendered into `<body>` and anchored to the trigger by
+[Anchored Popup](/components/anchored-popup), so it escapes any ancestor that would clip it, and
+flips to the opposite side when there isn't room. That primitive installs automatically as a
+registry dependency.
+
 ## Usage
 
 <Preview src="/preview/tooltip/usage.html" />

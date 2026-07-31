@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from "vue";
+import { useAnchoredPopup } from "../anchored-popup";
 
 export interface ToolbarItem {
   /** Stable id (also used as the icon-only aria-label fallback). */
@@ -35,6 +36,16 @@ const wrapRef = ref<HTMLElement | null>(null);
 const ghostRef = ref<HTMLElement | null>(null);
 const visibleCount = ref(props.items.length);
 const open = ref(false);
+
+// The overflow menu is teleported to <body> so a clipping ancestor (a Card's
+// overflow: hidden, a scrolling table wrapper) can't crop it, and anchored to the
+// "More" button instead. It has no bottom-sheet promotion, so no sheet breakpoint.
+const { anchorRef, popupRef, contains } = useAnchoredPopup({
+  open,
+  align: "end",
+  gap: 6,
+  sheetBreakpoint: 0,
+});
 
 function measure() {
   const wrap = wrapRef.value;
@@ -80,7 +91,8 @@ onBeforeUnmount(() => {
 watch(() => props.items, () => nextTick(measure), { deep: true });
 
 function onDoc(e: MouseEvent) {
-  if (wrapRef.value && !wrapRef.value.contains(e.target as Node)) open.value = false;
+  // `contains` covers the teleported menu; wrapRef covers the rest of the toolbar.
+  if (!contains(e.target as Node) && !wrapRef.value?.contains(e.target as Node)) open.value = false;
 }
 function onKey(e: KeyboardEvent) {
   if (e.key === "Escape") open.value = false;
@@ -135,6 +147,7 @@ function pick(it: ToolbarItem) {
 
     <div v-if="overflow.length" class="jl-toolbar__more" style="margin-left: auto">
       <button
+        ref="anchorRef"
         type="button"
         class="jl-toolbar__btn jl-toolbar__btn--icon"
         :aria-label="moreLabel"
@@ -149,22 +162,24 @@ function pick(it: ToolbarItem) {
           <circle cx="19" cy="12" r="1.7" />
         </svg>
       </button>
-      <div v-if="open" class="jl-toolbar__menu" role="menu">
-        <button
-          v-for="(it, i) in overflow"
-          :key="it.id || i"
-          type="button"
-          role="menuitem"
-          class="jl-toolbar__mitem"
-          :disabled="it.disabled"
-          :aria-pressed="it.active != null ? !!it.active : undefined"
-          @click="pick(it)"
-        >
-          <!-- eslint-disable-next-line vue/no-v-html -- icon is developer-authored inline SVG markup, not user input -->
-          <span v-if="it.icon" style="display: contents" v-html="it.icon" />
-          <span>{{ it.label || it.tooltip || it.id }}</span>
-        </button>
-      </div>
+      <Teleport to="body">
+        <div v-if="open" ref="popupRef" class="jl-toolbar__menu" role="menu">
+          <button
+            v-for="(it, i) in overflow"
+            :key="it.id || i"
+            type="button"
+            role="menuitem"
+            class="jl-toolbar__mitem"
+            :disabled="it.disabled"
+            :aria-pressed="it.active != null ? !!it.active : undefined"
+            @click="pick(it)"
+          >
+            <!-- eslint-disable-next-line vue/no-v-html -- icon is developer-authored inline SVG markup, not user input -->
+            <span v-if="it.icon" style="display: contents" v-html="it.icon" />
+            <span>{{ it.label || it.tooltip || it.id }}</span>
+          </button>
+        </div>
+      </Teleport>
     </div>
 
     <!-- hidden measuring clone: always all items at natural width -->

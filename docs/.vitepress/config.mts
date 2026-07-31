@@ -83,6 +83,7 @@ export default defineConfig({
             { text: 'Overview', link: '/components/' },
             { text: 'Accordion', link: '/components/accordion' },
             { text: 'Alert', link: '/components/alert' },
+            { text: 'Anchored Popup', link: '/components/anchored-popup' },
             { text: 'App Shell', link: '/components/app-shell' },
             { text: 'Avatar', link: '/components/avatar' },
             { text: 'Badge', link: '/components/badge' },

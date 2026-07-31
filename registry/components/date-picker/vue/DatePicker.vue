@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, watch } from "vue";
 import Calendar from "./Calendar.vue";
+import { useAnchoredPopup } from "../anchored-popup";
 
 type DatePickerSize = "sm" | "md";
 type DateInput = Date | string | number | null | undefined;
@@ -43,12 +44,20 @@ const defaultFormat = (d: Date) => d.toLocaleDateString(undefined, { month: "sho
 
 const sel = computed(() => toDate(props.modelValue));
 const open = ref(false);
-const root = ref<HTMLElement | null>(null);
+
+// The calendar is teleported to <body> so a clipping ancestor (a Card's overflow: hidden,
+// a scrolling table wrapper) can't crop it, and anchored to the trigger instead.
+const { anchorRef, popupRef, contains } = useAnchoredPopup({
+  open,
+  align: props.align === "end" ? "end" : "start",
+  gap: 8,
+});
 
 const label = computed(() => (sel.value ? (props.format || defaultFormat)(sel.value) : props.placeholder));
 
 function onDown(e: MouseEvent) {
-  if (root.value && !root.value.contains(e.target as Node)) open.value = false;
+  // `contains` covers the teleported calendar as well as the trigger.
+  if (!contains(e.target as Node)) open.value = false;
 }
 function onKey(e: KeyboardEvent) {
   if (e.key === "Escape") open.value = false;
@@ -77,7 +86,7 @@ function handle(d: Date) {
 
 <template>
   <span
-    ref="root"
+    ref="anchorRef"
     class="jl-datepicker"
     :class="props.size === 'sm' ? 'jl-datepicker--sm' : ''"
   >
@@ -94,17 +103,19 @@ function handle(d: Date) {
       </span>
       <span class="jl-datepicker__value" :data-placeholder="!sel || undefined">{{ label }}</span>
     </button>
-    <div v-if="open" class="jl-datepicker__pop" role="dialog" :data-align="props.align">
-      <Calendar
-        :model-value="sel"
-        :default-month="sel || undefined"
-        :min="props.min"
-        :max="props.max"
-        :disabled-date="props.disabledDate"
-        :week-starts-on="props.weekStartsOn"
-        @update:model-value="handle"
-      />
-    </div>
+    <Teleport to="body">
+      <div v-if="open" ref="popupRef" class="jl-datepicker__pop" role="dialog" :data-align="props.align">
+        <Calendar
+          :model-value="sel"
+          :default-month="sel || undefined"
+          :min="props.min"
+          :max="props.max"
+          :disabled-date="props.disabledDate"
+          :week-starts-on="props.weekStartsOn"
+          @update:model-value="handle"
+        />
+      </div>
+    </Teleport>
   </span>
 </template>
 

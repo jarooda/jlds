@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onBeforeUnmount } from "vue";
+import { useAnchoredPopup } from "../anchored-popup";
 
 type TooltipSide = "top" | "bottom" | "left" | "right";
 
@@ -20,7 +21,20 @@ const emit = defineEmits<{ "update:open": [value: boolean] }>();
 
 const isControlled = computed(() => props.open !== undefined);
 const internal = ref(false);
-const show = computed(() => (isControlled.value ? props.open : internal.value));
+const show = computed(() => !!(isControlled.value ? props.open : internal.value));
+
+// The bubble is teleported to <body> so a clipping ancestor (a Card's overflow: hidden,
+// a scrolling table wrapper) can't crop it, and anchored to the trigger instead. It stays
+// mounted — `retainOnClose` keeps the last position so the fade-out plays in place rather
+// than jumping. Tooltips are suppressed on touch, so no sheet.
+const { anchorRef, popupRef } = useAnchoredPopup({
+  open: show,
+  side: props.side,
+  align: "center",
+  gap: 8,
+  sheetBreakpoint: 0,
+  retainOnClose: true,
+});
 
 let timer: ReturnType<typeof setTimeout> | null = null;
 function set(v: boolean) {
@@ -43,6 +57,7 @@ onBeforeUnmount(() => timer && clearTimeout(timer));
   </span>
   <span
     v-else
+    ref="anchorRef"
     class="jl-tooltip"
     @mouseenter="onEnter"
     @mouseleave="close"
@@ -50,10 +65,18 @@ onBeforeUnmount(() => timer && clearTimeout(timer));
     @focusout="close"
   >
     <slot />
-    <span class="jl-tooltip__pop" role="tooltip" :data-side="side" :data-show="show || undefined">
-      <slot name="content">{{ content }}</slot>
-      <span class="jl-tooltip__arrow" />
-    </span>
+    <Teleport to="body">
+      <span
+        ref="popupRef"
+        class="jl-tooltip__pop"
+        role="tooltip"
+        :data-side="side"
+        :data-show="show || undefined"
+      >
+        <slot name="content">{{ content }}</slot>
+        <span class="jl-tooltip__arrow" />
+      </span>
+    </Teleport>
   </span>
 </template>
 

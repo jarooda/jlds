@@ -7,6 +7,11 @@ support async option sets. Full keyboard nav (↑/↓, Enter, Esc).
 > The HTML behavior layer covers the common **single-select** case (filter + keyboard + select on
 > declarative options). Multi-select chips, creatable, and async are React/Vue features.
 
+The list is rendered into `<body>` and anchored to the control by
+[Anchored Popup](/components/anchored-popup), so it opens over the edge of a Card, a scrolling
+table, or any other ancestor that would otherwise clip it. That primitive installs automatically
+as a registry dependency.
+
 ```bash
 jlds add combobox
 ```

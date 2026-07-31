@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useAnchoredPopup, AnchoredPortal } from "../anchored-popup";
 import "./date-picker.css";
 
 export type DatePickerSize = "sm" | "md";
@@ -189,12 +190,20 @@ export function DatePicker({
   const [innerVal, setInnerVal] = React.useState<Date | null>(toDate(defaultValue));
   const sel = value !== undefined ? toDate(value) : innerVal;
   const [open, setOpen] = React.useState(false);
-  const ref = React.useRef<HTMLSpanElement>(null);
+
+  // The calendar is portaled to <body> so a clipping ancestor (a Card's overflow: hidden,
+  // a scrolling table wrapper) can't crop it, and anchored to the trigger instead.
+  const { anchorRef, popupRef, contains } = useAnchoredPopup<HTMLSpanElement, HTMLDivElement>({
+    open,
+    align: align === "end" ? "end" : "start",
+    gap: 8,
+  });
 
   React.useEffect(() => {
     if (!open) return;
     const onDown = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      // `contains` covers the portaled calendar as well as the trigger.
+      if (!contains(e.target as Node)) setOpen(false);
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
@@ -205,7 +214,7 @@ export function DatePicker({
       document.removeEventListener("mousedown", onDown);
       document.removeEventListener("keydown", onKey);
     };
-  }, [open]);
+  }, [open, contains]);
 
   const handle = (d: Date) => {
     if (value === undefined) setInnerVal(d);
@@ -214,7 +223,7 @@ export function DatePicker({
   };
 
   return (
-    <span className={["jl-datepicker", size === "sm" ? "jl-datepicker--sm" : "", className].filter(Boolean).join(" ")} ref={ref} {...rest}>
+    <span className={["jl-datepicker", size === "sm" ? "jl-datepicker--sm" : "", className].filter(Boolean).join(" ")} ref={anchorRef} {...rest}>
       <button
         type="button"
         className="jl-datepicker__trigger"
@@ -227,17 +236,19 @@ export function DatePicker({
         <span className="jl-datepicker__value" data-placeholder={!sel || undefined}>{sel ? format(sel) : placeholder}</span>
       </button>
       {open && (
-        <div className="jl-datepicker__pop" role="dialog" data-align={align}>
-          <Calendar
-            value={sel}
-            onChange={handle}
-            defaultMonth={sel || undefined}
-            min={min}
-            max={max}
-            disabledDate={disabledDate}
-            weekStartsOn={weekStartsOn}
-          />
-        </div>
+        <AnchoredPortal>
+          <div ref={popupRef} className="jl-datepicker__pop" role="dialog" data-align={align}>
+            <Calendar
+              value={sel}
+              onChange={handle}
+              defaultMonth={sel || undefined}
+              min={min}
+              max={max}
+              disabledDate={disabledDate}
+              weekStartsOn={weekStartsOn}
+            />
+          </div>
+        </AnchoredPortal>
       )}
     </span>
   );

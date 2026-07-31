@@ -18,11 +18,16 @@
     if (!trigger || !panel) return;
 
     var cleanup = null;
+    var anchored = null;
 
     function close() {
       if (panel.hidden) return;
       panel.hidden = true;
       trigger.setAttribute("aria-expanded", "false");
+      if (anchored) {
+        anchored.release();
+        anchored = null;
+      }
       if (cleanup) {
         cleanup();
         cleanup = null;
@@ -33,7 +38,17 @@
       panel.hidden = false;
       trigger.setAttribute("aria-expanded", "true");
       var u = window.JLDS && window.JLDS.util;
-      var offOutside = u && u.onClickOutside ? u.onClickOutside(pop, close) : function () {};
+      // The panel is moved to <body> so a clipping ancestor (a Card, a scrolling table
+      // wrapper) can't crop it — which also makes it "outside" pop, hence the
+      // two-element click-outside test.
+      if (u && u.anchorPopup) {
+        anchored = u.anchorPopup(trigger, panel, {
+          side: panel.getAttribute("data-side") === "top" ? "top" : "bottom",
+          align: panel.getAttribute("data-align") || "center",
+          gap: 8,
+        });
+      }
+      var offOutside = u && u.onClickOutside ? u.onClickOutside([pop, panel], close) : function () {};
       var offEsc = u && u.onEscape ? u.onEscape(close) : function () {};
       cleanup = function () {
         offOutside();

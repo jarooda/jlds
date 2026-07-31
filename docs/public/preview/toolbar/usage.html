@@ -5,7 +5,9 @@
     <link rel="stylesheet" href="/css/index.css">
     <link rel="stylesheet" href="/css/toolbar.css">
     <style>
-      body { margin: 0; padding: var(--space-5); font-family: var(--font-sans); }
+      /* min-height reserves room for the open overflow menu: it is anchored to the viewport,
+         so a short canvas would push it back over the More button. */
+      body { margin: 0; padding: var(--space-5); font-family: var(--font-sans); min-height: 220px; }
       .wrap { max-width: 440px; margin: 0 auto; }
       .hint { font-family: var(--font-mono); font-size: var(--text-2xs); color: var(--text-tertiary); margin-top: 12px; }
     </style>

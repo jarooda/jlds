@@ -10,5 +10,5 @@
     "react": ["popover.tsx", "index.ts"],
     "vue": ["Popover.vue", "index.ts"]
   },
-  "registryDependencies": []
+  "registryDependencies": ["anchored-popup"]
 }
