@@ -34,6 +34,18 @@
 .jl-popover__pop[data-align="end"]    .jl-popover__arrow { right: 16px; }
 .jl-popover__pop[data-align="center"] .jl-popover__arrow { left: 50%; margin-left: -5px; }
 
+/* Anchored to the viewport (see the anchored-popup primitive): the positioner writes
+   `left` itself, so the centering translate — and the keyframes that preserve it —
+   must not apply on top of it, or the panel lands half its width to the left. */
+.jl-popover__pop[data-jl-anchored][data-align="center"] {
+  transform: none;
+  animation-name: jl-popover-in;
+}
+/* The positioner flips the panel when there's no room below, so the arrow follows the
+   side it actually landed on rather than the requested `data-side`. */
+.jl-popover__pop[data-jl-placement="bottom"] .jl-popover__arrow { top: -6px; bottom: auto; transform: rotate(45deg); }
+.jl-popover__pop[data-jl-placement="top"]    .jl-popover__arrow { bottom: -6px; top: auto; transform: rotate(225deg); }
+
 @media (prefers-reduced-motion: reduce) {
   .jl-popover__pop { animation: none; }
 }

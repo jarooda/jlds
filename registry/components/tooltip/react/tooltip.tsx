@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useAnchoredPopup, AnchoredPortal } from "../anchored-popup";
 import "./tooltip.css";
 
 export type TooltipSide = "top" | "bottom" | "left" | "right";
@@ -36,6 +37,19 @@ export function Tooltip({
   };
   const timer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // The bubble is portaled to <body> so a clipping ancestor (a Card's overflow: hidden,
+  // a scrolling table wrapper) can't crop it, and anchored to the trigger instead. It
+  // stays mounted — `retainOnClose` keeps the last position so the fade-out plays in
+  // place rather than jumping. Tooltips are suppressed on touch, so no sheet.
+  const { anchorRef, popupRef } = useAnchoredPopup<HTMLSpanElement, HTMLSpanElement>({
+    open: show,
+    side,
+    align: "center",
+    gap: 8,
+    sheetBreakpoint: 0,
+    retainOnClose: true,
+  });
+
   const openIt = () => {
     timer.current = setTimeout(() => set(true), delay);
   };
@@ -48,6 +62,7 @@ export function Tooltip({
 
   return (
     <span
+      ref={anchorRef}
       className={["jl-tooltip", className].filter(Boolean).join(" ")}
       onMouseEnter={openIt}
       onMouseLeave={close}
@@ -55,15 +70,18 @@ export function Tooltip({
       onBlur={close}
     >
       {children}
-      <span
-        className="jl-tooltip__pop"
-        role="tooltip"
-        data-side={side}
-        data-show={show || undefined}
-      >
-        {content}
-        <span className="jl-tooltip__arrow" />
-      </span>
+      <AnchoredPortal>
+        <span
+          ref={popupRef}
+          className="jl-tooltip__pop"
+          role="tooltip"
+          data-side={side}
+          data-show={show || undefined}
+        >
+          {content}
+          <span className="jl-tooltip__arrow" />
+        </span>
+      </AnchoredPortal>
     </span>
   );
 }

@@ -26,6 +26,7 @@
 
     var active = 0;
     var cleanup = null;
+    var anchored = null;
 
     function labelOf(opt) {
       var l = opt.querySelector(".jl-combobox__opt-label");
@@ -57,7 +58,11 @@
       input.setAttribute("aria-expanded", "true");
       filter();
       var u = window.JLDS && window.JLDS.util;
-      cleanup = u && u.onClickOutside ? u.onClickOutside(cb, close) : function () {};
+      // The list is moved to <body> so a clipping ancestor (a Card, a scrolling
+      // table wrapper) can't crop it — which also makes it "outside" cb, hence the
+      // two-element click-outside test.
+      if (u && u.anchorPopup) anchored = u.anchorPopup(control || cb, pop, { matchWidth: true });
+      cleanup = u && u.onClickOutside ? u.onClickOutside([cb, pop], close) : function () {};
     }
     function close() {
       if (pop.hidden) return;
@@ -66,6 +71,7 @@
       input.setAttribute("aria-expanded", "false");
       input.value = "";
       if (single) single.style.display = "";
+      if (anchored) { anchored.release(); anchored = null; }
       if (cleanup) { cleanup(); cleanup = null; }
     }
     function choose(opt) {

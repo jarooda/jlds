@@ -1,0 +1,28 @@
+/* JLDS — anchored popup primitive.
+ *
+ * Popups that are positioned in-flow (`position: absolute` inside their trigger's
+ * subtree) get clipped by any ancestor with a non-visible `overflow` — a Card
+ * (`overflow: hidden` for its rounded corners), a scrolling table wrapper, an
+ * accordion panel, a scroll area. `z-index` cannot help: clipping happens
+ * regardless of stacking order. The only escape is a different containing block.
+ *
+ * The primitive renders the popup into <body> and positions it against its
+ * trigger's viewport rect — `useAnchoredPopup` (React/Vue) or
+ * `JLDS.util.anchorPopup` (HTML). Those write `position/top/left/width` as inline
+ * styles, which beat any component rule, so this stylesheet is not required for
+ * correctness; it documents the anchored state and gives consumers something to
+ * target. Below --bp-mobile the popup docks as a bottom sheet via the component's
+ * own media query and the positioner steps aside, clearing its inline styles.
+ */
+
+[data-jl-anchored] {
+  position: fixed;
+  margin: 0;
+}
+
+/* Docked as a bottom sheet — the component's own @media block owns position and
+ * inset here, so nothing is anchored. Exposed for consumers who need to tell the
+ * two states apart. */
+[data-jl-anchored][data-jl-docked] {
+  margin: 0;
+}

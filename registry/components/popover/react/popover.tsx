@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useAnchoredPopup, AnchoredPortal } from "../anchored-popup";
 import "./popover.css";
 
 export type PopoverSide = "bottom" | "top";
@@ -38,7 +39,15 @@ export function Popover({
   const isControlled = controlledOpen != null;
   const [uncontrolled, setUncontrolled] = React.useState(defaultOpen);
   const open = isControlled ? controlledOpen : uncontrolled;
-  const ref = React.useRef<HTMLSpanElement>(null);
+
+  // The panel is portaled to <body> so a clipping ancestor (a Card's overflow: hidden,
+  // a scrolling table wrapper) can't crop it, and anchored to the trigger instead.
+  const { anchorRef, popupRef, contains } = useAnchoredPopup<HTMLSpanElement, HTMLDivElement>({
+    open,
+    side,
+    align,
+    gap: 8,
+  });
 
   const setOpen = React.useCallback(
     (v: boolean) => {
@@ -51,7 +60,8 @@ export function Popover({
   React.useEffect(() => {
     if (!open) return;
     const onDown = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      // `contains` covers the portaled panel as well as the trigger.
+      if (!contains(e.target as Node)) setOpen(false);
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
@@ -62,7 +72,7 @@ export function Popover({
       document.removeEventListener("mousedown", onDown);
       document.removeEventListener("keydown", onKey);
     };
-  }, [open, setOpen]);
+  }, [open, setOpen, contains]);
 
   const triggerEl = React.isValidElement(trigger)
     ? React.cloneElement(trigger as React.ReactElement<TriggerProps>, {
@@ -78,26 +88,29 @@ export function Popover({
   const origin = `${side === "top" ? "bottom" : "top"} ${align}`;
 
   return (
-    <span className={["jl-popover", className].filter(Boolean).join(" ")} ref={ref}>
+    <span className={["jl-popover", className].filter(Boolean).join(" ")} ref={anchorRef}>
       {triggerEl}
       {open && (
-        <div
-          className="jl-popover__pop"
-          role="dialog"
-          data-side={side}
-          data-align={align}
-          style={
-            {
-              "--_origin": origin,
-              "--_pad": padded ? undefined : "0",
-            } as React.CSSProperties
-          }
-        >
-          {arrow && <span className="jl-popover__arrow" aria-hidden="true" />}
-          {typeof children === "function"
-            ? children({ close: () => setOpen(false) })
-            : children}
-        </div>
+        <AnchoredPortal>
+          <div
+            ref={popupRef}
+            className="jl-popover__pop"
+            role="dialog"
+            data-side={side}
+            data-align={align}
+            style={
+              {
+                "--_origin": origin,
+                "--_pad": padded ? undefined : "0",
+              } as React.CSSProperties
+            }
+          >
+            {arrow && <span className="jl-popover__arrow" aria-hidden="true" />}
+            {typeof children === "function"
+              ? children({ close: () => setOpen(false) })
+              : children}
+          </div>
+        </AnchoredPortal>
       )}
     </span>
   );

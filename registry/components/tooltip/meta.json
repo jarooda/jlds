@@ -10,5 +10,5 @@
     "react": ["tooltip.tsx", "index.ts"],
     "vue": ["Tooltip.vue", "index.ts"]
   },
-  "registryDependencies": []
+  "registryDependencies": ["anchored-popup"]
 }

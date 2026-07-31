@@ -100,11 +100,13 @@
     var pop = dp.querySelector(".jl-datepicker__pop");
     var cal = pop && pop.querySelector(".jl-cal");
     var cleanup = null;
+    var anchored = null;
 
     function close() {
       if (!pop || pop.hidden) return;
       pop.hidden = true;
       trigger.setAttribute("aria-expanded", "false");
+      if (anchored) { anchored.release(); anchored = null; }
       if (cleanup) { cleanup(); cleanup = null; }
     }
     function open() {
@@ -128,7 +130,16 @@
       pop.hidden = false;
       trigger.setAttribute("aria-expanded", "true");
       var u = window.JLDS && window.JLDS.util;
-      var offOutside = u && u.onClickOutside ? u.onClickOutside(dp, close) : function () {};
+      // The calendar is moved to <body> so a clipping ancestor (a Card, a scrolling
+      // table wrapper) can't crop it — which also makes it "outside" dp, hence the
+      // two-element click-outside test.
+      if (u && u.anchorPopup) {
+        anchored = u.anchorPopup(trigger, pop, {
+          align: pop.getAttribute("data-align") === "end" ? "end" : "start",
+          gap: 8,
+        });
+      }
+      var offOutside = u && u.onClickOutside ? u.onClickOutside([dp, pop], close) : function () {};
       var offEsc = u && u.onEscape ? u.onEscape(close) : function () {};
       cleanup = function () { offOutside(); offEsc(); };
     }

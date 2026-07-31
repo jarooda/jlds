@@ -1,0 +1,14 @@
+{
+  "name": "anchored-popup",
+  "description": "Positioning primitive — renders a popup into <body> and anchors it to its trigger, so it escapes any clipping ancestor. Used by the overlay components.",
+  "version": "0.1.0",
+  "frameworks": ["react", "vue"],
+  "dependencies": [],
+  "devDependencies": [],
+  "files": {
+    "shared": [],
+    "react": ["anchored-popup.tsx", "anchored-portal.tsx", "index.ts"],
+    "vue": ["useAnchoredPopup.ts", "index.ts"]
+  },
+  "registryDependencies": []
+}

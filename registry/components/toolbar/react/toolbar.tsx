@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useAnchoredPopup, AnchoredPortal } from "../anchored-popup";
 import "./toolbar.css";
 
 export interface ToolbarItem {
@@ -65,6 +66,16 @@ export function Toolbar({
   const [visibleCount, setVisibleCount] = React.useState(items.length);
   const [open, setOpen] = React.useState(false);
 
+  // The overflow menu is portaled to <body> so a clipping ancestor (a Card's
+  // overflow: hidden, a scrolling table wrapper) can't crop it, and anchored to the
+  // "More" button instead. It has no bottom-sheet promotion, so no sheet breakpoint.
+  const { anchorRef, popupRef, contains } = useAnchoredPopup<HTMLButtonElement, HTMLDivElement>({
+    open,
+    align: "end",
+    gap: 6,
+    sheetBreakpoint: 0,
+  });
+
   const measure = React.useCallback(() => {
     const wrap = wrapRef.current;
     const ghost = ghostRef.current;
@@ -104,7 +115,8 @@ export function Toolbar({
   React.useEffect(() => {
     if (!open) return;
     const onDoc = (e: MouseEvent) => {
-      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
+      // `contains` covers the portaled menu; wrapRef covers the rest of the toolbar.
+      if (!contains(e.target as Node) && !wrapRef.current?.contains(e.target as Node)) setOpen(false);
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
@@ -115,7 +127,7 @@ export function Toolbar({
       document.removeEventListener("mousedown", onDoc);
       document.removeEventListener("keydown", onKey);
     };
-  }, [open]);
+  }, [open, contains]);
 
   const shown = items.slice(0, visibleCount);
   const overflow = items.slice(visibleCount).filter((it) => it.type !== "separator");
@@ -136,6 +148,7 @@ export function Toolbar({
       {overflow.length > 0 && (
         <div className="jl-toolbar__more" style={{ marginLeft: "auto" }}>
           <button
+            ref={anchorRef}
             type="button"
             className="jl-toolbar__btn jl-toolbar__btn--icon"
             aria-label={moreLabel}
@@ -151,25 +164,27 @@ export function Toolbar({
             </svg>
           </button>
           {open && (
-            <div className="jl-toolbar__menu" role="menu">
-              {overflow.map((it, i) => (
-                <button
-                  key={it.id || i}
-                  type="button"
-                  role="menuitem"
-                  className="jl-toolbar__mitem"
-                  disabled={it.disabled}
-                  aria-pressed={it.active != null ? !!it.active : undefined}
-                  onClick={() => {
-                    it.onClick?.();
-                    setOpen(false);
-                  }}
-                >
-                  {it.icon}
-                  <span>{it.label || it.tooltip || it.id}</span>
-                </button>
-              ))}
-            </div>
+            <AnchoredPortal>
+              <div ref={popupRef} className="jl-toolbar__menu" role="menu">
+                {overflow.map((it, i) => (
+                  <button
+                    key={it.id || i}
+                    type="button"
+                    role="menuitem"
+                    className="jl-toolbar__mitem"
+                    disabled={it.disabled}
+                    aria-pressed={it.active != null ? !!it.active : undefined}
+                    onClick={() => {
+                      it.onClick?.();
+                      setOpen(false);
+                    }}
+                  >
+                    {it.icon}
+                    <span>{it.label || it.tooltip || it.id}</span>
+                  </button>
+                ))}
+              </div>
+            </AnchoredPortal>
           )}
         </div>
       )}

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch, onBeforeUnmount, type Component } from "vue";
+import { useAnchoredPopup } from "../anchored-popup";
 
 interface Opt { value: string; label: string; icon?: Component; group?: string; disabled?: boolean }
 type OptionInput = string | Opt;
@@ -45,8 +46,11 @@ const opts = computed(() => props.options.map(norm));
 const open = ref(false);
 const query = ref("");
 const active = ref(0);
-const root = ref<HTMLElement | null>(null);
 const inputRef = ref<HTMLInputElement | null>(null);
+
+// The list is teleported to <body> so a clipping ancestor (a Card's overflow: hidden,
+// a scrolling table wrapper) can't crop it, and anchored to the control instead.
+const { anchorRef, popupRef, contains } = useAnchoredPopup({ open, matchWidth: true });
 
 const selected = computed(() =>
   props.multiple ? ((props.modelValue as string[]) || []) : props.modelValue
@@ -174,7 +178,8 @@ function onKeyDown(e: KeyboardEvent) {
 }
 
 function onDoc(e: MouseEvent) {
-  if (root.value && !root.value.contains(e.target as Node)) close();
+  // `contains` covers the teleported list as well as the control.
+  if (!contains(e.target as Node)) close();
 }
 watch(open, (v) => {
   if (v) document.addEventListener("mousedown", onDoc);
@@ -201,8 +206,8 @@ const cls = computed(() =>
 </script>
 
 <template>
-  <div ref="root" :class="cls">
-    <div class="jl-combobox__control" @click="onControlClick">
+  <div :class="cls">
+    <div ref="anchorRef" class="jl-combobox__control" @click="onControlClick">
       <span v-for="val in (multiple ? (selected as string[]) || [] : [])" :key="val" class="jl-combobox__chip">
         {{ labelFor(val) }}
         <button type="button" class="jl-combobox__chip-x" :aria-label="`Remove ${val}`" @click.stop="removeChip(val)">
@@ -241,45 +246,47 @@ const cls = computed(() =>
       </span>
     </div>
 
-    <div v-if="open" class="jl-combobox__pop" role="listbox">
-      <div v-if="loading" class="jl-combobox__loading"><span class="jl-combobox__spinner" />{{ loadingMessage }}</div>
-      <div v-else-if="flatCount === 0" class="jl-combobox__empty">{{ emptyMessage }}</div>
-      <template v-else>
-        <div v-for="g in groups" :key="g.name || '_'" role="group">
-          <div v-if="g.name" class="jl-combobox__group-label">{{ g.name }}</div>
+    <Teleport to="body">
+      <div v-if="open" ref="popupRef" class="jl-combobox__pop" role="listbox">
+        <div v-if="loading" class="jl-combobox__loading"><span class="jl-combobox__spinner" />{{ loadingMessage }}</div>
+        <div v-else-if="flatCount === 0" class="jl-combobox__empty">{{ emptyMessage }}</div>
+        <template v-else>
+          <div v-for="g in groups" :key="g.name || '_'" role="group">
+            <div v-if="g.name" class="jl-combobox__group-label">{{ g.name }}</div>
+            <div
+              v-for="o in g.items"
+              :key="o.value"
+              class="jl-combobox__opt"
+              role="option"
+              :aria-selected="isSel(o.value)"
+              :aria-disabled="o.disabled || undefined"
+              :data-active="optIndex(o) === active"
+              @mousemove="active = optIndex(o)"
+              @click="choose(o)"
+            >
+              <span v-if="o.icon" class="jl-combobox__opt-icon"><component :is="o.icon" /></span>
+              <span class="jl-combobox__opt-label">{{ o.label }}</span>
+              <span v-if="isSel(o.value)" class="jl-combobox__opt-check">
+                <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13 4.5 6.5 11 3 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              </span>
+            </div>
+          </div>
           <div
-            v-for="o in g.items"
-            :key="o.value"
+            v-if="showCreate"
             class="jl-combobox__opt"
             role="option"
-            :aria-selected="isSel(o.value)"
-            :aria-disabled="o.disabled || undefined"
-            :data-active="optIndex(o) === active"
-            @mousemove="active = optIndex(o)"
-            @click="choose(o)"
+            :data-active="filtered.length === active"
+            @mousemove="active = filtered.length"
+            @click="create"
           >
-            <span v-if="o.icon" class="jl-combobox__opt-icon"><component :is="o.icon" /></span>
-            <span class="jl-combobox__opt-label">{{ o.label }}</span>
-            <span v-if="isSel(o.value)" class="jl-combobox__opt-check">
-              <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13 4.5 6.5 11 3 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            <span class="jl-combobox__create-mark">
+              <svg viewBox="0 0 16 16" width="16" height="16" fill="none" aria-hidden="true"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
             </span>
+            <span class="jl-combobox__opt-label">Create “{{ query.trim() }}”</span>
           </div>
-        </div>
-        <div
-          v-if="showCreate"
-          class="jl-combobox__opt"
-          role="option"
-          :data-active="filtered.length === active"
-          @mousemove="active = filtered.length"
-          @click="create"
-        >
-          <span class="jl-combobox__create-mark">
-            <svg viewBox="0 0 16 16" width="16" height="16" fill="none" aria-hidden="true"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
-          </span>
-          <span class="jl-combobox__opt-label">Create “{{ query.trim() }}”</span>
-        </div>
-      </template>
-    </div>
+        </template>
+      </div>
+    </Teleport>
   </div>
 </template>
 

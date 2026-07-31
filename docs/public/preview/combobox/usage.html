@@ -5,7 +5,9 @@
     <link rel="stylesheet" href="/css/index.css">
     <link rel="stylesheet" href="/css/combobox.css">
     <style>
-      body { margin: 0; padding: var(--space-4); max-width: 320px; min-height: 240px; }
+      /* min-height reserves room for the open list: the popup is anchored to the viewport,
+         so a short canvas would push it back over the control. */
+      body { margin: 0; padding: var(--space-4); max-width: 320px; min-height: 340px; }
     </style>
   </head>
   <body>

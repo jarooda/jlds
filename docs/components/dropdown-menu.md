@@ -8,6 +8,11 @@ tone.
 jlds add dropdown-menu
 ```
 
+The menu is rendered into `<body>` and anchored to the trigger by
+[Anchored Popup](/components/anchored-popup), so it escapes any ancestor that would clip it (a
+Card's `overflow: hidden`, a scrolling table wrapper), and flips above the trigger when there
+isn't room below. That primitive installs automatically as a registry dependency.
+
 ## Usage
 
 <Preview src="/preview/dropdown-menu/usage.html" />
