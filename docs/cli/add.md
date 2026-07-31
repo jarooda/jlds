@@ -27,6 +27,19 @@ table's row-selection cell uses the Checkbox component. Dependency-only componen
 5. Installs any `dependencies`/`devDependencies` declared in `meta.json` using your detected
    package manager.
 
+## Registry
+
+Files come from the `registry` URL in `jlds.json` — pinned by `jlds init` to the CLI version
+that set the project up. If that pin is older than the CLI you are running, `add` prints the
+newer value to paste in; see
+[“Latest” means latest in your pinned registry](/cli/update#latest-means-latest-in-your-pinned-registry).
+
+`--registry <url>` overrides it for a single run, leaving `jlds.json` unchanged:
+
+```bash
+jlds add button --registry ../../registry
+```
+
 ## Output layout
 
 For `jlds add button` with the default `paths.components` (`src/components/ui`):

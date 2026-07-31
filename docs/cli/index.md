@@ -40,7 +40,7 @@ know your framework, install paths, and registry location.
 | `tailwind.css` | `string` | Path to your global CSS file — where `jlds init` injects design tokens |
 | `paths.components` | `string` | Directory components are installed into, one subfolder per component |
 | `paths.utils` | `string` | Reserved for shared utility files (not yet used by `add`/`update`) |
-| `registry` | `string` | Base URL or local path to the [registry](/registry/). See [local vs. remote](#local-vs-remote-registry) below |
+| `registry` | `string` | Base URL or local path to the [registry](/registry/). Pinned by `init` to the CLI version that created the project and never moved automatically — see [local vs. remote](#local-vs-remote-registry) below |
 
 ### Local vs. remote registry
 
@@ -57,5 +57,17 @@ HTTP(S) URL.
 // Remote registry (default — served via jsDelivr)
 { "registry": "https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry" }
 ```
+
+### Why the remote URL is pinned to a version
+
+A release tag is immutable, so jsDelivr can cache it permanently and every install of a given
+version gets byte-identical files. `@main` would be a moving target: jsDelivr caches branch URLs
+for hours, so "latest" would differ between machines with no way to tell which you got, and
+unreleased commits would reach every project the moment they merged. The design tokens `jlds
+init` injects are compiled into the binary too, so a pinned registry keeps components and tokens
+on the same release.
+
+The cost is that the pin never advances on its own. `add` and `update` flag it when your pin is
+behind the CLI — see [`jlds update`](/cli/update#latest-means-latest-in-your-pinned-registry).
 
 See [Registry: How it works](/registry/) for the on-disk/CDN layout.

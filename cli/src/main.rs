@@ -23,6 +23,9 @@ enum Command {
         /// Component name(s) to add
         #[arg(required = true)]
         components: Vec<String>,
+        /// Registry base URL or local path for this run, instead of the one in jlds.json
+        #[arg(long, value_name = "URL")]
+        registry: Option<String>,
     },
     /// List all available components
     List,
@@ -31,6 +34,9 @@ enum Command {
         /// Component name(s) to update
         #[arg(required = true)]
         components: Vec<String>,
+        /// Registry base URL or local path for this run, instead of the one in jlds.json
+        #[arg(long, value_name = "URL")]
+        registry: Option<String>,
     },
 }
 
@@ -40,8 +46,8 @@ async fn main() -> Result<()> {
 
     match cli.command {
         Command::Init(args) => commands::init::run(args).await,
-        Command::Add { components } => commands::add::run(components).await,
+        Command::Add { components, registry } => commands::add::run(components, registry).await,
         Command::List => commands::list::run().await,
-        Command::Update { components } => commands::update::run(components).await,
+        Command::Update { components, registry } => commands::update::run(components, registry).await,
     }
 }

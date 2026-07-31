@@ -9,9 +9,12 @@ use std::process::Command;
 use crate::config::Config;
 use crate::registry::{ComponentMeta, RegistryClient};
 
-pub async fn run(components: Vec<String>) -> Result<()> {
+pub async fn run(components: Vec<String>, registry: Option<String>) -> Result<()> {
     let config = Config::load()?;
-    let client = RegistryClient::new(&config.registry);
+    // A --registry override applies to this run only; the pin in jlds.json is left alone.
+    let registry = registry.unwrap_or_else(|| config.registry.clone());
+    super::warn_if_registry_behind(&registry);
+    let client = RegistryClient::new(&registry);
     let framework = config.framework.to_string();
     let pm = detect_package_manager();
 

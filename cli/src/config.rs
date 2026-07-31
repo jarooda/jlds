@@ -8,11 +8,47 @@ pub const CONFIG_FILE: &str = "jlds.json";
 /// Registry content is served from jsDelivr's GitHub mirror pinned to this build's own
 /// release tag (not `@main`), so `npx jlds add` always matches the CLI version that fetched
 /// it — and jsDelivr treats tags as immutable, so the cache never goes stale.
+///
+/// The pin is written into `jlds.json` at init and read back by every later command, so a
+/// project stays on the registry it was set up with until someone repoints it. Commands that
+/// write files say so when that pin is behind the running CLI — see `registry_behind_cli`.
 pub fn default_registry() -> String {
-    format!(
-        "https://cdn.jsdelivr.net/gh/jarooda/jlds@v{}/registry",
-        env!("CARGO_PKG_VERSION")
-    )
+    format!("{REGISTRY_PREFIX}{}{REGISTRY_SUFFIX}", cli_version())
+}
+
+const REGISTRY_PREFIX: &str = "https://cdn.jsdelivr.net/gh/jarooda/jlds@v";
+const REGISTRY_SUFFIX: &str = "/registry";
+
+/// The version this binary was built as — the newest registry it knows about. Release CI
+/// stamps it from the git tag, so it is also the newest release that existed at build time.
+pub fn cli_version() -> &'static str {
+    env!("CARGO_PKG_VERSION")
+}
+
+/// The version pinned by an official jsDelivr registry URL, if that is what this is. A local
+/// path, a fork, or a `@main` URL is a deliberate choice, so it yields `None` and stays quiet.
+fn pinned_version(registry: &str) -> Option<&str> {
+    let version = registry
+        .strip_prefix(REGISTRY_PREFIX)?
+        .strip_suffix(REGISTRY_SUFFIX)?;
+    semver_parts(version).map(|_| version)
+}
+
+fn semver_parts(version: &str) -> Option<(u32, u32, u32)> {
+    let mut parts = version.split('.');
+    let tuple = (
+        parts.next()?.parse().ok()?,
+        parts.next()?.parse().ok()?,
+        parts.next()?.parse().ok()?,
+    );
+    parts.next().is_none().then_some(tuple)
+}
+
+/// The pinned version when `jlds.json` points at an official registry older than this CLI —
+/// meaning releases have shipped that this project won't fetch until it is repointed.
+pub fn registry_behind_cli(registry: &str) -> Option<&str> {
+    let pinned = pinned_version(registry)?;
+    (semver_parts(pinned)? < semver_parts(cli_version())?).then_some(pinned)
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
