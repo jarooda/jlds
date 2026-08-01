@@ -40,6 +40,13 @@ export interface UseAnchoredPopupOptions {
 /** Distance kept between the popup and the viewport edges, in px. */
 const VIEWPORT_MARGIN = 8;
 
+/* Nothing here can run during SSR: there is no viewport to measure against and no
+ * popup element to position. Guard every entry point rather than relying on the
+ * element refs being null — a bundler that rewrites `window` to `undefined` (Nuxt's
+ * server build does) turns an unguarded access into a TypeError, and `stop()` reaches
+ * `window` before it ever looks at a ref. */
+const isBrowser = typeof window !== "undefined" && typeof document !== "undefined";
+
 function clearPosition(popup: HTMLElement) {
   const s = popup.style;
   s.position = "";
@@ -129,6 +136,7 @@ export function useAnchoredPopup(options: UseAnchoredPopupOptions) {
   const docked = ref(false);
 
   function update() {
+    if (!isBrowser) return;
     const anchor = anchorRef.value;
     const popup = popupRef.value;
     if (!anchor || !popup) return;
@@ -147,6 +155,7 @@ export function useAnchoredPopup(options: UseAnchoredPopupOptions) {
   let ro: ResizeObserver | null = null;
 
   function stop() {
+    if (!isBrowser) return;
     // Capture-phase scroll so the popup follows a scrolling ancestor, not just the page.
     window.removeEventListener("scroll", update, true);
     window.removeEventListener("resize", update);
@@ -163,6 +172,9 @@ export function useAnchoredPopup(options: UseAnchoredPopupOptions) {
   watch(
     open,
     async (isOpen) => {
+      // `immediate` fires synchronously inside setup(), so this also runs on the server,
+      // where a closed popup would take the `stop()` branch straight into `window`.
+      if (!isBrowser) return;
       if (!isOpen) {
         stop();
         return;
