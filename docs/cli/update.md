@@ -20,6 +20,14 @@ conflict detection — if you've customized a component, back up or diff your ch
 running `jlds update`.
 :::
 
+## Migrating components installed before stylesheet registration
+
+Components installed by an older CLI import their own stylesheet (`import "./button.css"` /
+`<style src="./button.css">`) instead of being registered in your global CSS. `jlds update
+<name>` performs the migration: it strips the inline reference and adds the `@import` — see
+[component stylesheets](/cli/add#component-stylesheets). Nothing changes visually; it is what
+makes the component compile under the Next.js Pages Router.
+
 ## "Latest" means latest *in your pinned registry*
 
 `jlds init` writes a `registry` URL pinned to the CLI version that created the project, and

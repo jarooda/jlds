@@ -279,7 +279,20 @@ fn defaults_for(framework: Framework, nuxt: bool, pkg: &PackageJson) -> Defaults
 
     let css = match framework {
         Framework::Vue => first_existing(&["src/assets/main.css", "src/style.css"], "src/assets/main.css"),
-        Framework::React => first_existing(&["src/index.css", "src/app/globals.css"], "src/index.css"),
+        // Vite first, then the Next App Router (`app/globals.css`) and Pages Router
+        // (`styles/globals.css`) layouts, each with and without a `src/` root. Getting this
+        // right matters beyond token injection: `jlds add` registers every component
+        // stylesheet here, so a path nothing imports means no component styles at all.
+        Framework::React => first_existing(
+            &[
+                "src/index.css",
+                "src/app/globals.css",
+                "app/globals.css",
+                "src/styles/globals.css",
+                "styles/globals.css",
+            ],
+            "src/index.css",
+        ),
     };
     Defaults {
         css,

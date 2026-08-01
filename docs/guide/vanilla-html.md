@@ -80,8 +80,8 @@ source). The behaviors are idempotent and dependency-free.
 
 `registry/css/<name>.css` is the *only* place a component's styles are written. It's served
 directly to HTML users via jsDelivr, **and** it's what `jlds add` fetches and writes
-into your project as `<name>.css` for React and Vue. The CDN file, the React `.css` import,
-and the Vue `<style src="...">` file are always identical.
+into your project as `<name>.css` for React and Vue (registered there via an `@import` in your
+global stylesheet). The CDN file and the copy in your project are always identical.
 
 ## Pinning a version
 

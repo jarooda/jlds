@@ -88,8 +88,12 @@ button/
 └── index.ts     # re-exports Button, ButtonProps, ButtonVariant, ButtonSize
 ```
 
-(For Vue, the same `button.css` lands alongside `Button.vue` and `index.ts`, referenced via
-`<style src="./button.css">`.)
+(For Vue, the same `button.css` lands alongside `Button.vue` and `index.ts`.)
+
+The stylesheet is wired up for you: `jlds add` appends `@import
+"../components/ui/button/button.css";` to your global CSS rather than importing it from the
+component file, so the same output works under Vite, Nuxt, and both Next.js routers — see
+[component stylesheets](/cli/add#component-stylesheets).
 
 Dependencies install automatically: any **npm packages** a component needs are added with your
 package manager, and any **other components** it builds on (its registry dependencies) are fetched

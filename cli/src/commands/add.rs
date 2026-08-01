@@ -3,7 +3,7 @@ use colored::Colorize;
 use indicatif::{ProgressBar, ProgressStyle};
 use std::collections::{HashMap, HashSet, VecDeque};
 use std::fs;
-use std::path::Path;
+use std::path::{Component as PathComponent, Path};
 use std::process::Command;
 
 use crate::config::Config;
@@ -90,15 +90,19 @@ pub async fn run(components: Vec<String>, registry: Option<String>) -> Result<()
             pb.set_message(file.clone());
             let content = client.fetch_file(name, &framework, file).await?;
             let final_content = inline_shared(content, &shared);
+            let final_content = strip_stylesheet_reference(final_content, name);
             fs::write(output_dir.join(file), final_content)?;
             pb.inc(1);
         }
 
         let css = client.fetch_css(name).await?;
-        fs::write(output_dir.join(format!("{name}.css")), css)?;
+        let css_file = output_dir.join(format!("{name}.css"));
+        fs::write(&css_file, css)?;
 
         pb.finish_and_clear();
         println!("{} {}", "✓".green().bold(), name);
+
+        register_stylesheet(&config, name, &css_file)?;
 
         install_deps(&meta.dependencies, false, &pm)?;
         install_deps(&meta.dev_dependencies, true, &pm)?;
@@ -181,6 +185,137 @@ fn install_deps(deps: &[String], dev: bool, pm: &PackageManager) -> Result<()> {
     }
 
     Ok(())
+}
+
+// ── Component stylesheet wiring ──────────────────────────────────────────────
+//
+// Registry sources reference their own stylesheet inline — `import "./button.css"` in React,
+// `<style src="./button.css">` in Vue. That works under Vite, Nuxt and the Next App Router,
+// but the Next Pages Router rejects any non-module CSS imported outside `pages/_app`, so a
+// component installed as-authored refuses to compile there.
+//
+// Rather than special-case one bundler, the reference is stripped on the way in and replaced
+// with an `@import` in the project's global stylesheet — the same file `init` injects the
+// design tokens into. Every framework loads it the same way, and the global stylesheet ends
+// up listing exactly which components are installed.
+
+/// Drops the component's own reference to `./<name>.css` — React's `import` statement or
+/// Vue's `<style src>` tag. A component may spread across several files (date-picker's
+/// `DatePicker.vue` and `Calendar.vue` both pull in `date-picker.css`); each is stripped,
+/// and `register_stylesheet` adds the single `@import` that replaces them all.
+fn strip_stylesheet_reference(content: String, name: &str) -> String {
+    let mut lines: Vec<&str> = content
+        .lines()
+        .filter(|line| !is_stylesheet_reference(line, name))
+        .collect();
+
+    // Vue's `<style src>` sits at the end of the file; removing it leaves trailing blanks.
+    while lines.last().is_some_and(|line| line.trim().is_empty()) {
+        lines.pop();
+    }
+
+    format!("{}\n", lines.join("\n"))
+}
+
+fn is_stylesheet_reference(line: &str, name: &str) -> bool {
+    let trimmed = line.trim();
+    let references_css = trimmed.contains(&format!("\"./{name}.css\""))
+        || trimmed.contains(&format!("'./{name}.css'"));
+
+    references_css && (trimmed.starts_with("import ") || trimmed.starts_with("<style"))
+}
+
+/// Adds `@import "<relative path>";` for the component's stylesheet to the project's global
+/// CSS. Idempotent — re-running `add`/`update` for a component already listed changes nothing.
+fn register_stylesheet(config: &Config, name: &str, component_css: &Path) -> Result<()> {
+    let global_css = config.tailwind.css.trim();
+    let import_line = |target: &str| format!("@import \"{target}\";");
+
+    if global_css.is_empty() || !Path::new(global_css).exists() {
+        eprintln!(
+            "  {} No global stylesheet at {} — run {} first, then add:",
+            "!".yellow().bold(),
+            if global_css.is_empty() { "(unset in jlds.json)" } else { global_css },
+            "jlds init".cyan()
+        );
+        eprintln!("  {}", import_line(&format!("./{name}.css")).cyan());
+        return Ok(());
+    }
+
+    let target = relative_import_path(Path::new(global_css), component_css);
+    let line = import_line(&target);
+
+    let existing = fs::read_to_string(global_css)
+        .with_context(|| format!("Failed to read {global_css}"))?;
+
+    if existing.lines().any(|l| l.trim() == line) {
+        return Ok(());
+    }
+
+    let updated = insert_after_leading_imports(&existing, &line);
+    fs::write(global_css, updated)
+        .with_context(|| format!("Failed to write to {global_css}"))?;
+
+    println!("  {} Registered {name}.css in {global_css}", "→".dimmed());
+    Ok(())
+}
+
+/// `@import` targets resolve against the importing stylesheet, so the path is expressed
+/// relative to the global CSS file's own directory.
+fn relative_import_path(global_css: &Path, component_css: &Path) -> String {
+    let from = path_segments(global_css.parent().unwrap_or_else(|| Path::new("")));
+    let to = path_segments(component_css);
+
+    let shared = from
+        .iter()
+        .zip(&to)
+        .take_while(|(a, b)| a == b)
+        .count();
+
+    let mut segments: Vec<String> = vec!["..".to_string(); from.len() - shared];
+    segments.extend(to[shared..].iter().cloned());
+
+    let joined = segments.join("/");
+    if joined.starts_with("..") {
+        joined
+    } else {
+        format!("./{joined}")
+    }
+}
+
+/// Splits a path into comparable segments, dropping `.`. Both paths come from `jlds.json`
+/// and are project-relative, so `..` segments aren't expected; keeping them verbatim leaves
+/// the prefix comparison conservative rather than wrong.
+fn path_segments(path: &Path) -> Vec<String> {
+    path.components()
+        .filter_map(|component| match component {
+            PathComponent::Normal(segment) => Some(segment.to_string_lossy().into_owned()),
+            PathComponent::ParentDir => Some("..".to_string()),
+            _ => None,
+        })
+        .collect()
+}
+
+/// CSS requires `@import` to precede every rule, so the new line goes after the stylesheet's
+/// existing leading imports (the Geist font import `init` writes, plus any components already
+/// registered) and before the first real rule.
+fn insert_after_leading_imports(existing: &str, line: &str) -> String {
+    let mut lines: Vec<String> = existing.lines().map(String::from).collect();
+    let mut insert_at = 0;
+
+    for (index, current) in lines.iter().enumerate() {
+        let trimmed = current.trim();
+        if trimmed.starts_with("@import") || trimmed.starts_with("@charset") {
+            insert_at = index + 1;
+        } else if trimmed.is_empty() || trimmed.starts_with("/*") || trimmed.starts_with('*') {
+            continue;
+        } else {
+            break;
+        }
+    }
+
+    lines.insert(insert_at, line.to_string());
+    format!("{}\n", lines.join("\n"))
 }
 
 // Prepends shared file content and removes the corresponding import block from the framework file.
