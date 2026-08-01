@@ -38,13 +38,20 @@ Passing a flag skips its prompt.
 
 | Layout | CSS | Components | Utils |
 |---|---|---|---|
-| React | `src/index.css` / `src/app/globals.css` | `src/components/ui` | `src/lib/utils` |
+| React / Next.js | `src/index.css` / `src/app/globals.css` / `app/globals.css` / `src/styles/globals.css` / `styles/globals.css` | `src/components/ui` | `src/lib/utils` |
 | Vue (Vite) | `src/assets/main.css` / `src/style.css` | `src/components/ui` | `src/lib/utils` |
 | Nuxt 4 | `app/assets/css/main.css` / `app/assets/main.css` | `app/components/ui` | `app/lib/utils` |
 | Nuxt 3 | `assets/css/main.css` / `assets/main.css` | `components/ui` | `lib/utils` |
 
-Where two CSS paths are listed, the first one that already exists wins; otherwise the first is
-used and created.
+Where several CSS paths are listed, the first one that already exists wins; otherwise the first
+is used and created. The React list covers Vite, the Next App Router (`app/globals.css`) and the
+Next Pages Router (`styles/globals.css`), each with and without a `src/` root.
+
+::: warning Check the CSS path
+`jlds add` registers every component's stylesheet as an `@import` in this file
+([why](/cli/add#component-stylesheets)), so it has to be a stylesheet your app actually loads.
+If `init` guesses a path that nothing imports, components install but render unstyled.
+:::
 
 Nuxt only auto-imports components under its source directory, which Nuxt 4 moved to `app/`.
 That layout is used when the `nuxt` dependency is v4 or newer, or when an `app/` directory

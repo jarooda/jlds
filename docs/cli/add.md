@@ -24,8 +24,41 @@ table's row-selection cell uses the Checkbox component. Dependency-only componen
 4. Fetches `css/<name>.css` from the registry and writes it as `<name>.css` alongside the
    component — this is the [single source of truth](/guide/vanilla-html#single-source-of-truth)
    for that component's `.jl-*` classes, for every framework.
-5. Installs any `dependencies`/`devDependencies` declared in `meta.json` using your detected
+5. Registers that stylesheet in your global CSS (see [below](#component-stylesheets)).
+6. Installs any `dependencies`/`devDependencies` declared in `meta.json` using your detected
    package manager.
+
+## Component stylesheets
+
+Component files in the registry reference their own stylesheet inline — `import "./button.css"`
+in React, `<style src="./button.css">` in Vue. `jlds add` **removes that reference** on the way
+in and adds an `@import` to the global stylesheet from `tailwind.css` in `jlds.json` instead —
+the same file `jlds init` injects the design tokens into:
+
+```css
+@import url('https://fonts.googleapis.com/css2?family=Geist...');
+@import "../components/ui/button/button.css";   /* added by jlds add */
+
+/* JLDS design tokens ... */
+```
+
+The import goes after any existing `@import` lines and before the first rule, because CSS
+requires `@import` to precede every rule. Re-running `add` or `update` for a component that is
+already listed leaves the file untouched.
+
+This exists because the **Next.js Pages Router** rejects any non-module `.css` imported outside
+`pages/_app` ([css-global](https://nextjs.org/docs/messages/css-global)) — a component that
+imported its own stylesheet simply would not compile there. Routing every framework through the
+global stylesheet keeps one code path instead of a per-bundler special case, and leaves your
+global CSS listing exactly which components are installed.
+
+::: warning
+If `tailwind.css` in `jlds.json` is unset or points at a file that doesn't exist, `add` skips
+this step and prints the `@import` line for you to place yourself. Run `jlds init` first.
+:::
+
+Deleting a component directory leaves a dangling `@import` behind — remove the matching line
+from your global stylesheet too.
 
 ## Registry
 
