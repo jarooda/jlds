@@ -8,7 +8,7 @@ pub async fn run(components: Vec<String>, registry: Option<String>) -> Result<()
     let config = Config::load()?;
     // A --registry override applies to this run only; the pin in jlds.json is left alone.
     let registry = registry.unwrap_or_else(|| config.registry.clone());
-    super::warn_if_registry_behind(&registry);
+    super::warn_if_registry_behind(&registry).await;
     let client = RegistryClient::new(&registry);
     let framework = config.framework.to_string();
 
