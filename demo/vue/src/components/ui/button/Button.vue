@@ -36,5 +36,3 @@ const cls = [
     <slot name="trailing-icon" />
   </button>
 </template>
-
-<style src="./button.css"></style>
