@@ -63,9 +63,9 @@ HTTP(S) URL.
 A release tag is immutable, so jsDelivr can cache it permanently and every install of a given
 version gets byte-identical files. `@main` would be a moving target: jsDelivr caches branch URLs
 for hours, so "latest" would differ between machines with no way to tell which you got, and
-unreleased commits would reach every project the moment they merged. The design tokens `jlds
-init` injects are compiled into the binary too, so a pinned registry keeps components and tokens
-on the same release.
+unreleased commits would reach every project the moment they merged. The design tokens that
+`jlds init` injects are compiled into the binary too, so a pinned registry keeps components and
+tokens on the same release.
 
 The cost is that the pin never advances on its own. `add` and `update` flag it when your pin is
 behind the CLI — see [`jlds update`](/cli/update#latest-means-latest-in-your-pinned-registry).

@@ -23,8 +23,9 @@ running `jlds update`.
 ## Migrating components installed before stylesheet registration
 
 Components installed by an older CLI import their own stylesheet (`import "./button.css"` /
-`<style src="./button.css">`) instead of being registered in your global CSS. `jlds update
-<name>` performs the migration: it strips the inline reference and adds the `@import` — see
+`<style src="./button.css">`) instead of being registered in your global CSS.
+`jlds update <name>` performs the migration: it strips the inline reference and adds the
+`@import` — see
 [component stylesheets](/cli/add#component-stylesheets). Nothing changes visually; it is what
 makes the component compile under the Next.js Pages Router.
 
