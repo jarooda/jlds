@@ -13,11 +13,20 @@ pub const CONFIG_FILE: &str = "jlds.json";
 /// project stays on the registry it was set up with until someone repoints it. Commands that
 /// write files say so when that pin is behind the running CLI — see `registry_behind_cli`.
 pub fn default_registry() -> String {
-    format!("{REGISTRY_PREFIX}{}{REGISTRY_SUFFIX}", cli_version())
+    registry_url_for(cli_version())
+}
+
+/// The official registry URL for a given release tag.
+pub fn registry_url_for(version: &str) -> String {
+    format!("{REGISTRY_PREFIX}{version}{REGISTRY_SUFFIX}")
 }
 
 const REGISTRY_PREFIX: &str = "https://cdn.jsdelivr.net/gh/jarooda/jlds@v";
 const REGISTRY_SUFFIX: &str = "/registry";
+
+/// npm's `latest` dist-tag for the CLI package. Releases publish the npm package and the git
+/// tag the registry is served from together, so npm's newest version names the newest registry.
+const NPM_LATEST_API: &str = "https://registry.npmjs.org/@jarooda/jlds/latest";
 
 /// The version this binary was built as — the newest registry it knows about. Release CI
 /// stamps it from the git tag, so it is also the newest release that existed at build time.
@@ -27,7 +36,7 @@ pub fn cli_version() -> &'static str {
 
 /// The version pinned by an official jsDelivr registry URL, if that is what this is. A local
 /// path, a fork, or a `@main` URL is a deliberate choice, so it yields `None` and stays quiet.
-fn pinned_version(registry: &str) -> Option<&str> {
+pub fn pinned_version(registry: &str) -> Option<&str> {
     let version = registry
         .strip_prefix(REGISTRY_PREFIX)?
         .strip_suffix(REGISTRY_SUFFIX)?;
@@ -44,11 +53,46 @@ fn semver_parts(version: &str) -> Option<(u32, u32, u32)> {
     parts.next().is_none().then_some(tuple)
 }
 
-/// The pinned version when `jlds.json` points at an official registry older than this CLI —
-/// meaning releases have shipped that this project won't fetch until it is repointed.
-pub fn registry_behind_cli(registry: &str) -> Option<&str> {
-    let pinned = pinned_version(registry)?;
-    (semver_parts(pinned)? < semver_parts(cli_version())?).then_some(pinned)
+/// Whether `version` names an older release than `than`. Anything unparseable compares as
+/// older than nothing, so a version this build can't read never provokes a warning.
+pub fn is_older(version: &str, than: &str) -> bool {
+    match (semver_parts(version), semver_parts(than)) {
+        (Some(version), Some(than)) => version < than,
+        _ => false,
+    }
+}
+
+#[derive(Deserialize)]
+struct NpmPackument {
+    version: String,
+}
+
+/// The newest published release, asked of npm.
+///
+/// npm is the only source that actually knows this. `cli_version()` is not a stand-in: the
+/// binary doing the asking is itself usually old — a global install, a lockfile entry, or a
+/// warm `npx` cache all pin one — and that is exactly when a project's registry pin is stale
+/// too, so measuring a stale pin against an equally stale build reports nothing wrong.
+///
+/// `None` on any failure — offline, timed out, unparseable — and callers stay quiet rather
+/// than guess, so a version check never blocks or fails the command it is advising on.
+pub async fn latest_release() -> Option<String> {
+    let client = reqwest::Client::builder()
+        .timeout(std::time::Duration::from_secs(3))
+        .build()
+        .ok()?;
+    let packument: NpmPackument = client
+        .get(NPM_LATEST_API)
+        .send()
+        .await
+        .ok()?
+        .error_for_status()
+        .ok()?
+        .json()
+        .await
+        .ok()?;
+
+    semver_parts(&packument.version).map(|_| packument.version)
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
