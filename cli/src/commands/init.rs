@@ -7,7 +7,10 @@ use std::fs;
 use std::io::IsTerminal;
 use std::path::Path;
 
-use crate::config::{default_registry, Config, Framework, PathsConfig, TailwindConfig};
+use crate::config::{
+    default_registry, Config, Framework, PathsConfig, TailwindConfig, LEGACY_CONFIG_FILE,
+    PACKAGE_FILE, PACKAGE_KEY,
+};
 
 #[derive(Args, Debug, Default)]
 pub struct InitArgs {
@@ -127,7 +130,14 @@ pub async fn run(args: InitArgs) -> Result<()> {
 
     config.save()?;
     println!();
-    println!("{} {}", "✓".green().bold(), "Created jlds.json");
+    println!(
+        "{} Wrote the {} config to {}",
+        "✓".green().bold(),
+        format!("\"{PACKAGE_KEY}\"").cyan(),
+        PACKAGE_FILE
+    );
+
+    warn_leftover_legacy_config();
 
     inject_css_tokens(&config)?;
 
@@ -312,6 +322,20 @@ fn major_version(range: Option<&str>) -> Option<u32> {
 }
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
+
+/// A `jlds.json` left over from an earlier setup is now dead weight — package.json wins on
+/// load — so say so rather than leaving two configs that disagree. It is the user's file to
+/// delete, not the CLI's, so this only points at it.
+fn warn_leftover_legacy_config() {
+    if !Path::new(LEGACY_CONFIG_FILE).exists() {
+        return;
+    }
+    println!(
+        "{} {} is no longer read — delete it to avoid two configs drifting apart.",
+        "!".yellow().bold(),
+        LEGACY_CONFIG_FILE.cyan()
+    );
+}
 
 /// Nuxt only loads a global stylesheet that is listed in `nuxt.config`, so injecting the
 /// tokens isn't enough on its own. Point that out unless the config already references it.

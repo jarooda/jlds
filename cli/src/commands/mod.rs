@@ -6,11 +6,13 @@ pub mod update;
 use colored::Colorize;
 use std::sync::atomic::{AtomicBool, Ordering};
 
-use crate::config::{cli_version, is_older, latest_release, pinned_version, registry_url_for};
+use crate::config::{
+    cli_version, is_older, latest_release, pinned_version, registry_url_for, CONFIG_LABEL,
+};
 
 static WARNED: AtomicBool = AtomicBool::new(false);
 
-/// Point out a `jlds.json` registry pin that is older than the newest release, with the value
+/// Point out a project's registry pin that is older than the newest release, with the value
 /// to replace it with. Only for commands that write component files — a stale pin is why a
 /// project keeps receiving old component source, and `update` in particular reads as "fetch
 /// the newest" while it is really bounded by the pin.
@@ -39,7 +41,7 @@ pub async fn warn_if_registry_behind(registry: &str) {
     );
     println!(
         "  {}",
-        format!("Fixes released since v{pinned} won't be fetched. To move the pin, set in jlds.json:")
+        format!("Fixes released since v{pinned} won't be fetched. To move the pin, set under {CONFIG_LABEL}:")
             .dimmed()
     );
     println!("  {}", format!("\"registry\": \"{}\"", registry_url_for(&latest)).cyan());

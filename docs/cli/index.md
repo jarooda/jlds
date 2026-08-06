@@ -4,33 +4,43 @@
 
 | Command | Description |
 |---|---|
-| [`jlds init`](/cli/init) | Auto-detect framework/TS/Tailwind, create `jlds.json`, inject CSS design tokens |
+| [`jlds init`](/cli/init) | Auto-detect framework/TS/Tailwind, write the `jlds` config into `package.json`, inject CSS design tokens |
 | [`jlds add <name...>`](/cli/add) | Download one or more components into your project |
 | [`jlds update <name...>`](/cli/update) | Re-fetch component(s) from the registry (overwrites local files) |
 | [`jlds list`](/cli/list) | List components available for your detected framework |
 
 Run `jlds --help` or `jlds <command> --help` for the same info from your terminal.
 
-## jlds.json reference
+## Config reference
 
-`jlds init` writes a `jlds.json` file to your project root. Every other command reads it to
-know your framework, install paths, and registry location.
+`jlds init` writes a `jlds` key into your project's `package.json`. Every other command reads
+it to know your framework, install paths, and registry location.
 
 ```json
+// package.json
 {
-  "framework": "react",
-  "typescript": true,
-  "tailwind": {
-    "config": "tailwind.config.ts",
-    "css": "src/index.css"
-  },
-  "paths": {
-    "components": "src/components/ui",
-    "utils": "src/lib/utils"
-  },
-  "registry": "https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry"
+  "name": "my-app",
+  "jlds": {
+    "framework": "react",
+    "typescript": true,
+    "tailwind": {
+      "config": "tailwind.config.ts",
+      "css": "src/index.css"
+    },
+    "paths": {
+      "components": "src/components/ui",
+      "utils": "src/lib/utils"
+    },
+    "registry": "https://cdn.jsdelivr.net/gh/jarooda/jlds@main/registry"
+  }
 }
 ```
+
+::: tip Upgrading from `jlds.json`
+Projects set up before the config moved keep working — a standalone `jlds.json` is still read
+(with a note pointing here). Run `jlds init` to move it into `package.json`, then delete
+`jlds.json`. If both exist, `package.json` wins.
+:::
 
 | Field | Type | Description |
 |---|---|---|

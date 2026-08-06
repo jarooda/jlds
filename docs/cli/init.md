@@ -1,7 +1,7 @@
 # jlds init
 
-Initializes JLDS in your project: detects your framework/setup, writes `jlds.json`, and
-injects the design token stylesheet into your global CSS.
+Initializes JLDS in your project: detects your framework/setup, writes the `jlds` config into
+`package.json`, and injects the design token stylesheet into your global CSS.
 
 ```bash
 jlds init
@@ -98,13 +98,14 @@ jlds init \
 | `--utils <PATH>` | Directory utilities are installed into (alias `--utils-dir`) |
 | `--registry <URL>` | Registry base URL or [local path](/cli/#local-vs-remote-registry), instead of the default |
 
-Since `jlds.json` is written to the project root and re-running `init` is safe, the usual
+Since the config is written into your `package.json` and re-running `init` is safe, the usual
 scripted setup is `jlds init -y && jlds add button`.
 
 ## What gets written
 
-A `jlds.json` is created with the detected/entered values and `registry` set to the
-[default registry](/registry/). See the [full field reference](/cli/#jldsjson-reference).
+A `jlds` key is added to your `package.json` with the detected/entered values and `registry`
+set to the [default registry](/registry/). Every other key in the file — and their order — is
+left untouched. See the [full field reference](/cli/#config-reference).
 
 ## CSS token injection
 

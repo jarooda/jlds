@@ -9,7 +9,7 @@ jlds list
 ## What it does
 
 Fetches `registry.json` from the [registry](/registry/), then prints every component whose
-`frameworks` array includes your `jlds.json` `framework` (`react` or `vue`), along with its
+`frameworks` array includes your configured `framework` (`react` or `vue`), along with its
 description:
 
 ```

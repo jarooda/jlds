@@ -45,11 +45,14 @@ https://cdn.jsdelivr.net/gh/<org>/<repo>@main/registry/components/button/meta.js
 
 If you get a 404, wait ~1 minute for jsDelivr to pick up the push.
 
-## 3. Point jlds.json at it
+## 3. Point your config at it
 
 ```json
+// package.json
 {
-  "registry": "https://cdn.jsdelivr.net/gh/<org>/<repo>@main/registry"
+  "jlds": {
+    "registry": "https://cdn.jsdelivr.net/gh/<org>/<repo>@main/registry"
+  }
 }
 ```
 

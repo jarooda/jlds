@@ -39,8 +39,8 @@ jlds add button
 ```
 
 This fetches `button.tsx` + `button.css` (or `Button.vue` + `button.css` for Vue) from the
-[registry](/registry/) and writes them into your project under the path configured in
-`jlds.json`. The files are self-contained — no runtime dependency on JLDS, no Tailwind
+[registry](/registry/) and writes them into your project under the path configured in the
+`jlds` key of your `package.json`. The files are self-contained — no runtime dependency on JLDS, no Tailwind
 required.
 
 Not using React or Vue? The same `.jl-*` classes work directly in plain HTML — see

@@ -67,7 +67,7 @@ Each prompt can be answered up front with its flag, and `jlds init --yes` takes 
 defaults for all three. Without a TTY — CI, Docker builds, scripted setup — the prompts are
 skipped automatically. See [`jlds init`](/cli/init#non-interactive-use).
 
-`jlds init` then writes [`jlds.json`](/cli/#jldsjson-reference) and injects the JLDS design
+`jlds init` then writes the [`jlds` config](/cli/#config-reference) into your `package.json` and injects the JLDS design
 tokens (colors, typography, spacing, radius, shadows, motion + the Geist font) into your
 global CSS file. If that file already has content, the `@import` is hoisted to the top and
 the `:root` token block is appended — your existing styles are preserved.
@@ -128,4 +128,4 @@ import { Button } from "@/components/ui/button"
 
 - [Theming](/guide/theming) — re-theme the design tokens
 - [Components](/components/) — see what's available and their props
-- [CLI Reference](/cli/) — `init`, `add`, `update`, `list`, and the full `jlds.json` schema
+- [CLI Reference](/cli/) — `init`, `add`, `update`, `list`, and the full config schema

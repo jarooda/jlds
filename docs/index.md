@@ -18,7 +18,7 @@ features:
   - title: Own your code
     details: Components are copied into your project as plain source files — no npm package, no version lock-in. Read it, edit it, ship it.
   - title: React & Vue
-    details: jlds init auto-detects your framework (including Next.js and Nuxt) and scaffolds jlds.json accordingly.
+    details: jlds init auto-detects your framework (including Next.js and Nuxt) and scaffolds the jlds config in package.json accordingly.
   - title: No Tailwind required
     details: Every component ships self-contained .jl-* CSS classes built on CSS variable design tokens — Tailwind is optional.
   - title: HTML too

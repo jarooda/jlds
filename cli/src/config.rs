@@ -1,15 +1,29 @@
 use anyhow::{bail, Context, Result};
+use colored::Colorize;
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::Path;
+use std::sync::atomic::{AtomicBool, Ordering};
 
-pub const CONFIG_FILE: &str = "jlds.json";
+pub const PACKAGE_FILE: &str = "package.json";
+
+/// The key the config lives under in `package.json`, the way `eslintConfig` and `prettier`
+/// do — a JLDS project already requires a package.json, so this keeps the project root free
+/// of one more tool file.
+pub const PACKAGE_KEY: &str = "jlds";
+
+/// Where the config lived before it moved into package.json. Still read, never written.
+pub const LEGACY_CONFIG_FILE: &str = "jlds.json";
+
+/// How to name the config's location in help text, now that it is a key rather than a file.
+pub const CONFIG_LABEL: &str = "the \"jlds\" key in package.json";
 
 /// Registry content is served from jsDelivr's GitHub mirror pinned to this build's own
 /// release tag (not `@main`), so `npx jlds add` always matches the CLI version that fetched
 /// it — and jsDelivr treats tags as immutable, so the cache never goes stale.
 ///
-/// The pin is written into `jlds.json` at init and read back by every later command, so a
+/// The pin is written into the project's config at init and read back by every later command, so a
 /// project stays on the registry it was set up with until someone repoints it. Commands that
 /// write files say so when that pin is behind the running CLI — see `registry_behind_cli`.
 pub fn default_registry() -> String {
@@ -135,28 +149,89 @@ pub struct PathsConfig {
 }
 
 impl Config {
+    /// Reads the `"jlds"` key from package.json, falling back to a standalone `jlds.json`
+    /// for projects initialized before the move.
+    ///
+    /// The fallback is what keeps this a non-breaking change, and it matters more here than
+    /// the usual deprecation: the registry pin is per-project, but the CLI is not — the
+    /// documented invocation is `npx @jarooda/jlds@latest`, so every existing project runs
+    /// the new binary against its old config the day it ships, with no opt-in step.
     pub fn load() -> Result<Self> {
-        let path = Self::find()?;
-        let content = fs::read_to_string(&path)
-            .with_context(|| format!("Failed to read {CONFIG_FILE}"))?;
-        serde_json::from_str(&content)
-            .with_context(|| format!("Invalid {CONFIG_FILE}"))
+        if let Some(value) = package_config()? {
+            return serde_json::from_value(value)
+                .with_context(|| format!("Invalid \"{PACKAGE_KEY}\" config in {PACKAGE_FILE}"));
+        }
+
+        if Path::new(LEGACY_CONFIG_FILE).exists() {
+            let content = fs::read_to_string(LEGACY_CONFIG_FILE)
+                .with_context(|| format!("Failed to read {LEGACY_CONFIG_FILE}"))?;
+            let config = serde_json::from_str(&content)
+                .with_context(|| format!("Invalid {LEGACY_CONFIG_FILE}"))?;
+            warn_legacy_config();
+            return Ok(config);
+        }
+
+        bail!("No JLDS config found. Run `jlds init` to set up your project.")
     }
 
+    /// Writes the config into package.json's `"jlds"` key, leaving every other key — and
+    /// their order — as it was found.
     pub fn save(&self) -> Result<()> {
-        let content = serde_json::to_string_pretty(self)?;
-        fs::write(CONFIG_FILE, content)?;
+        let mut manifest = read_package_json()?;
+        let Some(map) = manifest.as_object_mut() else {
+            bail!("{PACKAGE_FILE} is not a JSON object");
+        };
+        map.insert(PACKAGE_KEY.to_string(), serde_json::to_value(self)?);
+
+        let mut content = serde_json::to_string_pretty(&manifest)?;
+        content.push('\n');
+        fs::write(PACKAGE_FILE, content)
+            .with_context(|| format!("Failed to write {PACKAGE_FILE}"))?;
         Ok(())
     }
+}
 
-    fn find() -> Result<PathBuf> {
-        let path = Path::new(CONFIG_FILE);
-        if path.exists() {
-            Ok(path.to_path_buf())
-        } else {
-            bail!(
-                "No {CONFIG_FILE} found. Run `jlds init` to set up your project."
-            )
-        }
+/// The parsed package.json, or a "run this from your project root" error.
+pub fn read_package_json() -> Result<Value> {
+    if !Path::new(PACKAGE_FILE).exists() {
+        bail!("No {PACKAGE_FILE} found. Run `jlds` from your project root.");
     }
+    let content = fs::read_to_string(PACKAGE_FILE)
+        .with_context(|| format!("Failed to read {PACKAGE_FILE}"))?;
+    serde_json::from_str(&content).with_context(|| format!("Invalid {PACKAGE_FILE}"))
+}
+
+/// The `"jlds"` value from package.json, or `None` when there is no package.json or no key.
+/// A missing manifest is not an error here — the caller falls back to `jlds.json` first and
+/// reports the absence of any config at all.
+fn package_config() -> Result<Option<Value>> {
+    if !Path::new(PACKAGE_FILE).exists() {
+        return Ok(None);
+    }
+    Ok(read_package_json()?
+        .as_object_mut()
+        .and_then(|map| map.remove(PACKAGE_KEY)))
+}
+
+static WARNED_LEGACY: AtomicBool = AtomicBool::new(false);
+
+/// Printed once per run — `update` delegates to `add`, so the config is loaded twice there.
+fn warn_legacy_config() {
+    if WARNED_LEGACY.swap(true, Ordering::Relaxed) {
+        return;
+    }
+    println!(
+        "{} Reading config from {}.",
+        "!".yellow().bold(),
+        LEGACY_CONFIG_FILE.cyan()
+    );
+    println!(
+        "  {}",
+        format!(
+            "It now belongs under {CONFIG_LABEL} — run `jlds init` to move it, \
+             then delete {LEGACY_CONFIG_FILE}."
+        )
+        .dimmed()
+    );
+    println!();
 }

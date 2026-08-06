@@ -31,5 +31,18 @@
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
+  },
+  "jlds": {
+    "framework": "vue",
+    "typescript": true,
+    "tailwind": {
+      "config": "",
+      "css": "src/assets/main.css"
+    },
+    "paths": {
+      "components": "src/components/ui",
+      "utils": "src/lib/utils"
+    },
+    "registry": "../../registry"
   }
 }

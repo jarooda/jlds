@@ -32,7 +32,7 @@ makes the component compile under the Next.js Pages Router.
 ## "Latest" means latest *in your pinned registry*
 
 `jlds init` writes a `registry` URL pinned to the CLI version that created the project, and
-every later command reads it back from `jlds.json`. Upgrading the CLI does not move that pin —
+every later command reads it back from your `package.json`. Upgrading the CLI does not move that pin —
 so `jlds update` re-fetches from the same release until you repoint it, and a component fix
 published later never arrives.
 
@@ -40,14 +40,14 @@ published later never arrives.
 
 ```
 ! Registry pinned to v1.3.1 — this CLI is v1.4.0.
-  Fixes released since v1.3.1 won't be fetched. To move the pin, set in jlds.json:
+  Fixes released since v1.3.1 won't be fetched. To move the pin, set under the "jlds" key in package.json:
   "registry": "https://cdn.jsdelivr.net/gh/jarooda/jlds@v1.4.0/registry"
 ```
 
-Paste that value into `jlds.json` and re-run `jlds update <name>` for each component you want
+Paste that value into the `jlds` key in `package.json` and re-run `jlds update <name>` for each component you want
 on the newer release. The warning is silent for a local path, a fork, or a `@main` URL — those
 are deliberate choices, not a stale pin. `--registry <url>` overrides the registry for a single
-run without touching `jlds.json`:
+run without touching the stored pin:
 
 ```bash
 jlds update button --registry https://cdn.jsdelivr.net/gh/jarooda/jlds@v1.4.0/registry
@@ -59,8 +59,8 @@ jlds update button --registry https://cdn.jsdelivr.net/gh/jarooda/jlds@v1.4.0/re
 # 1. Edit the component source in the registry
 vim registry/components/button/react/button.tsx
 
-# 2. Make sure jlds.json points at the local registry
-#    { "registry": "../../registry" }
+# 2. Make sure the jlds config points at the local registry
+#    package.json → { "jlds": { "registry": "../../registry" } }
 
 # 3. Sync to your project
 jlds update button

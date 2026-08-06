@@ -33,7 +33,7 @@ Or install globally (`npm i -g @jarooda/jlds`, then use the `jlds` command), or 
 jlds add button
 ```
 
-This fetches `button.tsx` + `button.css` (or `Button.vue`) from the registry and writes them into your project under the path configured in `jlds.json`. The files are self-contained — no runtime dependency on JLDS, no Tailwind required.
+This fetches `button.tsx` + `button.css` (or `Button.vue`) from the registry and writes them into your project under the path configured in the `jlds` key of your `package.json`. The files are self-contained — no runtime dependency on JLDS, no Tailwind required.
 
 ---
 
@@ -109,7 +109,7 @@ out.
 
 ## Pointing at a local registry
 
-The registry is just a folder of static files (`registry/`). For local development, point `jlds.json` directly at that folder on disk — no server required:
+The registry is just a folder of static files (`registry/`). For local development, point the `jlds` config directly at that folder on disk — no server required:
 
 ```json
 {
@@ -119,7 +119,7 @@ The registry is just a folder of static files (`registry/`). For local developme
 
 The path is resolved relative to the directory `jlds` is run from (e.g. `demo/vue/` or `demo/react/`). Any path starting with `/`, `./`, `../`, or `file://` is treated as local.
 
-For production, the registry is deployed to GitHub + jsDelivr. See [`todo/deploy-to-registry.md`](todo/deploy-to-registry.md) for the full process. Once deployed, `jlds.json` points at:
+For production, the registry is deployed to GitHub + jsDelivr. See [`todo/deploy-to-registry.md`](todo/deploy-to-registry.md) for the full process. Once deployed, the `registry` value points at:
 
 ```json
 {
@@ -169,7 +169,7 @@ For local development, point the registry at the local folder after init (see ab
 jlds add button
 ```
 
-Files land in the path configured under `paths.components` in `jlds.json`.
+Files land in the path configured under `jlds.paths.components` in `package.json`.
 For the React demo: `src/components/ui/button/`
 
 ```
@@ -235,7 +235,7 @@ This re-fetches from the registry and overwrites the local files.
 # 1. Edit the component source in the registry
 vim registry/components/button/react/button.tsx
 
-# 2. Make sure jlds.json points at the local registry (see above)
+# 2. Make sure the jlds config points at the local registry (see above)
 
 # 3. Sync to demo
 cd demo/react && jlds update button
@@ -250,7 +250,7 @@ cat src/components/ui/button/button.tsx
 
 | Command | Description |
 |---|---|
-| `jlds init` | Auto-detect framework/TS/Tailwind, create `jlds.json`, inject CSS design tokens |
+| `jlds init` | Auto-detect framework/TS/Tailwind, write the `jlds` config into `package.json`, inject CSS design tokens |
 | `jlds add <name>` | Download a component into your project |
 | `jlds update <name>` | Re-fetch a component from the registry (overwrites local) |
 | `jlds list` | List all components available for your framework |

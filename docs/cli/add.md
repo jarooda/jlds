@@ -32,7 +32,7 @@ table's row-selection cell uses the Checkbox component. Dependency-only componen
 
 Component files in the registry reference their own stylesheet inline — `import "./button.css"`
 in React, `<style src="./button.css">` in Vue. `jlds add` **removes that reference** on the way
-in and adds an `@import` to the global stylesheet from `tailwind.css` in `jlds.json` instead —
+in and adds an `@import` to the global stylesheet from `tailwind.css` in your config instead —
 the same file `jlds init` injects the design tokens into:
 
 ```css
@@ -53,7 +53,7 @@ global stylesheet keeps one code path instead of a per-bundler special case, and
 global CSS listing exactly which components are installed.
 
 ::: warning
-If `tailwind.css` in `jlds.json` is unset or points at a file that doesn't exist, `add` skips
+If `tailwind.css` in your config is unset or points at a file that doesn't exist, `add` skips
 this step and prints the `@import` line for you to place yourself. Run `jlds init` first.
 :::
 
@@ -62,12 +62,12 @@ from your global stylesheet too.
 
 ## Registry
 
-Files come from the `registry` URL in `jlds.json` — pinned by `jlds init` to the CLI version
+Files come from the `registry` URL in your config — pinned by `jlds init` to the CLI version
 that set the project up. If that pin is older than the CLI you are running, `add` prints the
 newer value to paste in; see
 [“Latest” means latest in your pinned registry](/cli/update#latest-means-latest-in-your-pinned-registry).
 
-`--registry <url>` overrides it for a single run, leaving `jlds.json` unchanged:
+`--registry <url>` overrides it for a single run, leaving the stored pin unchanged:
 
 ```bash
 jlds add button --registry ../../registry
