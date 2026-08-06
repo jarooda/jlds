@@ -75,7 +75,7 @@ small screens — for the details, see [Responsive & mobile](/guide/responsive):
 | [Tooltip](/components/tooltip) | ✅ | ✅ | ✅ | ✅ | ✅ |
 | [Tree View](/components/tree-view) | ✅ | ✅ | ✅ | — | — |
 
-Run `jlds list` from a project with `jlds.json` to see what's available for your detected
+Run `jlds list` from an initialized project to see what's available for your detected
 framework — see [CLI: list](/cli/list).
 
 The **HTML** column means the component's `.jl-*` CSS classes (and JS controller, where needed)

@@ -8,7 +8,7 @@ component source straight into your project — the code is yours to read, own, 
 No install needed — run on the fly with `npx`:
 
 ```bash
-npx @jarooda/jlds init          # detect framework, write jlds.json, inject design tokens
+npx @jarooda/jlds init          # detect framework, write the jlds config, inject design tokens
 npx @jarooda/jlds add button    # download a component into your project
 npx @jarooda/jlds list          # list available components
 ```

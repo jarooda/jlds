@@ -235,7 +235,7 @@ fn register_stylesheet(config: &Config, name: &str, component_css: &Path) -> Res
         eprintln!(
             "  {} No global stylesheet at {} — run {} first, then add:",
             "!".yellow().bold(),
-            if global_css.is_empty() { "(unset in jlds.json)" } else { global_css },
+            if global_css.is_empty() { "(unset in the jlds config)" } else { global_css },
             "jlds init".cyan()
         );
         eprintln!("  {}", import_line(&format!("./{name}.css")).cyan());

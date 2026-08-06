@@ -12,7 +12,9 @@ path = "src/main.rs"
 [dependencies]
 clap = { version = "4", features = ["derive"] }
 serde = { version = "1", features = ["derive"] }
-serde_json = "1"
+# `preserve_order` keeps package.json's own key order when the config is written back —
+# without it every save would alphabetize the user's whole manifest.
+serde_json = { version = "1", features = ["preserve_order"] }
 reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "json"] }
 tokio = { version = "1", features = ["full"] }
 anyhow = "1"
